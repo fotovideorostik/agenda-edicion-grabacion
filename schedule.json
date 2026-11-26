@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T01:31:57.592Z",
+  "updatedAt": "2026-11-26T01:33:11.590Z",
   "owner": "Freelance Filmmaker & Editor (Valladolid)",
   "events": [
     {
@@ -524,6 +524,16 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
+      "id": "ev-1795656746292-0",
+      "date": "2026-12-22",
+      "category": "sit",
+      "type": "reel",
+      "title": "Vídeo Diario SIT Granollers",
+      "fullDay": false,
+      "weight": 1,
+      "notes": ""
+    },
+    {
       "id": "sit-reel-2026-12-23",
       "date": "2026-12-23",
       "category": "sit",
@@ -533,22 +543,14 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-reel-2026-12-24",
-      "date": "2026-12-24",
+      "id": "ev-1795656743008-0",
+      "date": "2026-12-23",
       "category": "sit",
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-reel-2026-12-25",
-      "date": "2026-12-25",
-      "category": "sit",
-      "type": "reel",
-      "title": "Vídeo Diario SIT Granollers",
-      "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "weight": 1,
+      "notes": ""
     },
     {
       "id": "sit-reel-2026-12-26",
@@ -569,6 +571,16 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
+      "id": "ev-1795656749379-0",
+      "date": "2026-12-29",
+      "category": "sit",
+      "type": "reel",
+      "title": "Vídeo Diario SIT Granollers",
+      "fullDay": false,
+      "weight": 1,
+      "notes": ""
+    },
+    {
       "id": "sit-reel-2026-12-30",
       "date": "2026-12-30",
       "category": "sit",
@@ -578,13 +590,14 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-reel-2026-12-31",
-      "date": "2026-12-31",
+      "id": "ev-1795656752183-0",
+      "date": "2026-12-30",
       "category": "sit",
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "weight": 1,
+      "notes": ""
     }
   ]
 }
