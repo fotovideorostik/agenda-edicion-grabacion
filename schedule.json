@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T01:53:08.043Z",
+  "updatedAt": "2026-11-26T01:54:44.549Z",
   "owner": "Freelance Filmmaker & Editor (Valladolid)",
   "events": [
     {
@@ -304,13 +304,34 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "ev-1795654498859-0",
+      "id": "ev-1795658040683-0",
       "date": "2026-11-25",
       "category": "hector",
       "type": "reel",
-      "title": "3 Reels Héctor Loza (Barbería)",
+      "title": "Reel Héctor Loza (Barbería)",
       "fullDay": false,
-      "notes": "Grabación mensual en barbería / escuela de barbería."
+      "weight": 1,
+      "notes": "Grabación mensual en Santoña (barbería / escuela de barbería)."
+    },
+    {
+      "id": "ev-1795658055354-0",
+      "date": "2026-11-25",
+      "category": "hector",
+      "type": "reel",
+      "title": "Reel Héctor Loza (Barbería)",
+      "fullDay": false,
+      "weight": 1,
+      "notes": "Grabación mensual en Santoña (barbería / escuela de barbería)."
+    },
+    {
+      "id": "ev-1795658076232-0",
+      "date": "2026-11-25",
+      "category": "hector",
+      "type": "reel",
+      "title": "Reel Héctor Loza (Barbería)",
+      "fullDay": false,
+      "weight": 1,
+      "notes": "Grabación mensual en Santoña (barbería / escuela de barbería)."
     },
     {
       "id": "sit-reel-2026-11-26",
