@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-26T01:56:17.427Z",
-  "owner": "Freelance Filmmaker & Editor (Valladolid)",
+  "updatedAt": "2026-11-26T02:10:05.614Z",
+  "owner": "Freelance Audiovisual Valladolid",
   "events": [
     {
       "id": "sit-reel-2026-11-03",
@@ -9,7 +9,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "trip-ida-1795657984703-0",
@@ -19,7 +20,8 @@
       "title": "Viaje de Ida (Valladolid → Castro Urdiales)",
       "fullDay": true,
       "weight": 1,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "ev-1795654125598-0",
@@ -28,17 +30,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795657984703-1",
       "date": "2026-11-04",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "ev-1795654139461-0",
@@ -47,17 +51,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795657984703-2",
       "date": "2026-11-05",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "ev-1795654256057-0",
@@ -66,17 +72,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": ""
+      "notes": "",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795657984703-3",
       "date": "2026-11-06",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "ev-1795654260145-0",
@@ -85,37 +93,41 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": ""
+      "notes": "",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795657984703-4",
       "date": "2026-11-07",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "stay-castro-1795657984703-5",
       "date": "2026-11-08",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "stay-castro-1795657984703-6",
       "date": "2026-11-09",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "sit-reel-2026-11-10",
@@ -124,17 +136,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795657984703-7",
       "date": "2026-11-10",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "sit-reel-2026-11-11",
@@ -143,17 +157,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795657984703-8",
       "date": "2026-11-11",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "sit-reel-2026-11-12",
@@ -162,17 +178,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795657984703-9",
       "date": "2026-11-12",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "ev-1795654250175-0",
@@ -181,7 +199,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers.",
+      "client": "granollers"
     },
     {
       "id": "ev-1795654475123-0",
@@ -190,17 +209,19 @@
       "type": "long_video",
       "title": "Entrega Vídeo Largo SIT",
       "fullDay": false,
-      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795657984703-10",
       "date": "2026-11-13",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "ev-1795654264607-0",
@@ -209,17 +230,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": ""
+      "notes": "",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795657984703-11",
       "date": "2026-11-14",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "trip-vuelta-1795657984703-12",
@@ -229,7 +252,8 @@
       "title": "Viaje de Vuelta (Castro Urdiales → Valladolid)",
       "fullDay": true,
       "weight": 1,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "sit-reel-2026-11-17",
@@ -238,7 +262,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-11-18",
@@ -247,7 +272,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-11-19",
@@ -256,7 +282,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-11-20",
@@ -265,7 +292,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-11-21",
@@ -274,7 +302,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-11-24",
@@ -283,7 +312,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "ev-1795654450531-0",
@@ -292,7 +322,8 @@
       "type": "long_video",
       "title": "Entrega Vídeo Largo SIT",
       "fullDay": false,
-      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-11-25",
@@ -301,7 +332,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "ev-1795658040683-0",
@@ -311,7 +343,8 @@
       "title": "Reel Héctor Loza (Barbería)",
       "fullDay": false,
       "weight": 1,
-      "notes": "Grabación mensual en Santoña (barbería / escuela de barbería)."
+      "notes": "Grabación mensual en Santoña (barbería / escuela de barbería).",
+      "client": "hector"
     },
     {
       "id": "ev-1795658055354-0",
@@ -321,7 +354,8 @@
       "title": "Reel Héctor Loza (Barbería)",
       "fullDay": false,
       "weight": 1,
-      "notes": "Grabación mensual en Santoña (barbería / escuela de barbería)."
+      "notes": "Grabación mensual en Santoña (barbería / escuela de barbería).",
+      "client": "hector"
     },
     {
       "id": "ev-1795658076232-0",
@@ -331,7 +365,8 @@
       "title": "Reel Héctor Loza (Barbería)",
       "fullDay": false,
       "weight": 1,
-      "notes": "Grabación mensual en Santoña (barbería / escuela de barbería)."
+      "notes": "Grabación mensual en Santoña (barbería / escuela de barbería).",
+      "client": "hector"
     },
     {
       "id": "sit-reel-2026-11-26",
@@ -340,7 +375,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-11-27",
@@ -349,7 +385,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-11-28",
@@ -358,7 +395,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "trip-ida-1795655549316-0",
@@ -368,27 +406,30 @@
       "title": "Viaje de Ida (Valladolid → Granollers)",
       "fullDay": true,
       "weight": 1,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "travel"
     },
     {
       "id": "stay-shoot-1795655549316-1",
       "date": "2026-11-29",
       "category": "sit",
-      "type": "stay_shoot",
+      "type": "shoot_granollers",
       "title": "Estancia / Rodaje SIT (07:00–19:00)",
       "fullDay": true,
       "weight": 2,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "granollers"
     },
     {
       "id": "stay-shoot-1795655549316-2",
       "date": "2026-11-30",
       "category": "sit",
-      "type": "stay_shoot",
+      "type": "shoot_granollers",
       "title": "Estancia / Rodaje SIT (07:00–19:00)",
       "fullDay": true,
       "weight": 2,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-01",
@@ -397,17 +438,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-shoot-1795655549316-3",
       "date": "2026-12-01",
       "category": "sit",
-      "type": "stay_shoot",
+      "type": "shoot_granollers",
       "title": "Estancia / Rodaje SIT (07:00–19:00)",
       "fullDay": true,
       "weight": 2,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-02",
@@ -416,17 +459,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-shoot-1795655549316-4",
       "date": "2026-12-02",
       "category": "sit",
-      "type": "stay_shoot",
+      "type": "shoot_granollers",
       "title": "Estancia / Rodaje SIT (07:00–19:00)",
       "fullDay": true,
       "weight": 2,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-03",
@@ -435,17 +480,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-shoot-1795655549316-5",
       "date": "2026-12-03",
       "category": "sit",
-      "type": "stay_shoot",
+      "type": "shoot_granollers",
       "title": "Estancia / Rodaje SIT (07:00–19:00)",
       "fullDay": true,
       "weight": 2,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-04",
@@ -454,17 +501,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-shoot-1795655549316-6",
       "date": "2026-12-04",
       "category": "sit",
-      "type": "stay_shoot",
+      "type": "shoot_granollers",
       "title": "Estancia / Rodaje SIT (07:00–19:00)",
       "fullDay": true,
       "weight": 2,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-05",
@@ -473,27 +522,30 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-shoot-1795655549316-7",
       "date": "2026-12-05",
       "category": "sit",
-      "type": "stay_shoot",
+      "type": "shoot_granollers",
       "title": "Estancia / Rodaje SIT (07:00–19:00)",
       "fullDay": true,
       "weight": 2,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "granollers"
     },
     {
       "id": "stay-shoot-1795655549316-8",
       "date": "2026-12-06",
       "category": "sit",
-      "type": "stay_shoot",
+      "type": "shoot_granollers",
       "title": "Estancia / Rodaje SIT (07:00–19:00)",
       "fullDay": true,
       "weight": 2,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "granollers"
     },
     {
       "id": "trip-vuelta-1795655549316-9",
@@ -503,7 +555,8 @@
       "title": "Viaje de Vuelta (Granollers → Valladolid)",
       "fullDay": true,
       "weight": 1,
-      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00."
+      "notes": "Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.",
+      "client": "travel"
     },
     {
       "id": "sit-reel-2026-12-08",
@@ -512,7 +565,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-09",
@@ -521,7 +575,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "trip-ida-1795656696900-0",
@@ -531,7 +586,8 @@
       "title": "Viaje de Ida (Valladolid → Castro Urdiales)",
       "fullDay": true,
       "weight": 1,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "sit-reel-2026-12-10",
@@ -540,17 +596,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795656696900-1",
       "date": "2026-12-10",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "sit-reel-2026-12-11",
@@ -559,17 +617,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795656696900-2",
       "date": "2026-12-11",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "sit-reel-2026-12-12",
@@ -578,27 +638,30 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "stay-castro-1795656696900-3",
       "date": "2026-12-12",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "stay-castro-1795656696900-4",
       "date": "2026-12-13",
       "category": "personal",
-      "type": "stay_couple",
+      "type": "stay_castro",
       "title": "Estancia en Castro Urdiales",
       "fullDay": false,
       "weight": 0,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "trip-vuelta-1795656696900-5",
@@ -608,7 +671,8 @@
       "title": "Viaje de Vuelta (Castro Urdiales → Valladolid)",
       "fullDay": true,
       "weight": 1,
-      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.",
+      "client": "personal"
     },
     {
       "id": "sit-reel-2026-12-15",
@@ -617,17 +681,19 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "ev-1795656707903-0",
       "date": "2026-12-15",
       "category": "hector",
-      "type": "shoot",
+      "type": "shoot_hector",
       "title": "Rodaje Héctor Loza (Día completo)",
       "fullDay": true,
       "weight": 1,
-      "notes": "Grabación mensual en barbería / escuela de barbería."
+      "notes": "Grabación mensual en barbería / escuela de barbería.",
+      "client": "hector"
     },
     {
       "id": "sit-reel-2026-12-16",
@@ -636,7 +702,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-17",
@@ -645,7 +712,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-18",
@@ -654,7 +722,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-19",
@@ -663,7 +732,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-22",
@@ -672,7 +742,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "ev-1795656746292-0",
@@ -682,7 +753,8 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "weight": 1,
-      "notes": ""
+      "notes": "",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-23",
@@ -691,7 +763,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "ev-1795656743008-0",
@@ -701,7 +774,8 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "weight": 1,
-      "notes": ""
+      "notes": "",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-26",
@@ -710,7 +784,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-29",
@@ -719,7 +794,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "ev-1795656749379-0",
@@ -729,7 +805,8 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "weight": 1,
-      "notes": ""
+      "notes": "",
+      "client": "granollers"
     },
     {
       "id": "sit-reel-2026-12-30",
@@ -738,7 +815,8 @@
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.",
+      "client": "granollers"
     },
     {
       "id": "ev-1795656752183-0",
@@ -748,7 +826,128 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "weight": 1,
-      "notes": ""
+      "notes": "",
+      "client": "granollers"
+    },
+    {
+      "id": "ev-1795658985331-0-castro-ida",
+      "date": "2026-12-23",
+      "client": "personal",
+      "type": "travel_full",
+      "title": "Viaje de Ida a Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": true,
+      "weight": 1
+    },
+    {
+      "id": "ev-1795658985331-1-castro-stay",
+      "date": "2026-12-24",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-2-castro-stay",
+      "date": "2026-12-25",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-3-castro-stay",
+      "date": "2026-12-26",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-4-castro-stay",
+      "date": "2026-12-27",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-5-castro-stay",
+      "date": "2026-12-28",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-6-castro-stay",
+      "date": "2026-12-29",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-7-castro-stay",
+      "date": "2026-12-30",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-8-castro-stay",
+      "date": "2026-12-31",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-9-castro-stay",
+      "date": "2027-01-01",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-10-castro-stay",
+      "date": "2027-01-02",
+      "client": "personal",
+      "type": "stay_castro",
+      "title": "Estancia en Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": false,
+      "weight": 0
+    },
+    {
+      "id": "ev-1795658985331-11-castro-vuelta",
+      "date": "2027-01-03",
+      "client": "personal",
+      "type": "travel_full",
+      "title": "Viaje de Vuelta desde Castro Urdiales",
+      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "fullDay": true,
+      "weight": 1
     }
   ]
 }
