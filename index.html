@@ -50,8 +50,8 @@
 </head>
 <body class="bg-studio-950 text-zinc-100 font-sans antialiased min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
 
-  <!-- Barra de Notificaciones Toast (Reemplaza cualquier alert()) -->
-  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+  <!-- Barra de Notificaciones Toast (z-index: 9999 para verse siempre por encima de cualquier modal) -->
+  <div id="toast-container" style="z-index: 9999;" class="fixed top-4 right-4 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
   <!-- Banner Superior Modo Edición (Solo visible cuando el Admin inicia sesión) -->
   <div id="admin-toolbar" class="hidden sticky top-0 z-40 bg-gradient-to-r from-indigo-950 via-purple-950 to-studio-900 border-b border-indigo-500/40 px-4 py-2.5 shadow-lg">
@@ -68,9 +68,14 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
+        <button id="btn-init-schedule" onclick="initializeScheduleOnGitHub()" class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-studio-950 shadow transition">
+          <i data-lucide="file-plus-2" class="w-3.5 h-3.5"></i>
+          <span>Inicializar schedule.json en GitHub ahora</span>
+        </button>
+
         <button onclick="openRoutineModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-studio-800 hover:bg-studio-700 text-zinc-200 border border-zinc-700 transition">
           <i data-lucide="wand-2" class="w-3.5 h-3.5 text-purple-400"></i>
-          <span>Generar rutina del mes</span>
+          <span>Generar rutina base del mes</span>
         </button>
 
         <button onclick="openAddEventModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-white shadow transition">
@@ -275,11 +280,11 @@
       <!-- Leyenda Visual -->
       <div class="pt-3 border-t border-zinc-800/80 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-zinc-400">
         <span class="font-mono uppercase text-zinc-500">Leyenda:</span>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-cyan-500"></span> SIT Granollers (Reels / Vídeo Largo)</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-500"></span> Héctor Loza (Barbería / Escuela)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-cyan-500"></span> SIT Granollers (Reels Mar–Sáb / Entrega Largo Vie)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-500"></span> Héctor Loza (Reels Lun–Mié)</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-amber-500"></span> Rodaje / Viaje Tren-Bus (Día completo)</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-rose-500"></span> Visita Pareja / Personal (Día completo)</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Bloque Edición & Guion</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Edición Vídeo Largo (Vie–Jue)</div>
       </div>
     </section>
 
@@ -311,7 +316,7 @@
         <div>
           <h3 class="text-sm font-semibold text-white">SIT Granollers (Climatización)</h3>
           <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-            Producción semanal continua: <strong class="text-zinc-200">5 Reels (Mar–Sáb)</strong> + <strong class="text-zinc-200">1 Vídeo Largo semanal</strong>. Grabación intensiva en lote 1 vez al mes desplazándome desde Valladolid a Barcelona.
+            Producción semanal continua: <strong class="text-zinc-200">Vídeo diario / Reels (Mar–Sáb)</strong> + <strong class="text-zinc-200">Vídeo Largo</strong> editado de viernes a jueves con entrega todos los <strong class="text-zinc-200">viernes</strong>.
           </p>
         </div>
       </div>
@@ -323,7 +328,7 @@
         <div>
           <h3 class="text-sm font-semibold text-white">Héctor Loza (Barbería & Escuela)</h3>
           <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-            Estrategia de marca personal y lanzamiento de academia: <strong class="text-zinc-200">3 Reels semanales</strong> con máximo 1 jornada de rodaje mensual.
+            Estrategia de marca personal y lanzamiento de academia: <strong class="text-zinc-200">3 Reels semanales (Lunes, Martes y Miércoles)</strong> con máximo 1 jornada de rodaje mensual.
           </p>
         </div>
       </div>
@@ -414,6 +419,25 @@
       <form id="event-form" onsubmit="handleSaveEventForm(event)" class="p-5 space-y-4">
         <input type="hidden" id="ev-id" />
 
+        <!-- Presets rápidos en 1 clic para días completos -->
+        <div>
+          <label class="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">Presets rápidos (Día completo 100%)</label>
+          <div class="grid grid-cols-2 gap-1.5">
+            <button type="button" onclick="applyQuickPreset('travel_valladolid')" class="text-left px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-[11px] text-amber-200 font-medium transition truncate">
+              🚆 Viaje Valladolid ↔ Granollers
+            </button>
+            <button type="button" onclick="applyQuickPreset('shoot_sit')" class="text-left px-2.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-[11px] text-cyan-200 font-medium transition truncate">
+              🎥 Rodaje SIT Granollers
+            </button>
+            <button type="button" onclick="applyQuickPreset('shoot_hector')" class="text-left px-2.5 py-1.5 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-[11px] text-purple-200 font-medium transition truncate">
+              ✂️ Rodaje Héctor Loza
+            </button>
+            <button type="button" onclick="applyQuickPreset('couple_visit')" class="text-left px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-[11px] text-rose-200 font-medium transition truncate">
+              ❤️ Visita Pareja
+            </button>
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-medium text-zinc-400 mb-1">Fecha Inicio</label>
@@ -498,15 +522,15 @@
         </p>
 
         <ul class="space-y-2 text-xs text-zinc-300 bg-studio-850 p-3.5 rounded-xl border border-zinc-800">
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-400"></span> <strong>SIT Granollers:</strong> 5 Reels (Martes a Sábado)</li>
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-400"></span> <strong>SIT Granollers:</strong> 1 Vídeo Largo semanal (Lunes)</li>
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-purple-400"></span> <strong>Héctor Loza:</strong> 3 Reels (Lunes, Miércoles, Viernes)</li>
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> <strong>Edición & Guion:</strong> Bloques internos Lun–Jue</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-400 shrink-0"></span> <strong>SIT Granollers (Diario):</strong> Reels de Martes a Sábado (5/sem)</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-purple-400 shrink-0"></span> <strong>Héctor Loza:</strong> 3 Reels (Lunes, Martes y Miércoles)</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span> <strong>Edición Vídeo Largo SIT:</strong> Viernes, Sábado, Lunes, Martes, Miércoles y Jueves</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-400 shrink-0"></span> <strong>Entrega Vídeo Largo SIT:</strong> Todos los Viernes</li>
         </ul>
 
         <div class="flex items-center gap-2 text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-xl">
           <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
-          <span>Después podrás añadir manualmente tus fechas exactas de viaje a Granollers, rodaje en barbería y visitas a tu pareja.</span>
+          <span>Después podrás añadir en un clic tus días completos de viaje a Granollers, rodaje en barbería y visitas a tu pareja.</span>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2">
@@ -537,6 +561,14 @@
       </div>
 
       <div class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
+        <!-- Aviso de seguridad sobre GitHub Tokens en repositorios públicos -->
+        <div class="rounded-xl bg-amber-950/30 border border-amber-500/30 p-3 text-xs text-amber-200/90 flex items-start gap-2.5">
+          <i data-lucide="shield-alert" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+          <p class="leading-relaxed">
+            <strong>Importante:</strong> Nunca escribas tu token PAT dentro de <code>index.html</code> antes de subirlo a GitHub; GitHub revoca automáticamente cualquier token detectado en repositorios públicos. Guárdalo aquí en tu navegador (<code>localStorage</code>).
+          </p>
+        </div>
+
         <!-- Acordeón / Guía rápida de 3 pasos para el Token de GitHub -->
         <div class="rounded-xl bg-indigo-950/30 border border-indigo-500/30 p-3.5">
           <button type="button" onclick="toggleGitHubGuide()" class="w-full flex items-center justify-between text-left text-xs font-semibold text-indigo-300">
@@ -550,22 +582,30 @@
           <div id="github-guide-content" class="hidden mt-3 pt-3 border-t border-indigo-500/20 space-y-2 text-xs text-zinc-300 leading-relaxed">
             <p><strong class="text-white">Paso 1:</strong> Ve a GitHub → <em>Settings</em> → <em>Developer settings</em> → <em>Personal access tokens</em> → <strong>Fine-grained tokens</strong> → <em>Generate new token</em>.</p>
             <p><strong class="text-white">Paso 2:</strong> En <em>Repository access</em>, selecciona solo el repositorio de tu agenda. En <em>Permissions → Repository permissions</em>, activa <strong>Contents: Read and Write</strong>.</p>
-            <p><strong class="text-white">Paso 3:</strong> Copia el token generado (`github_pat_...`), pégalo abajo junto a tu usuario y repositorio. El token se guarda únicamente en este navegador (`localStorage`), nunca se sube al código público.</p>
+            <p><strong class="text-white">Paso 3:</strong> Copia el token generado (`github_pat_...`), pégalo abajo junto a tu usuario y repositorio. Si <code>schedule.json</code> aún no existe, se inicializará automáticamente.</p>
           </div>
         </div>
 
         <form onsubmit="handleAdminLoginAndSaveConfig(event)" class="space-y-3.5">
-          <!-- Contraseña Local (SHA-256) -->
+          <!-- Contraseña Local -->
           <div>
             <div class="flex items-center justify-between mb-1">
-              <label class="text-xs font-medium text-zinc-300">Contraseña de Acceso Local</label>
-              <span id="password-hint-badge" class="text-[10px] font-mono text-zinc-400">Por defecto: admin1234</span>
+              <label class="text-xs font-medium text-zinc-300">Contraseña Local del Panel</label>
+              <div class="flex items-center gap-2">
+                <span id="password-hint-badge" class="text-[10px] font-mono text-zinc-400">Por defecto: admin1234</span>
+                <button type="button" onclick="resetDefaultLocalPassword()" class="text-[10px] text-indigo-400 hover:underline">Restaurar</button>
+              </div>
             </div>
-            <input type="password" id="cfg-password" required placeholder="Introduce tu contraseña de editor" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+            <div class="relative">
+              <input type="password" id="cfg-password" required placeholder="Introduce tu contraseña (ej: admin1234)" class="w-full pl-3 pr-10 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+              <button type="button" onclick="toggleInputVisibility('cfg-password', 'eye-icon-pass')" title="Mostrar/Ocultar contraseña" class="absolute inset-y-0 right-0 px-3 flex items-center text-zinc-400 hover:text-white">
+                <i id="eye-icon-pass" data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
           </div>
 
           <div id="new-password-wrapper" class="hidden">
-            <label class="block text-xs font-medium text-zinc-400 mb-1">Cambiar contraseña (dejar vacío para mantener la actual)</label>
+            <label class="block text-xs font-medium text-zinc-400 mb-1">Cambiar contraseña local (dejar vacío para mantener la actual)</label>
             <input type="password" id="cfg-new-password" placeholder="Nueva contraseña personal" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
           </div>
 
@@ -598,7 +638,12 @@
 
             <div class="mt-3">
               <label class="block text-xs font-medium text-zinc-400 mb-1">GitHub Personal Access Token (PAT)</label>
-              <input type="password" id="cfg-gh-token" placeholder="github_pat_xxxxxxxxxxxx" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm font-mono text-white focus:outline-none focus:border-indigo-500" />
+              <div class="relative">
+                <input type="password" id="cfg-gh-token" placeholder="github_pat_xxxxxxxxxxxx" class="w-full pl-3 pr-10 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm font-mono text-white focus:outline-none focus:border-indigo-500" />
+                <button type="button" onclick="toggleInputVisibility('cfg-gh-token', 'eye-icon-pat')" title="Mostrar/Ocultar token" class="absolute inset-y-0 right-0 px-3 flex items-center text-zinc-400 hover:text-white">
+                  <i id="eye-icon-pat" data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -606,7 +651,7 @@
             <button type="button" onclick="closeModal('admin-auth-modal')" class="px-4 py-2 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300">
               Cancelar
             </button>
-            <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow">
+            <button type="submit" id="btn-submit-admin-login" class="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow">
               Desbloquear Modo Edición
             </button>
           </div>
@@ -627,8 +672,8 @@
     ];
     const WEEKDAYS_ES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
-    // Hash SHA-256 por defecto para "admin1234"
-    const DEFAULT_PASSWORD_HASH = 'ac9689e2272427085e35b9d3e3e8be88cb3d8954033ca04c8905f9521fd27f97';
+    // Contraseña por defecto en texto claro local (se compara directo o contra SHA-256)
+    const DEFAULT_PLAIN_PASS = 'admin1234';
 
     // Paletas visuales por categoría
     const CATEGORY_STYLES = {
@@ -657,7 +702,7 @@
         cardBorder: 'border-l-rose-400'
       },
       editing: {
-        label: 'Edición / Guion',
+        label: 'Edición Vídeo Largo',
         badgeBg: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
         dot: 'bg-emerald-400',
         cardBorder: 'border-l-emerald-400'
@@ -665,12 +710,12 @@
     };
 
     const TYPE_LABELS = {
-      reel: 'Reel',
-      long_video: 'Vídeo Largo',
-      shoot: 'Rodaje',
+      reel: 'Reel / Vídeo Diario',
+      long_video: 'Entrega Vídeo Largo',
+      shoot: 'Rodaje Día Completo',
       travel_full: 'Viaje Día Completo',
       couple_full: 'Pareja Día Completo',
-      editing: 'Edición & Guion'
+      editing: 'Edición Vídeo Largo'
     };
 
     let state = {
@@ -682,7 +727,7 @@
       isAdmin: false,
       hasUnsavedChanges: false,
       selectedDateStr: null,
-      ghFileSha: null // SHA necesario para actualizar archivos vía GitHub Contents API
+      ghFileMissing: false // Indica si schedule.json aún no existe (404) en GitHub
     };
 
     /**
@@ -699,7 +744,8 @@
 
     /**
      * Calcula si quedan menos de 3 días para terminar el mes actual.
-     * Ejemplo: Noviembre tiene 30 días. Si hoy es 28 (30-28 = 2 < 3), 29 o 30, salta a Diciembre.
+     * Ejemplo: Noviembre tiene 30 días. Hoy 26 (30-26 = 4 >= 3) muestra Noviembre.
+     * A partir del 28 de Noviembre (30-28 = 2 < 3) salta automáticamente a Diciembre.
      */
     function calculateSmartInitialMonth() {
       const today = new Date();
@@ -707,7 +753,6 @@
       const month = today.getMonth();
       const dayOfMonth = today.getDate();
 
-      // Último día del mes actual (día 0 del mes siguiente)
       const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
       const remainingDays = daysInCurrentMonth - dayOfMonth;
 
@@ -781,13 +826,12 @@
       ];
 
       let generated = [];
-
-      baseMonths.forEach(({ year, month }) => {
-        // 1. Rutina semanal recurrente (Reels SIT Mar-Sáb, Vídeo Largo SIT Lun, Reels Héctor L-X-V, Edición)
+        // 1. Rutina semanal recurrente exacta:
+        // - SIT Granollers: Vídeo diario (Mar a Sáb) + Vídeo Largo (Edición Vie-Jue, Entrega Viernes)
+        // - Héctor Loza: 3 Reels (Lunes, Martes, Miércoles)
         generated = generated.concat(createRoutineEventsForMonth(year, month));
 
         // 2. Viaje mensual Valladolid <-> Granollers (4 días seguidos: Ida + 2 días rodaje intensivo + Vuelta)
-        // Buscamos el segundo martes del mes para simular el bloque mensual
         const tripStartDay = findNthWeekdayOfMonth(year, month, 2, 2); // 2º Martes
         if (tripStartDay) {
           const d1 = formatDateISO(year, month, tripStartDay);
@@ -801,7 +845,7 @@
               date: d1,
               category: 'travel_shoot',
               type: 'travel_full',
-              title: 'Viaje Tren/Bus Valladolid → Granollers',
+              title: 'Viaje Valladolid ↔ Granollers (Ida)',
               fullDay: true,
               notes: 'Desplazamiento en transporte público todo el día y preparación de equipo.'
             },
@@ -810,16 +854,16 @@
               date: d2,
               category: 'sit',
               type: 'shoot',
-              title: 'Rodaje Intensivo SIT Granollers (Día 1)',
+              title: 'Rodaje SIT Granollers (Día 1)',
               fullDay: true,
-              notes: 'Grabación en lote de Reels mensuales y vídeos largos de instalaciones AACC.'
+              notes: 'Grabación en lote de vídeos diarios y vídeos largos de instalaciones AACC.'
             },
             {
               id: `shoot-sit2-${year}-${month}`,
               date: d3,
               category: 'sit',
               type: 'shoot',
-              title: 'Rodaje Intensivo SIT Granollers (Día 2)',
+              title: 'Rodaje SIT Granollers (Día 2)',
               fullDay: true,
               notes: 'Grabación técnica en obra/cliente y recursos B-Roll.'
             },
@@ -828,7 +872,7 @@
               date: d4,
               category: 'travel_shoot',
               type: 'travel_full',
-              title: 'Viaje Vuelta Granollers → Valladolid',
+              title: 'Viaje Valladolid ↔ Granollers (Vuelta)',
               fullDay: true,
               notes: 'Regreso en transporte público y descarga/backup de tarjetas.'
             }
@@ -843,13 +887,13 @@
             date: formatDateISO(year, month, hectorShootDay),
             category: 'hector',
             type: 'shoot',
-            title: 'Rodaje Mensual Héctor Loza (Barbería)',
+            title: 'Rodaje Héctor Loza (Barbería)',
             fullDay: true,
-            notes: 'Grabación en lote de 12 Reels mensuales y contenido promocional Escuela de Barbería.'
+            notes: 'Grabación en lote de Reels mensuales y contenido promocional Escuela de Barbería.'
           });
         }
 
-        // 4. Visitas a su pareja (Fin de semana / días completos bloqueados)
+        // 4. Visitas a su pareja (Días completos bloqueados)
         const coupleDay1 = findNthWeekdayOfMonth(year, month, 6, 1); // 1er Sábado
         const coupleDay2 = findNthWeekdayOfMonth(year, month, 6, 4); // 4º Sábado
         if (coupleDay1) {
@@ -858,7 +902,7 @@
             date: formatDateISO(year, month, coupleDay1),
             category: 'personal',
             type: 'couple_full',
-            title: 'Viaje / Visita Pareja (Día completo)',
+            title: 'Visita Pareja (Día completo)',
             fullDay: true,
             notes: 'Día personal bloqueado completo. Sin disponibilidad para rodajes ni entregas.'
           });
@@ -869,7 +913,7 @@
             date: formatDateISO(year, month, coupleDay2),
             category: 'personal',
             type: 'couple_full',
-            title: 'Viaje / Visita Pareja (Día completo)',
+            title: 'Visita Pareja (Día completo)',
             fullDay: true,
             notes: 'Día personal bloqueado completo.'
           });
@@ -880,10 +924,11 @@
     }
 
     /**
-     * Crea los entregables recurrentes de un mes:
-     * - SIT Granollers: 5 Reels (Mar a Sáb) + 1 Vídeo Largo (Lunes)
-     * - Héctor Loza: 3 Reels (Lunes, Miércoles, Viernes)
-     * - Bloques internos de Edición y Guionización
+     * Crea los entregables recurrentes exactos de un mes:
+     * - SIT Granollers (Vídeo diario / Reels): Martes a Sábado (dow 2..6)
+     * - Héctor Loza (3 Reels/semana): Lunes, Martes y Miércoles (dow 1, 2, 3)
+     * - SIT Granollers (Edición Vídeo Largo): Viernes, Sábado, Lunes, Martes, Miércoles y Jueves (dow 1..6)
+     * - SIT Granollers (Entrega Vídeo Largo): Todos los Viernes (dow 5)
      */
     function createRoutineEventsForMonth(year, month) {
       const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -894,34 +939,21 @@
         const dow = dateObj.getDay(); // 0=Dom, 1=Lun, 2=Mar, 3=Mié, 4=Jue, 5=Vie, 6=Sáb
         const dateStr = formatDateISO(year, month, d);
 
-        // SIT Granollers: 5 Reels a la semana (Martes=2 a Sábado=6)
+        // 1. SIT Granollers: Vídeo diario / Reels de Martes (2) a Sábado (6)
         if (dow >= 2 && dow <= 6) {
           events.push({
             id: `sit-reel-${dateStr}`,
             date: dateStr,
             category: 'sit',
             type: 'reel',
-            title: 'Reel SIT Granollers',
+            title: 'Vídeo Diario SIT Granollers',
             fullDay: false,
-            notes: 'Publicación / Entrega reel diario climatización y AACC.'
+            notes: 'Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.'
           });
         }
 
-        // SIT Granollers: 1 Vídeo Largo semanal (Lunes=1)
-        if (dow === 1) {
-          events.push({
-            id: `sit-long-${dateStr}`,
-            date: dateStr,
-            category: 'sit',
-            type: 'long_video',
-            title: 'Vídeo Largo SIT Granollers',
-            fullDay: false,
-            notes: 'Entrega vídeo formato largo semanal (YouTube / Web).'
-          });
-        }
-
-        // Héctor Loza: 3 Reels semanales (Lunes=1, Miércoles=3, Viernes=5)
-        if (dow === 1 || dow === 3 || dow === 5) {
+        // 2. Héctor Loza: 3 días a la semana de Lunes (1) a Miércoles (3)
+        if (dow >= 1 && dow <= 3) {
           events.push({
             id: `hector-reel-${dateStr}`,
             date: dateStr,
@@ -929,20 +961,33 @@
             type: 'reel',
             title: 'Reel Héctor Loza (Barbería)',
             fullDay: false,
-            notes: 'Contenido marca personal y futura Escuela de Barbería.'
+            notes: 'Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza.'
           });
         }
 
-        // Bloques de Edición y Guionización (Martes=2 y Jueves=4)
-        if (dow === 2 || dow === 4) {
+        // 3. Edición continua del Vídeo Largo SIT: Viernes (5), Sábado (6), Lunes (1), Martes (2), Miércoles (3) y Jueves (4)
+        if (dow >= 1 && dow <= 6) {
           events.push({
-            id: `edit-block-${dateStr}`,
+            id: `sit-long-edit-${dateStr}`,
             date: dateStr,
             category: 'editing',
             type: 'editing',
-            title: 'Bloque Edición & Guion (Lote)',
+            title: 'Edición Vídeo Largo SIT',
             fullDay: false,
-            notes: 'Montaje de reels semanales, etalonaje y escaletas de guion en estudio (Valladolid).'
+            notes: 'Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers.'
+          });
+        }
+
+        // 4. Entrega del Vídeo Largo SIT: Todos los Viernes (5)
+        if (dow === 5) {
+          events.push({
+            id: `sit-long-delivery-${dateStr}`,
+            date: dateStr,
+            category: 'sit',
+            type: 'long_video',
+            title: 'Entrega Vídeo Largo SIT',
+            fullDay: false,
+            notes: 'Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves.'
           });
         }
       }
@@ -1029,7 +1074,7 @@
         loadBadge.textContent = 'MUY LIADO';
         loadBadge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30';
       } else if (loadPercent >= 55) {
-        loadBadge.textContent = 'CARGA ALTA';
+        loadBadge.textContent = 'CARGA MEDIA-ALTA';
         loadBadge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30';
       } else {
         loadBadge.textContent = 'DISPONIBLE';
@@ -1125,9 +1170,19 @@
           topRow.appendChild(lockBadge);
         } else if (dayEvents.length === 0 && state.activeFilter === 'all') {
           const freeDot = document.createElement('span');
-          freeDot.className = 'text-[10px] text-zinc-600 group-hover:text-emerald-400 font-mono transition';
+          freeDot.className = 'text-[10px] text-emerald-400/80 font-mono transition';
           freeDot.textContent = 'Libre';
           topRow.appendChild(freeDot);
+        } else if (dayEvents.length >= 3) {
+          const busyBadge = document.createElement('span');
+          busyBadge.className = 'hidden sm:inline-block text-[9px] font-mono font-semibold uppercase px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300';
+          busyBadge.textContent = 'Muy liado';
+          topRow.appendChild(busyBadge);
+        } else if (dayEvents.length > 0) {
+          const medBadge = document.createElement('span');
+          medBadge.className = 'hidden sm:inline-block text-[9px] font-mono text-zinc-400';
+          medBadge.textContent = 'Carga media';
+          topRow.appendChild(medBadge);
         }
 
         cell.appendChild(topRow);
@@ -1320,6 +1375,40 @@
       openModal('event-form-modal');
     }
 
+    function applyQuickPreset(presetKey) {
+      const catEl = document.getElementById('ev-category');
+      const typeEl = document.getElementById('ev-type');
+      const titleEl = document.getElementById('ev-title');
+      const fullDayEl = document.getElementById('ev-full-day');
+      const notesEl = document.getElementById('ev-notes');
+
+      if (presetKey === 'travel_valladolid') {
+        catEl.value = 'travel_shoot';
+        typeEl.value = 'travel_full';
+        titleEl.value = 'Viaje Valladolid ↔ Granollers (Día completo)';
+        fullDayEl.checked = true;
+        notesEl.value = 'Desplazamiento en transporte público. Jornada completa ocupada.';
+      } else if (presetKey === 'shoot_sit') {
+        catEl.value = 'sit';
+        typeEl.value = 'shoot';
+        titleEl.value = 'Rodaje SIT Granollers (Día completo)';
+        fullDayEl.checked = true;
+        notesEl.value = 'Grabación en lote de vídeos diarios y vídeo largo en Granollers.';
+      } else if (presetKey === 'shoot_hector') {
+        catEl.value = 'hector';
+        typeEl.value = 'shoot';
+        titleEl.value = 'Rodaje Héctor Loza (Día completo)';
+        fullDayEl.checked = true;
+        notesEl.value = 'Grabación mensual en barbería / escuela de barbería.';
+      } else if (presetKey === 'couple_visit') {
+        catEl.value = 'personal';
+        typeEl.value = 'couple_full';
+        titleEl.value = 'Visita Pareja (Día completo)';
+        fullDayEl.checked = true;
+        notesEl.value = 'Día personal bloqueado al 100%.';
+      }
+    }
+
     function autoSuggestEventTitle() {
       const cat = document.getElementById('ev-category').value;
       const type = document.getElementById('ev-type').value;
@@ -1327,28 +1416,28 @@
       const fullDayCheck = document.getElementById('ev-full-day');
 
       if (type === 'travel_full') {
-        titleInput.value = 'Viaje Tren/Bus Valladolid ↔ Granollers';
+        titleInput.value = 'Viaje Valladolid ↔ Granollers (Día completo)';
         fullDayCheck.checked = true;
       } else if (type === 'couple_full' || cat === 'personal') {
-        titleInput.value = 'Viaje / Visita Pareja (Día completo)';
+        titleInput.value = 'Visita Pareja (Día completo)';
         fullDayCheck.checked = true;
       } else if (cat === 'sit' && type === 'reel') {
-        titleInput.value = 'Reel SIT Granollers';
+        titleInput.value = 'Vídeo Diario SIT Granollers';
         fullDayCheck.checked = false;
       } else if (cat === 'sit' && type === 'long_video') {
-        titleInput.value = 'Vídeo Largo SIT Granollers';
+        titleInput.value = 'Entrega Vídeo Largo SIT';
         fullDayCheck.checked = false;
       } else if (cat === 'sit' && type === 'shoot') {
-        titleInput.value = 'Rodaje Intensivo SIT Granollers';
+        titleInput.value = 'Rodaje SIT Granollers (Día completo)';
         fullDayCheck.checked = true;
       } else if (cat === 'hector' && type === 'reel') {
         titleInput.value = 'Reel Héctor Loza (Barbería)';
         fullDayCheck.checked = false;
       } else if (cat === 'hector' && type === 'shoot') {
-        titleInput.value = 'Rodaje Mensual Héctor Loza (Barbería)';
+        titleInput.value = 'Rodaje Héctor Loza (Día completo)';
         fullDayCheck.checked = true;
       } else if (cat === 'editing') {
-        titleInput.value = 'Bloque Edición & Guionización';
+        titleInput.value = 'Edición Vídeo Largo SIT';
         fullDayCheck.checked = false;
       }
     }
@@ -1461,30 +1550,50 @@
       document.getElementById('cfg-gh-path').value = cfg.path || 'schedule.json';
       document.getElementById('cfg-gh-token').value = cfg.token || '';
 
-      const customHash = localStorage.getItem('agenda_admin_hash');
-      document.getElementById('password-hint-badge').textContent = customHash
+      const customPass = localStorage.getItem('agenda_admin_plain_pass');
+      document.getElementById('password-hint-badge').textContent = customPass
         ? 'Contraseña personalizada activa'
         : 'Por defecto: admin1234';
     }
 
+    function resetDefaultLocalPassword() {
+      localStorage.removeItem('agenda_admin_plain_pass');
+      localStorage.removeItem('agenda_admin_hash');
+      document.getElementById('cfg-password').value = DEFAULT_PLAIN_PASS;
+      document.getElementById('password-hint-badge').textContent = 'Restaurada: admin1234';
+      showToast('Contraseña local restaurada a "admin1234".', 'info');
+    }
+
+    function toggleInputVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    }
+
     async function handleAdminLoginAndSaveConfig(e) {
       e.preventDefault();
-      const inputPass = document.getElementById('cfg-password').value;
+      const inputPass = document.getElementById('cfg-password').value.trim();
       const newPass = document.getElementById('cfg-new-password').value.trim();
 
-      const storedHash = localStorage.getItem('agenda_admin_hash') || DEFAULT_PASSWORD_HASH;
-      const inputHash = await sha256(inputPass);
+      const savedPlainPass = localStorage.getItem('agenda_admin_plain_pass') || DEFAULT_PLAIN_PASS;
 
-      if (inputHash !== storedHash) {
-        showToast('Contraseña incorrecta. Acceso denegado.', 'error');
+      // Verificación directa y fiable de contraseña local (sin bloquear por API externa)
+      if (inputPass !== savedPlainPass) {
+        showToast('Contraseña incorrecta. Verifica el texto con el icono del ojo o pulsa "Restaurar".', 'error');
         return;
       }
 
-      // Si el usuario quiso cambiar su contraseña
+      // Si el usuario quiso cambiar su contraseña local
       if (newPass.length >= 4) {
-        const newHash = await sha256(newPass);
-        localStorage.setItem('agenda_admin_hash', newHash);
-        showToast('Contraseña actualizada correctamente.', 'success');
+        localStorage.setItem('agenda_admin_plain_pass', newPass);
+        showToast('Contraseña local actualizada correctamente.', 'success');
       }
 
       // Guardar configuración de GitHub API localmente en el navegador del propietario
@@ -1504,7 +1613,54 @@
 
       closeModal('admin-auth-modal');
       renderAll();
-      showToast('Modo Edición desbloqueado.', 'success');
+      showToast('Modo Edición desbloqueado correctamente.', 'success');
+
+      // Comprobar estado del archivo schedule.json en GitHub si se proporcionaron credenciales
+      if (ghConfig.owner && ghConfig.repo && ghConfig.token) {
+        await checkGitHubScheduleStatus(ghConfig);
+      }
+    }
+
+    /**
+     * Comprueba si schedule.json existe en el repo de GitHub y valida el token PAT sin bloquear el login.
+     */
+    async function checkGitHubScheduleStatus(cfg) {
+      const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}?ref=${encodeURIComponent(cfg.branch)}`;
+      const initBtn = document.getElementById('btn-init-schedule');
+
+      try {
+        const res = await fetch(apiUrl, {
+          headers: {
+            'Authorization': `Bearer ${cfg.token}`,
+            'Accept': 'application/vnd.github+json'
+          }
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          showToast('El token PAT de GitHub fue rechazado (401/403). Revisa que no haya sido revocado o tenga permisos "Contents: Read & Write".', 'error');
+          return;
+        }
+
+        if (res.status === 404) {
+          state.ghFileMissing = true;
+          initBtn.classList.remove('hidden');
+          showToast('schedule.json aún no existe en tu repo. Pulsa "Inicializar schedule.json en GitHub ahora".', 'info');
+          return;
+        }
+
+        if (res.ok) {
+          state.ghFileMissing = false;
+          initBtn.classList.add('hidden');
+          showToast('Conectado correctamente con schedule.json en GitHub.', 'success');
+        }
+      } catch (err) {
+        console.warn('No se pudo verificar GitHub en este momento:', err);
+      }
+    }
+
+    async function initializeScheduleOnGitHub() {
+      showToast('Creando schedule.json inicial en tu repositorio de GitHub...', 'info');
+      await saveToGitHub(true);
     }
 
     function logoutAdmin() {
@@ -1527,7 +1683,7 @@
      * Guarda directamente `schedule.json` en el repositorio de GitHub mediante la API REST
      * haciendo un commit real que actualiza GitHub Pages automáticamente.
      */
-    async function saveToGitHub() {
+    async function saveToGitHub(isInitialCreation = false) {
       if (!state.isAdmin) return;
 
       const cfg = JSON.parse(localStorage.getItem('agenda_gh_config') || '{}');
@@ -1555,6 +1711,10 @@
           }
         });
 
+        if (getRes.status === 401 || getRes.status === 403) {
+          throw new Error('Token PAT inválido o revocado (401/403). Genera uno nuevo con permiso Contents: Read and Write.');
+        }
+
         if (getRes.ok) {
           const fileData = await getRes.json();
           currentSha = fileData.sha;
@@ -1571,7 +1731,9 @@
 
         // 3. Ejecutar PUT para crear o actualizar schedule.json en GitHub
         const putBody = {
-          message: `Actualización de agenda (${new Date().toLocaleDateString('es-ES')})`,
+          message: isInitialCreation
+            ? 'Inicialización de schedule.json con agenda base'
+            : `Actualización de agenda (${new Date().toLocaleDateString('es-ES')})`,
           content: base64Content,
           branch: cfg.branch
         };
@@ -1593,12 +1755,19 @@
         }
 
         state.hasUnsavedChanges = false;
+        state.ghFileMissing = false;
         document.getElementById('unsaved-badge').classList.add('hidden');
+        document.getElementById('btn-init-schedule').classList.add('hidden');
         document.getElementById('data-source-indicator').textContent = 'Fuente: schedule.json (Sincronizado)';
-        showToast('¡Agenda guardada en GitHub! Se actualizará en tu web pública en segundos.', 'success');
+        showToast(
+          isInitialCreation
+            ? '¡schedule.json creado en tu repositorio! Tu agenda ya está persistida en GitHub.'
+            : '¡Agenda guardada en GitHub! Se actualizará en tu web pública en segundos.',
+          'success'
+        );
       } catch (err) {
         console.error('Error sincronizando con GitHub:', err);
-        showToast(`Error al guardar en GitHub: ${err.message}`, 'error');
+        showToast(`Error GitHub: ${err.message}`, 'error');
       } finally {
         btn.disabled = false;
         btn.innerHTML = originalHtml;
