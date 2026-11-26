@@ -285,7 +285,7 @@
         <span class="text-zinc-700">|</span>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-orange-500"></span> SIT Granollers</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-orange-800 border border-orange-600/60"></span> Largo SIT (Vie)</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Rodaje Granollers (x2)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Rodaje Granollers</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-blue-500"></span> Héctor Loza</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-500"></span> Viaje Trabajo</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-red-500"></span> Castro Urdiales / Pareja</div>
@@ -444,7 +444,7 @@
           <label class="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">Presets rápidos de viaje y rodaje</label>
           <div class="grid grid-cols-1 gap-2">
             <button type="button" onclick="applyQuickPreset('granollers_trip_pack')" class="text-left px-3 py-2.5 rounded-xl bg-gradient-to-r from-purple-500/20 to-emerald-500/20 hover:from-purple-500/30 hover:to-emerald-500/30 border border-emerald-500/40 text-xs text-emerald-100 font-semibold transition flex items-center justify-between gap-2">
-              <span>🚆🎥 Viaje Granollers (Ida + Estancia Rodaje 07h–19h x2 + Vuelta)</span>
+              <span>🚆🎥 Viaje Granollers (Ida + Estancia Rodaje 07h–19h + Vuelta)</span>
               <span class="shrink-0 text-[10px] font-mono bg-emerald-500/30 px-1.5 py-0.5 rounded text-emerald-200">RANGO</span>
             </button>
             <button type="button" onclick="applyQuickPreset('castro_trip_pack')" class="text-left px-3 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/45 text-xs text-red-100 font-semibold transition flex items-center justify-between gap-2">
@@ -492,8 +492,8 @@
             <select id="ev-type" required onchange="autoSuggestEventTitle()" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500">
               <option value="reel">Entrega / Publicación Reel</option>
               <option value="long_video">Entrega Vídeo Largo (YouTube)</option>
-              <option value="stay_shoot">Estancia / Rodaje Intensivo (07:00–19:00 · Peso x2)</option>
-              <option value="stay_couple">Estancia con Pareja (Castro Urdiales · Peso 0)</option>
+              <option value="stay_shoot">Estancia / Rodaje Intensivo (07:00–19:00)</option>
+              <option value="stay_couple">Estancia con Pareja (Castro Urdiales)</option>
               <option value="shoot">Jornada de Rodaje / Grabación</option>
               <option value="travel_full">Viaje Transporte Público (Día Completo)</option>
               <option value="couple_full">Visita Pareja / Personal (Día Completo)</option>
@@ -710,8 +710,8 @@
     const TYPE_LABELS = {
       reel: 'Entrega / Publicación Reel',
       long_video: 'Entrega Vídeo Largo',
-      stay_shoot: 'Estancia / Rodaje Intensivo (07:00–19:00 · x2)',
-      stay_couple: 'Estancia con Pareja (Castro Urdiales · Peso 0)',
+      stay_shoot: 'Estancia / Rodaje Intensivo (07:00–19:00)',
+      stay_couple: 'Estancia con Pareja (Castro Urdiales)',
       shoot: 'Jornada de Rodaje',
       travel_full: 'Viaje Transporte Público (Día Completo)',
       couple_full: 'Visita Pareja / Personal (Día Completo)',
@@ -1357,7 +1357,7 @@
         if (dayEvents.some(e => e.type === 'stay_shoot')) {
           const lockBadge = document.createElement('span');
           lockBadge.className = 'text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 truncate';
-          lockBadge.textContent = '07h–19h (x2)';
+          lockBadge.textContent = '07h–19h';
           topRow.appendChild(lockBadge);
         } else if (isFullDayBlocked) {
           const lockBadge = document.createElement('span');
@@ -1398,16 +1398,11 @@
           const maxVisible = 2;
           workEvents.slice(0, maxVisible).forEach(ev => {
             const style = getEventStyle(ev);
-            const weightVal = getEventWeight(ev);
-            const isDoubleWeight = weightVal >= 2;
             const pill = document.createElement('div');
-            pill.className = `px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium border truncate flex items-center justify-between gap-1 ${style.badgeBg}`;
+            pill.className = `px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium border truncate flex items-center gap-1 ${style.badgeBg}`;
             pill.innerHTML = `
-              <span class="flex items-center gap-1 truncate">
-                <span class="w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}"></span>
-                <span class="truncate">${escapeHtml(ev.title)}</span>
-              </span>
-              ${isDoubleWeight ? '<span class="shrink-0 text-[9px] font-mono font-bold px-1 rounded bg-emerald-500/30 text-emerald-100">x2</span>' : ''}
+              <span class="w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}"></span>
+              <span class="truncate">${escapeHtml(ev.title)}</span>
             `;
             bottomHalf.appendChild(pill);
           });
@@ -1536,7 +1531,6 @@
       } else {
         dayEvents.forEach(ev => {
           const style = getEventStyle(ev);
-          const weightVal = getEventWeight(ev);
           const item = document.createElement('div');
           item.className = `p-3.5 rounded-xl bg-studio-850 border border-zinc-800 border-l-4 ${style.cardBorder} flex items-start justify-between gap-3`;
 
@@ -1545,8 +1539,8 @@
               <div class="flex flex-wrap items-center gap-2">
                 <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${style.badgeBg}">${style.label}</span>
                 <span class="text-[10px] font-mono text-zinc-400">${TYPE_LABELS[ev.type] || ev.type}</span>
-                ${weightVal >= 2 ? '<span class="text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 px-1.5 py-0.5 rounded">PESO x2 EVENTOS (07h–19h)</span>' : ''}
-                ${weightVal === 0 ? '<span class="text-[10px] font-mono bg-red-500/20 text-red-300 border border-red-500/35 px-1.5 py-0.5 rounded">ESTANCIA · SIN PESO LABORAL</span>' : ''}
+                ${ev.type === 'stay_shoot' ? '<span class="text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 px-1.5 py-0.5 rounded">JORNADA INTENSIVA (07h–19h)</span>' : ''}
+                ${ev.type === 'stay_couple' ? '<span class="text-[10px] font-mono bg-red-500/20 text-red-300 border border-red-500/35 px-1.5 py-0.5 rounded">ESTANCIA EN CASTRO</span>' : ''}
                 ${ev.fullDay ? '<span class="text-[10px] font-mono bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded">DÍA COMPLETO</span>' : ''}
               </div>
               <h4 class="text-sm font-semibold text-white">${escapeHtml(ev.title)}</h4>
@@ -1648,7 +1642,7 @@
       if (presetKey === 'granollers_trip_pack') {
         isTripPackEl.value = 'granollers';
         tripHintEl.className = 'p-2.5 rounded-xl bg-amber-950/40 border border-amber-500/30 text-[11px] text-amber-200 leading-relaxed';
-        tripHintEl.innerHTML = '<strong>Modo Pack Viaje Granollers:</strong> El 1er día se creará como <em>Viaje de Ida</em> (día completo), los días intermedios como <em>Estancia / Rodaje Intensivo (07:00–19:00 · Peso x2)</em> y el último día como <em>Viaje de Vuelta</em> (día completo).';
+        tripHintEl.innerHTML = '<strong>Modo Pack Viaje Granollers:</strong> El 1er día se creará como <em>Viaje de Ida</em> (día completo), los días intermedios como <em>Estancia / Rodaje Intensivo (07:00–19:00)</em> y el último día como <em>Viaje de Vuelta</em> (día completo).';
         tripHintEl.classList.remove('hidden');
         standardFieldsEl.classList.add('hidden');
         dateLabel.textContent = 'Día Viaje de Ida';
@@ -1812,7 +1806,7 @@
               title: 'Estancia / Rodaje SIT (07:00–19:00)',
               fullDay: true,
               weight: 2,
-              notes: notes || 'Jornada intensiva de grabación de 07:00 a 19:00 (Peso x2 eventos).'
+              notes: notes || 'Jornada intensiva de grabación de 07:00 a 19:00.'
             });
           }
         });
@@ -1823,7 +1817,7 @@
         showToast(
           isCastro
             ? `Viaje Castro Urdiales creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} Estancia en Castro y Vuelta).`
-            : `Viaje Granollers creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} Estancia/Rodaje x2 y Vuelta).`,
+            : `Viaje Granollers creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} Estancia/Rodaje y Vuelta).`,
           'success'
         );
         return;
