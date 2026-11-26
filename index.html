@@ -163,7 +163,7 @@
       <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
         <div class="flex items-center justify-between text-zinc-400">
           <span class="text-xs font-medium">Reels a entregar</span>
-          <span class="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400"><i data-lucide="smartphone" class="w-4 h-4"></i></span>
+          <span class="p-1.5 rounded-lg bg-orange-500/10 text-orange-400"><i data-lucide="smartphone" class="w-4 h-4"></i></span>
         </div>
         <div class="mt-3 flex items-baseline gap-2">
           <span id="kpi-reels" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
@@ -176,7 +176,7 @@
       <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
         <div class="flex items-center justify-between text-zinc-400">
           <span class="text-xs font-medium">Vídeos Largos</span>
-          <span class="p-1.5 rounded-lg bg-blue-500/10 text-blue-400"><i data-lucide="youtube" class="w-4 h-4"></i></span>
+          <span class="p-1.5 rounded-lg bg-orange-500/10 text-orange-400"><i data-lucide="youtube" class="w-4 h-4"></i></span>
         </div>
         <div class="mt-3 flex items-baseline gap-2">
           <span id="kpi-long" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
@@ -189,7 +189,7 @@
       <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
         <div class="flex items-center justify-between text-zinc-400">
           <span class="text-xs font-medium">Rodajes / Viajes</span>
-          <span class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400"><i data-lucide="train-front" class="w-4 h-4"></i></span>
+          <span class="p-1.5 rounded-lg bg-purple-500/10 text-purple-400"><i data-lucide="train-front" class="w-4 h-4"></i></span>
         </div>
         <div class="mt-3 flex items-baseline gap-2">
           <span id="kpi-shoots" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
@@ -202,7 +202,7 @@
       <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
         <div class="flex items-center justify-between text-zinc-400">
           <span class="text-xs font-medium">Personal / Pareja</span>
-          <span class="p-1.5 rounded-lg bg-rose-500/10 text-rose-400"><i data-lucide="heart" class="w-4 h-4"></i></span>
+          <span class="p-1.5 rounded-lg bg-red-500/10 text-red-400"><i data-lucide="heart" class="w-4 h-4"></i></span>
         </div>
         <div class="mt-3 flex items-baseline gap-2">
           <span id="kpi-personal" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
@@ -260,16 +260,16 @@
             Todos
           </button>
           <button data-filter="sit" onclick="setFilter('sit')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-cyan-400"></span> SIT Granollers
+            <span class="w-2 h-2 rounded-full bg-orange-400"></span> SIT Granollers
           </button>
           <button data-filter="hector" onclick="setFilter('hector')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-purple-400"></span> Héctor Loza
+            <span class="w-2 h-2 rounded-full bg-blue-400"></span> Héctor Loza
           </button>
           <button data-filter="travel_shoot" onclick="setFilter('travel_shoot')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-amber-400"></span> Viajes y Rodajes
+            <span class="w-2 h-2 rounded-full bg-purple-400"></span> Viajes y Rodajes
           </button>
           <button data-filter="personal" onclick="setFilter('personal')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-rose-400"></span> Personal / Pareja
+            <span class="w-2 h-2 rounded-full bg-red-400"></span> Personal / Pareja
           </button>
           <button data-filter="editing" onclick="setFilter('editing')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Edición / Guion
@@ -280,10 +280,10 @@
       <!-- Leyenda Visual -->
       <div class="pt-3 border-t border-zinc-800/80 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-zinc-400">
         <span class="font-mono uppercase text-zinc-500">Leyenda:</span>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-cyan-500"></span> SIT Granollers (Reels Mar–Sáb / Entrega Largo Vie)</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-500"></span> Héctor Loza (Reels Lun–Mié)</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-amber-500"></span> Rodaje / Viaje Tren-Bus (Día completo)</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-rose-500"></span> Visita Pareja / Personal (Día completo)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-orange-500"></span> SIT Granollers (Naranja · Reels Mar–Sáb / Largo Vie)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-blue-500"></span> Héctor Loza (Azul · Reels Lun–Mié)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-500"></span> Viajes (Morado · Tren-Bus)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-red-500"></span> Pareja / Personal (Rojo · Castro Urdiales)</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Edición Vídeo Largo (Vie–Jue)</div>
       </div>
     </section>
@@ -310,7 +310,7 @@
     <!-- Nota informativa sobre el flujo de trabajo para clientes potenciales -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="bg-studio-900/70 border border-zinc-800/80 rounded-2xl p-4 flex items-start gap-3">
-        <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 shrink-0 mt-0.5">
+        <div class="p-2 rounded-xl bg-orange-500/10 text-orange-400 shrink-0 mt-0.5">
           <i data-lucide="wind" class="w-5 h-5"></i>
         </div>
         <div>
@@ -322,7 +322,7 @@
       </div>
 
       <div class="bg-studio-900/70 border border-zinc-800/80 rounded-2xl p-4 flex items-start gap-3">
-        <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400 shrink-0 mt-0.5">
+        <div class="p-2 rounded-xl bg-blue-500/10 text-blue-400 shrink-0 mt-0.5">
           <i data-lucide="scissors" class="w-5 h-5"></i>
         </div>
         <div>
@@ -334,13 +334,13 @@
       </div>
 
       <div class="bg-studio-900/70 border border-zinc-800/80 rounded-2xl p-4 flex items-start gap-3">
-        <div class="p-2 rounded-xl bg-rose-500/10 text-rose-400 shrink-0 mt-0.5">
+        <div class="p-2 rounded-xl bg-red-500/10 text-red-400 shrink-0 mt-0.5">
           <i data-lucide="calendar-off" class="w-5 h-5"></i>
         </div>
         <div>
-          <h3 class="text-sm font-semibold text-white">Días Completos Bloqueados</h3>
+          <h3 class="text-sm font-semibold text-white">Viajes & Días Personales</h3>
           <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-            Los desplazamientos en transporte público (Valladolid ↔ Granollers) y los viajes personales/pareja ocupan la <strong class="text-zinc-200">jornada completa</strong> sin disponibilidad para rodajes ni entregas urgentes.
+            Los desplazamientos en transporte público (<span class="text-purple-300 font-medium">morado</span>) y los días de pareja (<span class="text-red-300 font-medium">rojo</span>) quedan claramente diferenciados en la agenda.
           </p>
         </div>
       </div>
@@ -423,24 +423,24 @@
         <div>
           <label class="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">Presets rápidos (Día completo / Viaje)</label>
           <div class="grid grid-cols-2 gap-1.5">
-            <button type="button" onclick="applyQuickPreset('granollers_trip_pack')" class="col-span-2 text-left px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500/20 to-cyan-500/20 hover:from-amber-500/30 hover:to-cyan-500/30 border border-amber-500/40 text-xs text-amber-100 font-semibold transition flex items-center justify-between">
+            <button type="button" onclick="applyQuickPreset('granollers_trip_pack')" class="col-span-2 text-left px-3 py-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-orange-500/20 hover:from-purple-500/30 hover:to-orange-500/30 border border-purple-500/40 text-xs text-purple-100 font-semibold transition flex items-center justify-between">
               <span>🚆🎥 Pack Viaje Granollers (Ida + Estancia Rodaje + Vuelta)</span>
-              <span class="text-[10px] font-mono bg-amber-500/30 px-1.5 py-0.5 rounded text-amber-200">RANGO FECHAS</span>
+              <span class="text-[10px] font-mono bg-purple-500/30 px-1.5 py-0.5 rounded text-purple-200">RANGO FECHAS</span>
             </button>
-            <button type="button" onclick="applyQuickPreset('castro_trip_pack')" class="col-span-2 text-left px-3 py-2 rounded-lg bg-gradient-to-r from-rose-500/20 to-pink-500/20 hover:from-rose-500/30 hover:to-pink-500/30 border border-rose-500/40 text-xs text-rose-100 font-semibold transition flex items-center justify-between">
+            <button type="button" onclick="applyQuickPreset('castro_trip_pack')" class="col-span-2 text-left px-3 py-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-red-500/20 hover:from-purple-500/30 hover:to-red-500/30 border border-red-500/40 text-xs text-red-100 font-semibold transition flex items-center justify-between">
               <span>❤️🚆 Pack Viaje Castro Urdiales (Ida + Estancia Pareja + Vuelta)</span>
-              <span class="text-[10px] font-mono bg-rose-500/30 px-1.5 py-0.5 rounded text-rose-200">RANGO FECHAS</span>
+              <span class="text-[10px] font-mono bg-red-500/30 px-1.5 py-0.5 rounded text-red-200">RANGO FECHAS</span>
             </button>
-            <button type="button" onclick="applyQuickPreset('stay_shoot_intensive')" class="text-left px-2.5 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-[11px] text-cyan-200 font-medium transition truncate">
+            <button type="button" onclick="applyQuickPreset('stay_shoot_intensive')" class="text-left px-2.5 py-1.5 rounded-lg bg-orange-500/15 hover:bg-orange-500/25 border border-orange-500/40 text-[11px] text-orange-200 font-medium transition truncate">
               🎬 Estancia/Rodaje (07h–19h · x2)
             </button>
-            <button type="button" onclick="applyQuickPreset('stay_couple_castro')" class="text-left px-2.5 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-[11px] text-rose-200 font-medium transition truncate">
+            <button type="button" onclick="applyQuickPreset('stay_couple_castro')" class="text-left px-2.5 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/25 border border-red-500/40 text-[11px] text-red-200 font-medium transition truncate">
               🏡 Estancia Castro Urdiales (Peso 0)
             </button>
-            <button type="button" onclick="applyQuickPreset('travel_valladolid')" class="text-left px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-[11px] text-amber-200 font-medium transition truncate">
+            <button type="button" onclick="applyQuickPreset('travel_valladolid')" class="text-left px-2.5 py-1.5 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-[11px] text-purple-200 font-medium transition truncate">
               🚆 Viaje Ida / Vuelta (Día 100%)
             </button>
-            <button type="button" onclick="applyQuickPreset('shoot_hector')" class="text-left px-2.5 py-1.5 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-[11px] text-purple-200 font-medium transition truncate">
+            <button type="button" onclick="applyQuickPreset('shoot_hector')" class="text-left px-2.5 py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/40 text-[11px] text-blue-200 font-medium transition truncate">
               ✂️ Rodaje Héctor Loza
             </button>
           </div>
@@ -540,10 +540,10 @@
         </p>
 
         <ul class="space-y-2 text-xs text-zinc-300 bg-studio-850 p-3.5 rounded-xl border border-zinc-800">
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-400 shrink-0"></span> <strong>SIT Granollers (Diario):</strong> Reels de Martes a Sábado (5/sem)</li>
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-purple-400 shrink-0"></span> <strong>Héctor Loza:</strong> 3 Reels (Lunes, Martes y Miércoles)</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-orange-400 shrink-0"></span> <strong>SIT Granollers (Diario):</strong> Reels de Martes a Sábado (5/sem)</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-400 shrink-0"></span> <strong>Héctor Loza:</strong> 3 Reels (Lunes, Martes y Miércoles)</li>
           <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span> <strong>Edición Vídeo Largo SIT:</strong> Viernes, Sábado, Lunes, Martes, Miércoles y Jueves</li>
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-400 shrink-0"></span> <strong>Entrega Vídeo Largo SIT:</strong> Todos los Viernes</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-orange-500 shrink-0"></span> <strong>Entrega Vídeo Largo SIT:</strong> Todos los Viernes</li>
         </ul>
 
         <div class="flex items-center gap-2 text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-xl">
@@ -697,27 +697,27 @@
     const CATEGORY_STYLES = {
       sit: {
         label: 'SIT Granollers',
-        badgeBg: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
-        dot: 'bg-cyan-400',
-        cardBorder: 'border-l-cyan-400'
+        badgeBg: 'bg-orange-500/15 text-orange-300 border-orange-500/35',
+        dot: 'bg-orange-400',
+        cardBorder: 'border-l-orange-400'
       },
       hector: {
         label: 'Héctor Loza',
-        badgeBg: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
-        dot: 'bg-purple-400',
-        cardBorder: 'border-l-purple-400'
+        badgeBg: 'bg-blue-500/15 text-blue-300 border-blue-500/35',
+        dot: 'bg-blue-400',
+        cardBorder: 'border-l-blue-400'
       },
       travel_shoot: {
         label: 'Viaje / Rodaje',
-        badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-        dot: 'bg-amber-400',
-        cardBorder: 'border-l-amber-400'
+        badgeBg: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+        dot: 'bg-purple-400',
+        cardBorder: 'border-l-purple-400'
       },
       personal: {
         label: 'Personal / Pareja',
-        badgeBg: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
-        dot: 'bg-rose-400',
-        cardBorder: 'border-l-rose-400'
+        badgeBg: 'bg-red-500/20 text-red-300 border-red-500/40',
+        dot: 'bg-red-400',
+        cardBorder: 'border-l-red-400'
       },
       editing: {
         label: 'Edición Vídeo Largo',
@@ -1130,19 +1130,19 @@
       const text = document.getElementById('live-status-text');
 
       if (todayEvents.some(e => e.type === 'stay_shoot')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-orange-400 animate-pulse';
         text.textContent = 'Estancia / Rodaje Intensivo (07:00–19:00)';
       } else if (todayEvents.some(e => e.type === 'travel_full')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse';
         text.textContent = 'En viaje (Transporte público · Día completo)';
       } else if (todayEvents.some(e => e.type === 'shoot')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-orange-400 animate-pulse';
         text.textContent = 'En rodaje (Grabación activa)';
       } else if (todayEvents.some(e => e.type === 'couple_full')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-400';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
         text.textContent = 'Día personal / No disponible';
       } else if (todayEvents.some(e => e.type === 'stay_couple')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-400';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
         text.textContent = 'En Castro Urdiales (Edición remota activa)';
       } else if (todayEvents.length > 0) {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400';
@@ -1187,13 +1187,15 @@
 
         const isFullDayBlocked = dayEvents.some(ev => ev.fullDay);
         const isPersonalDay = dayEvents.some(ev => ev.category === 'personal');
-        const isTravelShootDay = dayEvents.some(ev => ev.category === 'travel_shoot' || ev.type === 'shoot' || ev.type === 'stay_shoot');
+        const isTravelDay = dayEvents.some(ev => ev.category === 'travel_shoot' || ev.type === 'travel_full');
+        const isSitIntensiveDay = dayEvents.some(ev => ev.type === 'stay_shoot' || (ev.category === 'sit' && ev.type === 'shoot'));
         const dayEffectiveWeight = getDayTotalEventWeight(dayEvents);
 
         const cell = document.createElement('div');
         let bgClass = 'bg-studio-900 hover:bg-studio-850/90';
-        if (isPersonalDay) bgClass = 'bg-rose-950/20 hover:bg-rose-950/30';
-        else if (isTravelShootDay) bgClass = 'bg-amber-950/20 hover:bg-amber-950/30';
+        if (isPersonalDay) bgClass = 'bg-red-950/25 hover:bg-red-950/35';
+        else if (isTravelDay) bgClass = 'bg-purple-950/25 hover:bg-purple-950/35';
+        else if (isSitIntensiveDay) bgClass = 'bg-orange-950/20 hover:bg-orange-950/30';
 
         cell.className = `min-h-[105px] sm:min-h-[135px] p-1.5 sm:p-2.5 flex flex-col justify-between cursor-pointer transition relative group ${bgClass} ${isToday ? 'ring-2 ring-inset ring-indigo-500' : ''}`;
         cell.onclick = () => openDayDetailModal(dateStr);
@@ -1211,8 +1213,19 @@
 
         if (isFullDayBlocked) {
           const lockBadge = document.createElement('span');
-          lockBadge.className = 'text-[9px] sm:text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 truncate';
-          lockBadge.textContent = dayEvents.some(e => e.type === 'stay_shoot') ? '07h–19h (x2)' : 'DÍA COMPLETO';
+          if (dayEvents.some(e => e.type === 'stay_shoot')) {
+            lockBadge.className = 'text-[9px] sm:text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-500/35 truncate';
+            lockBadge.textContent = '07h–19h (x2)';
+          } else if (isPersonalDay) {
+            lockBadge.className = 'text-[9px] sm:text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-500/35 truncate';
+            lockBadge.textContent = 'DÍA COMPLETO';
+          } else if (isTravelDay) {
+            lockBadge.className = 'text-[9px] sm:text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/35 truncate';
+            lockBadge.textContent = 'VIAJE 100%';
+          } else {
+            lockBadge.className = 'text-[9px] sm:text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/35 truncate';
+            lockBadge.textContent = 'DÍA COMPLETO';
+          }
           topRow.appendChild(lockBadge);
         } else if (dayEvents.length === 0 && state.activeFilter === 'all') {
           const freeDot = document.createElement('span');
@@ -1221,7 +1234,7 @@
           topRow.appendChild(freeDot);
         } else if (dayEffectiveWeight >= 3) {
           const busyBadge = document.createElement('span');
-          busyBadge.className = 'hidden sm:inline-block text-[9px] font-mono font-semibold uppercase px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300';
+          busyBadge.className = 'hidden sm:inline-block text-[9px] font-mono font-semibold uppercase px-1.5 py-0.5 rounded bg-orange-500/15 text-orange-300';
           busyBadge.textContent = 'Muy liado';
           topRow.appendChild(busyBadge);
         } else if (dayEffectiveWeight > 0) {
@@ -1240,7 +1253,9 @@
         // Mostrar hasta 3 eventos en vista escritorio y puntos/resumen compacto en móvil
         const maxVisible = 3;
         dayEvents.slice(0, maxVisible).forEach(ev => {
-          const style = CATEGORY_STYLES[ev.category] || CATEGORY_STYLES.editing;
+          const style = ev.type === 'travel_full'
+            ? CATEGORY_STYLES.travel_shoot
+            : (CATEGORY_STYLES[ev.category] || CATEGORY_STYLES.editing);
           const weightVal = getEventWeight(ev);
           const isDoubleWeight = weightVal >= 2;
           const isZeroWeightLocation = ev.type === 'stay_couple' || weightVal === 0;
@@ -1251,8 +1266,8 @@
               <span class="w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}"></span>
               <span class="truncate">${escapeHtml(ev.title)}</span>
             </span>
-            ${isDoubleWeight ? '<span class="shrink-0 text-[9px] font-mono font-bold px-1 rounded bg-white/15 text-white">x2</span>' : ''}
-            ${isZeroWeightLocation ? '<span class="shrink-0 text-[9px] font-mono px-1 rounded bg-rose-500/25 text-rose-200">📍</span>' : ''}
+            ${isDoubleWeight ? '<span class="shrink-0 text-[9px] font-mono font-bold px-1 rounded bg-orange-500/30 text-orange-100">x2</span>' : ''}
+            ${isZeroWeightLocation ? '<span class="shrink-0 text-[9px] font-mono px-1 rounded bg-red-500/30 text-red-100">📍</span>' : ''}
           `;
           eventsContainer.appendChild(pill);
         });
@@ -1318,18 +1333,24 @@
 
       const banner = document.getElementById('modal-day-status-banner');
       if (isFullBlocked) {
-        banner.className = 'p-3 rounded-xl border bg-rose-950/40 border-rose-500/40 text-rose-200 flex items-center gap-3';
+        const isOnlyTravel = dayEvents.some(ev => ev.type === 'travel_full') && !dayEvents.some(ev => ev.category === 'personal');
+        const isCoupleDay = dayEvents.some(ev => ev.category === 'personal');
+        banner.className = isOnlyTravel
+          ? 'p-3 rounded-xl border bg-purple-950/40 border-purple-500/40 text-purple-200 flex items-center gap-3'
+          : (isCoupleDay
+            ? 'p-3 rounded-xl border bg-red-950/40 border-red-500/40 text-red-200 flex items-center gap-3'
+            : 'p-3 rounded-xl border bg-orange-950/40 border-orange-500/40 text-orange-200 flex items-center gap-3');
         banner.innerHTML = `
-          <i data-lucide="ban" class="w-5 h-5 text-rose-400 shrink-0"></i>
+          <i data-lucide="ban" class="w-5 h-5 ${isOnlyTravel ? 'text-purple-400' : (isCoupleDay ? 'text-red-400' : 'text-orange-400')} shrink-0"></i>
           <div class="text-xs">
             <strong class="block text-sm text-white">Día Completo Ocupado</strong>
             No disponible para nuevos rodajes, llamadas largas ni entregas urgentes.
           </div>
         `;
       } else if (isCastroStay) {
-        banner.className = 'p-3 rounded-xl border bg-rose-950/25 border-rose-500/30 text-rose-200 flex items-center gap-3';
+        banner.className = 'p-3 rounded-xl border bg-red-950/30 border-red-500/35 text-red-200 flex items-center gap-3';
         banner.innerHTML = `
-          <i data-lucide="map-pin" class="w-5 h-5 text-rose-400 shrink-0"></i>
+          <i data-lucide="map-pin" class="w-5 h-5 text-red-400 shrink-0"></i>
           <div class="text-xs">
             <strong class="block text-sm text-white">En casa de mi pareja (Castro Urdiales)</strong>
             Estancia fuera de Valladolid sin añadir carga extra al volumen de trabajo.
@@ -1362,7 +1383,9 @@
         list.innerHTML = `<p class="text-xs text-zinc-500 text-center py-4">No hay tareas o bloqueos registrados este día.</p>`;
       } else {
         dayEvents.forEach(ev => {
-          const style = CATEGORY_STYLES[ev.category] || CATEGORY_STYLES.editing;
+          const style = ev.type === 'travel_full'
+            ? CATEGORY_STYLES.travel_shoot
+            : (CATEGORY_STYLES[ev.category] || CATEGORY_STYLES.editing);
           const weightVal = getEventWeight(ev);
           const item = document.createElement('div');
           item.className = `p-3.5 rounded-xl bg-studio-850 border border-zinc-800 border-l-4 ${style.cardBorder} flex items-start justify-between gap-3`;
@@ -1372,9 +1395,9 @@
               <div class="flex flex-wrap items-center gap-2">
                 <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${style.badgeBg}">${style.label}</span>
                 <span class="text-[10px] font-mono text-zinc-400">${TYPE_LABELS[ev.type] || ev.type}</span>
-                ${weightVal >= 2 ? '<span class="text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded">PESO x2 EVENTOS (07h–19h)</span>' : ''}
-                ${weightVal === 0 ? '<span class="text-[10px] font-mono bg-rose-500/20 text-rose-300 border border-rose-500/30 px-1.5 py-0.5 rounded">UBICACIÓN · SIN PESO LABORAL</span>' : ''}
-                ${ev.fullDay ? '<span class="text-[10px] font-mono bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded">DÍA COMPLETO</span>' : ''}
+                ${weightVal >= 2 ? '<span class="text-[10px] font-mono font-bold bg-orange-500/20 text-orange-300 border border-orange-500/35 px-1.5 py-0.5 rounded">PESO x2 EVENTOS (07h–19h)</span>' : ''}
+                ${weightVal === 0 ? '<span class="text-[10px] font-mono bg-red-500/20 text-red-300 border border-red-500/35 px-1.5 py-0.5 rounded">UBICACIÓN · SIN PESO LABORAL</span>' : ''}
+                ${ev.fullDay ? '<span class="text-[10px] font-mono bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded">DÍA COMPLETO</span>' : ''}
               </div>
               <h4 class="text-sm font-semibold text-white">${escapeHtml(ev.title)}</h4>
               ${ev.notes ? `<p class="text-xs text-zinc-400 leading-relaxed">${escapeHtml(ev.notes)}</p>` : ''}
@@ -1495,8 +1518,8 @@
 
       if (presetKey === 'castro_trip_pack') {
         isTripPackEl.value = 'castro';
-        tripHintEl.className = 'p-2.5 rounded-xl bg-rose-950/40 border border-rose-500/30 text-[11px] text-rose-200 leading-relaxed';
-        tripHintEl.innerHTML = '<strong>Modo Pack Viaje Castro Urdiales:</strong> El 1er día se creará como <em>Viaje de Ida</em> (día completo), los días intermedios como <em>En casa de mi pareja · Castro Urdiales</em> (<strong>Peso 0</strong> en volumen de trabajo) y el último día como <em>Viaje de Vuelta</em> (día completo).';
+        tripHintEl.className = 'p-2.5 rounded-xl bg-red-950/40 border border-red-500/35 text-[11px] text-red-200 leading-relaxed';
+        tripHintEl.innerHTML = '<strong>Modo Pack Viaje Castro Urdiales:</strong> El 1er día se creará como <em>Viaje de Ida</em> (<span class="text-purple-300">morado</span>, día completo), los días intermedios como <em>En casa de mi pareja · Castro Urdiales</em> (<span class="text-red-300">rojo</span>, <strong>Peso 0</strong>) y el último día como <em>Viaje de Vuelta</em> (<span class="text-purple-300">morado</span>, día completo).';
         tripHintEl.classList.remove('hidden');
         standardFieldsEl.classList.add('hidden');
         dateLabel.textContent = 'Día Viaje de Ida';
