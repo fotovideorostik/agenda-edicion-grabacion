@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Agenda & Disponibilidad | Filmmaker & Editor Freelance</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Agenda de Producción Audiovisual · Freelance Valladolid</title>
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons CDN -->
+
+  <!-- Fuente Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Iconos Lucide -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Fonts: Inter & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -20,7 +23,6 @@
         extend: {
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
             studio: {
@@ -33,109 +35,104 @@
           }
         }
       }
-    }
+    };
   </script>
+
   <style>
-    /* Scrollbar estilizada estilo suite de edición */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #09090b; }
-    ::-webkit-scrollbar-thumb { background: #2e2e3a; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #4b4b5e; }
-    .glass-panel {
-      background: rgba(24, 24, 31, 0.82);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #f4f4f5;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #121216;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2e2e3a;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #464656;
+    }
+
+    .calendar-cell {
+      transition: transform 0.14s ease, border-color 0.14s ease, background-color 0.14s ease;
+    }
+    .calendar-cell:hover {
+      border-color: rgba(161, 161, 170, 0.55);
+    }
+
+    @keyframes pulseSoft {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
+    .animate-pulse-soft {
+      animation: pulseSoft 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
   </style>
 </head>
-<body class="bg-studio-950 text-zinc-100 font-sans antialiased min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200">
 
-  <!-- Barra de Notificaciones Toast (z-index: 9999 para verse siempre por encima de cualquier modal) -->
-  <div id="toast-container" style="z-index: 9999;" class="fixed top-4 right-4 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+  <!-- Contenedor Global de Notificaciones (Toast siempre visible encima de modales) -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
-  <!-- Banner Superior Modo Edición (Solo visible cuando el Admin inicia sesión) -->
-  <div id="admin-toolbar" class="hidden sticky top-0 z-40 bg-gradient-to-r from-indigo-950 via-purple-950 to-studio-900 border-b border-indigo-500/40 px-4 py-2.5 shadow-lg">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-2.5">
-        <span class="flex h-2.5 w-2.5 relative">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-        </span>
-        <span class="text-xs sm:text-sm font-semibold tracking-wide text-indigo-200 uppercase font-mono">Modo Edición Activo</span>
-        <span id="unsaved-badge" class="hidden text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full">
-          Cambios sin subir
-        </span>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-2">
-        <button id="btn-init-schedule" onclick="initializeScheduleOnGitHub()" class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-studio-950 shadow transition">
-          <i data-lucide="file-plus-2" class="w-3.5 h-3.5"></i>
-          <span>Inicializar schedule.json en GitHub ahora</span>
-        </button>
-
-        <button onclick="openRoutineModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-studio-800 hover:bg-studio-700 text-zinc-200 border border-zinc-700 transition">
-          <i data-lucide="wand-2" class="w-3.5 h-3.5 text-purple-400"></i>
-          <span>Generar rutina base del mes</span>
-        </button>
-
-        <button onclick="openAddEventModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-white shadow transition">
-          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-          <span>Añadir bloque</span>
-        </button>
-
-        <button id="btn-sync-github" onclick="saveToGitHub()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow transition">
-          <i data-lucide="cloud-upload" class="w-3.5 h-3.5"></i>
-          <span>Guardar en GitHub</span>
-        </button>
-
-        <button onclick="downloadScheduleJson()" title="Descargar respaldo manual de schedule.json" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-studio-800 hover:bg-studio-700 text-zinc-300 border border-zinc-700 transition">
-          <i data-lucide="download" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">JSON</span>
-        </button>
-
-        <button onclick="openAdminSettingsModal()" title="Configuración GitHub API y Contraseña" class="p-1.5 rounded-lg bg-studio-800 hover:bg-studio-700 text-zinc-300 border border-zinc-700 transition">
-          <i data-lucide="settings" class="w-4 h-4"></i>
-        </button>
-
-        <button onclick="logoutAdmin()" title="Cerrar sesión de edición" class="p-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 transition">
-          <i data-lucide="log-out" class="w-4 h-4"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Cabecera Principal -->
-  <header class="border-b border-zinc-800/80 bg-studio-900/70 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div class="flex items-start sm:items-center gap-3.5">
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-rose-500 p-[1px] shrink-0 shadow-lg shadow-indigo-500/10">
-            <div class="w-full h-full bg-studio-950 rounded-2xl flex items-center justify-center">
-              <i data-lucide="clapperboard" class="w-6 h-6 text-indigo-400"></i>
-            </div>
-          </div>
-          <div>
-            <div class="flex flex-wrap items-center gap-2">
-              <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">Agenda de Producción & Rodajes</h1>
-              <span class="inline-flex items-center gap-1 text-xs font-mono px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700">
-                <i data-lucide="map-pin" class="w-3 h-3 text-rose-400"></i> Base: Valladolid
-              </span>
-            </div>
-            <p class="text-xs sm:text-sm text-zinc-400 mt-0.5">
-              Filmmaker, Guionista & Editor Freelance · Consulta mi carga de trabajo y disponibilidad real.
-            </p>
+  <!-- Barra Superior (Header) -->
+  <header class="sticky top-0 z-30 backdrop-blur-xl bg-studio-950/85 border-b border-zinc-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <!-- Identidad -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-amber-500 p-[1px] shadow-lg shadow-indigo-500/10">
+          <div class="w-full h-full bg-studio-900 rounded-[11px] flex items-center justify-center">
+            <i data-lucide="clapperboard" class="w-5 h-5 text-indigo-400"></i>
           </div>
         </div>
-
-        <!-- Badge Dinámico de Estado Actual (Hoy / Esta Semana) -->
-        <div class="flex items-center gap-3 self-start md:self-auto">
-          <div id="live-status-badge" class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-studio-850 border border-zinc-800 shadow-inner">
-            <span id="live-status-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-            <div class="text-left">
-              <div class="text-[10px] uppercase tracking-wider text-zinc-500 font-mono">Estado actual</div>
-              <div id="live-status-text" class="text-xs sm:text-sm font-semibold text-zinc-200">Calculando agenda...</div>
-            </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">Agenda de Producción</h1>
+            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/70">
+              Cámara &amp; Editor Freelance
+            </span>
           </div>
+          <p class="text-xs text-zinc-400 flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-zinc-500"></i>
+            <span>Base: Valladolid · Desplazamientos a Granollers &amp; Santoña</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Estado del Día Actual & Controles Admin -->
+      <div class="flex items-center gap-2 sm:gap-3 ml-auto">
+        <!-- Indicador en vivo de disponibilidad hoy -->
+        <div id="live-status-badge" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-studio-850 border border-zinc-800 text-xs">
+          <span id="live-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-soft"></span>
+          <span id="live-status-text" class="text-zinc-300 font-medium">Cargando estado...</span>
+        </div>
+
+        <!-- Botón de Admin (visible al iniciar sesión) -->
+        <div id="admin-toolbar" class="hidden items-center gap-2">
+          <button onclick="openBulkGeneratorModal()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium border border-zinc-700 transition">
+            <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-indigo-400"></i>
+            <span class="hidden md:inline">Generar Rutina Mes</span>
+          </button>
+
+          <button id="btn-sync-github" onclick="saveToGitHub()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-950/50 transition">
+            <i data-lucide="cloud-upload" class="w-3.5 h-3.5"></i>
+            <span>Guardar en GitHub</span>
+          </button>
+
+          <button onclick="openSettingsModal()" title="Configuración GitHub y Contraseña" class="p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 transition">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+          </button>
+
+          <button onclick="logoutAdmin()" title="Cerrar sesión" class="p-2 rounded-xl bg-red-950/50 hover:bg-red-900/60 text-red-300 border border-red-800/50 transition">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -144,12 +141,32 @@
   <!-- Contenido Principal -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
+    <!-- Banner de estado de sincronización o modo admin activo -->
+    <div id="admin-active-banner" class="hidden rounded-2xl bg-gradient-to-r from-indigo-950/70 via-studio-850 to-purple-950/50 border border-indigo-500/30 p-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 text-xs sm:text-sm text-indigo-200">
+        <span class="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-300">
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
+        </span>
+        <span>
+          <strong>Modo Edición Activo:</strong> Haz clic en cualquier día del calendario para añadir, editar o eliminar bloques. Recuerda pulsar <em>"Guardar en GitHub"</em> para publicar cambios.
+        </span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="unsaved-indicator" class="hidden text-xs font-medium px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+          Cambios sin subir a GitHub
+        </span>
+        <button id="btn-init-github-file" onclick="initializeScheduleOnGitHub()" class="hidden text-xs font-semibold px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white transition">
+          Inicializar schedule.json en GitHub
+        </button>
+      </div>
+    </div>
+
     <!-- Aviso inteligente si ha saltado automáticamente al mes siguiente -->
     <div id="auto-next-month-banner" class="hidden rounded-2xl bg-indigo-950/40 border border-indigo-500/30 px-4 py-3 flex items-center justify-between gap-3">
       <div class="flex items-center gap-2.5 text-xs sm:text-sm text-indigo-200">
         <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400 shrink-0"></i>
         <span>
-          Quedan menos de 3 días para finalizar el mes actual, así que te muestro directamente la planificación de <strong id="auto-month-name" class="text-white underline decoration-indigo-400"></strong>.
+          El próximo día laboral ya corresponde al mes siguiente, así que te muestro directamente la planificación de <strong id="auto-month-name" class="text-white underline decoration-indigo-400"></strong>.
         </span>
       </div>
       <button onclick="goToActualCurrentMonth()" class="shrink-0 text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 transition">
@@ -158,417 +175,450 @@
     </div>
 
     <!-- Dashboard de Carga del Mes Visible -->
-    <section aria-label="Resumen de carga mensual" class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
-      <!-- KPI 1: Reels del Mes -->
-      <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
-        <div class="flex items-center justify-between text-zinc-400">
-          <span class="text-xs font-medium">Reels a entregar</span>
-          <span class="p-1.5 rounded-lg bg-orange-500/10 text-orange-400"><i data-lucide="smartphone" class="w-4 h-4"></i></span>
-        </div>
-        <div class="mt-3 flex items-baseline gap-2">
-          <span id="kpi-reels" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
-          <span class="text-xs text-zinc-500">vídeos cortos</span>
-        </div>
-        <div id="kpi-reels-breakdown" class="mt-1 text-[11px] text-zinc-400 truncate">SIT + Héctor Loza</div>
-      </div>
-
-      <!-- KPI 2: Vídeos Largos -->
-      <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
-        <div class="flex items-center justify-between text-zinc-400">
-          <span class="text-xs font-medium">Vídeos Largos</span>
-          <span class="p-1.5 rounded-lg bg-orange-500/10 text-orange-400"><i data-lucide="youtube" class="w-4 h-4"></i></span>
-        </div>
-        <div class="mt-3 flex items-baseline gap-2">
-          <span id="kpi-long" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
-          <span class="text-xs text-zinc-500">formato YouTube</span>
-        </div>
-        <div class="mt-1 text-[11px] text-zinc-400">SIT Granollers (1/sem)</div>
-      </div>
-
-      <!-- KPI 3: Rodajes y Viajes Trabajo -->
-      <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
-        <div class="flex items-center justify-between text-zinc-400">
-          <span class="text-xs font-medium">Rodajes / Viajes</span>
-          <span class="p-1.5 rounded-lg bg-purple-500/10 text-purple-400"><i data-lucide="train-front" class="w-4 h-4"></i></span>
-        </div>
-        <div class="mt-3 flex items-baseline gap-2">
-          <span id="kpi-shoots" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
-          <span class="text-xs text-zinc-500">días bloqueados</span>
-        </div>
-        <div class="mt-1 text-[11px] text-zinc-400">Granollers + Barbería</div>
-      </div>
-
-      <!-- KPI 4: Días Personales / Pareja -->
-      <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
-        <div class="flex items-center justify-between text-zinc-400">
-          <span class="text-xs font-medium">Personal / Pareja</span>
-          <span class="p-1.5 rounded-lg bg-red-500/10 text-red-400"><i data-lucide="heart" class="w-4 h-4"></i></span>
-        </div>
-        <div class="mt-3 flex items-baseline gap-2">
-          <span id="kpi-personal" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
-          <span class="text-xs text-zinc-500">días completos</span>
-        </div>
-        <div class="mt-1 text-[11px] text-zinc-400">No disponible</div>
-      </div>
-
-      <!-- KPI 5: Medidor de Ocupación -->
-      <div class="col-span-2 lg:col-span-1 bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
-        <div class="flex items-center justify-between text-zinc-400">
-          <span class="text-xs font-medium">Nivel de Carga</span>
-          <span id="kpi-load-badge" class="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">ALTO</span>
-        </div>
-        <div class="mt-2">
-          <div class="flex items-baseline justify-between">
-            <span id="kpi-load-percent" class="text-2xl sm:text-3xl font-extrabold text-white">0%</span>
-            <span id="kpi-busy-days" class="text-xs text-zinc-400">0/30 días</span>
-          </div>
-          <div class="w-full h-2 bg-studio-800 rounded-full mt-2 overflow-hidden">
-            <div id="kpi-load-bar" class="h-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 transition-all duration-500" style="width: 0%"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Controles de Navegación del Mes y Filtros -->
-    <section class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <!-- Navegador de Mes -->
-        <div class="flex items-center justify-between sm:justify-start gap-2">
-          <button onclick="changeMonth(-1)" aria-label="Mes anterior" class="p-2.5 rounded-xl bg-studio-800 hover:bg-studio-700 text-zinc-200 border border-zinc-700/80 transition active:scale-95">
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <!-- Navegación de Mes y Resumen -->
+      <div class="lg:col-span-5 rounded-2xl bg-studio-900 border border-zinc-800/90 p-5 flex flex-col justify-between gap-4">
+        <div class="flex items-center justify-between gap-2">
+          <button id="btn-prev-month" onclick="changeMonth(-1)" aria-label="Mes anterior" class="p-2.5 rounded-xl bg-studio-800 hover:bg-studio-700 text-zinc-200 border border-zinc-700/80 transition active:scale-95 disabled:opacity-35 disabled:pointer-events-none">
             <i data-lucide="chevron-left" class="w-5 h-5"></i>
           </button>
 
-          <div class="min-w-[190px] text-center px-3">
-            <h2 id="current-month-label" class="text-lg sm:text-xl font-bold capitalize text-white tracking-tight">
+          <div class="text-center px-2">
+            <h2 id="current-month-label" class="text-xl sm:text-2xl font-extrabold tracking-tight text-white capitalize">
               Noviembre 2026
             </h2>
-            <p id="current-month-sub" class="text-[11px] font-mono text-zinc-400">Vista mensual</p>
+            <p id="current-month-sub" class="text-xs text-zinc-400 mt-0.5">
+              Planificación mensual
+            </p>
           </div>
 
           <button onclick="changeMonth(1)" aria-label="Mes siguiente" class="p-2.5 rounded-xl bg-studio-800 hover:bg-studio-700 text-zinc-200 border border-zinc-700/80 transition active:scale-95">
             <i data-lucide="chevron-right" class="w-5 h-5"></i>
           </button>
-
-          <button onclick="resetToDefaultLandingMonth()" class="ml-1 px-3 py-2 rounded-xl text-xs font-medium bg-studio-850 hover:bg-studio-800 text-zinc-300 border border-zinc-700/70 transition">
-            Hoy / Inicio
-          </button>
         </div>
 
-        <!-- Filtros rápidos por Cliente / Categoría -->
-        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar" id="filter-buttons">
-          <button data-filter="all" onclick="setFilter('all')" class="filter-btn active px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-studio-950 transition shrink-0">
-            Todos
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-zinc-800/80 text-xs">
+          <button onclick="resetToDefaultLandingMonth()" class="inline-flex items-center gap-1.5 text-zinc-400 hover:text-white transition">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-indigo-400"></i>
+            <span>Ir a vista principal</span>
           </button>
-          <button data-filter="sit" onclick="setFilter('sit')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-orange-400"></span> SIT Granollers
-          </button>
-          <button data-filter="hector" onclick="setFilter('hector')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-blue-400"></span> Héctor Loza
-          </button>
-          <button data-filter="travel_shoot" onclick="setFilter('travel_shoot')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-purple-400"></span> Viajes y Rodajes
-          </button>
-          <button data-filter="personal" onclick="setFilter('personal')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-red-400"></span> Personal / Pareja
-          </button>
-          <button data-filter="editing" onclick="setFilter('editing')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Edición / Guion
-          </button>
+
+          <span id="repo-sync-status" class="text-zinc-500 flex items-center gap-1.5">
+            <i data-lucide="database" class="w-3.5 h-3.5"></i>
+            <span>Fuente: Local / GitHub</span>
+          </span>
         </div>
       </div>
 
-      <!-- Leyenda Visual -->
-      <div class="pt-3 border-t border-zinc-800/80 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-zinc-400">
-        <span class="font-mono uppercase text-zinc-500">Estructura diaria:</span>
-        <div class="flex items-center gap-1.5 text-zinc-300"><span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-mono text-[10px]">📍 Valladolid · Libre</span> Apartado Ubicación</div>
-        <div class="flex items-center gap-1.5 text-zinc-300"><span class="px-1.5 py-0.5 rounded bg-orange-500/15 text-orange-300 border border-orange-500/30 font-mono text-[10px]">🎬 Trabajo</span> Apartado Rodaje / Edición</div>
-        <span class="text-zinc-700">|</span>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-orange-500"></span> SIT Granollers</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-orange-800 border border-orange-600/60"></span> Largo SIT (Vie)</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Rodaje Granollers</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-blue-500"></span> Héctor Loza</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-500"></span> Viaje Trabajo</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-red-500"></span> Castro Urdiales / Pareja</div>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-cyan-500"></span> Edición Largo</div>
+      <!-- KPIs de Carga de Trabajo -->
+      <div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <!-- KPI 1: SIT Granollers -->
+        <div class="rounded-2xl bg-studio-900 border border-orange-500/25 p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-orange-300">SIT Granollers</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+          </div>
+          <div class="mt-3">
+            <div id="kpi-granollers" class="text-2xl font-bold text-white">0</div>
+            <p class="text-[11px] text-zinc-400 mt-0.5">Reels (Mar–Sáb) + Largos</p>
+          </div>
+        </div>
+
+        <!-- KPI 2: Héctor Loza -->
+        <div class="rounded-2xl bg-studio-900 border border-blue-500/25 p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-blue-300">Héctor Loza</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+          </div>
+          <div class="mt-3">
+            <div id="kpi-hector" class="text-2xl font-bold text-white">0</div>
+            <p class="text-[11px] text-zinc-400 mt-0.5">Reels (Lun–Mié) + Santoña</p>
+          </div>
+        </div>
+
+        <!-- KPI 3: Desplazamientos y Rodajes -->
+        <div class="rounded-2xl bg-studio-900 border border-emerald-500/25 p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-emerald-300">Viajes &amp; Estancias</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          </div>
+          <div class="mt-3">
+            <div id="kpi-travel" class="text-2xl font-bold text-white">0d</div>
+            <p class="text-[11px] text-zinc-400 mt-0.5">Granollers, Santoña &amp; Castro</p>
+          </div>
+        </div>
+
+        <!-- KPI 4: Índice de Ocupación -->
+        <div class="rounded-2xl bg-studio-900 border border-zinc-800 p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-zinc-300">Carga Mensual</span>
+            <i data-lucide="activity" class="w-4 h-4 text-indigo-400"></i>
+          </div>
+          <div class="mt-3">
+            <div id="kpi-load" class="text-2xl font-bold text-white">0%</div>
+            <div class="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden mt-1.5">
+              <div id="kpi-load-bar" class="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leyenda y Filtros Rápidos -->
+    <section class="rounded-2xl bg-studio-900/90 border border-zinc-800/90 p-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <span class="text-zinc-500 font-medium mr-1">Filtrar:</span>
+        <button onclick="setFilter('all')" data-filter="all" class="filter-chip active px-3 py-1.5 rounded-xl bg-zinc-800 text-white border border-zinc-600 font-medium transition">
+          Todo
+        </button>
+        <button onclick="setFilter('granollers')" data-filter="granollers" class="filter-chip px-3 py-1.5 rounded-xl bg-studio-850 hover:bg-zinc-800 text-orange-300 border border-orange-500/30 font-medium transition flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+          SIT Granollers
+        </button>
+        <button onclick="setFilter('hector')" data-filter="hector" class="filter-chip px-3 py-1.5 rounded-xl bg-studio-850 hover:bg-zinc-800 text-blue-300 border border-blue-500/30 font-medium transition flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+          Héctor Loza
+        </button>
+        <button onclick="setFilter('travel')" data-filter="travel" class="filter-chip px-3 py-1.5 rounded-xl bg-studio-850 hover:bg-zinc-800 text-emerald-300 border border-emerald-500/30 font-medium transition flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          Viajes / Rodajes
+        </button>
+        <button onclick="setFilter('personal')" data-filter="personal" class="filter-chip px-3 py-1.5 rounded-xl bg-studio-850 hover:bg-zinc-800 text-red-300 border border-red-500/30 font-medium transition flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-red-500"></span>
+          Castro / Pareja
+        </button>
+      </div>
+
+      <!-- Leyenda visual de estados y tags -->
+      <div class="flex flex-wrap items-center gap-3 text-[11px] text-zinc-400">
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-orange-500"></span> Reel SIT
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-orange-700"></span> Largo SIT
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Rodaje Granollers
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span> Héctor / Santoña
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-purple-500"></span> Viaje
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-red-500"></span> Castro Urdiales
+        </span>
       </div>
     </section>
 
     <!-- Calendario Mensual -->
-    <section aria-label="Calendario de actividades" class="bg-studio-900 border border-zinc-800/90 rounded-2xl overflow-hidden shadow-xl">
-      <!-- Cabecera Días de la Semana (Lunes a Domingo - estándar España) -->
-      <div class="grid grid-cols-7 bg-studio-850 border-b border-zinc-800 text-center py-2.5">
-        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Lun</div>
-        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Mar</div>
-        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Mié</div>
-        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Jue</div>
-        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Vie</div>
-        <div class="text-xs font-semibold text-amber-400/90 uppercase tracking-wider">Sáb</div>
-        <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Dom</div>
+    <section class="rounded-2xl bg-studio-900 border border-zinc-800 overflow-hidden shadow-2xl shadow-black/40">
+      <!-- Cabecera días de la semana (Lunes a Domingo) -->
+      <div class="grid grid-cols-7 bg-studio-850 border-b border-zinc-800 text-center py-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">
+        <div>Lun</div>
+        <div>Mar</div>
+        <div>Mié</div>
+        <div>Jue</div>
+        <div>Vie</div>
+        <div>Sáb</div>
+        <div class="text-zinc-500">Dom</div>
       </div>
 
-      <!-- Cuadrícula de Días -->
-      <div id="calendar-grid" class="grid grid-cols-7 divide-x divide-y divide-zinc-800/70 bg-studio-900">
-        <!-- Se rellena dinámicamente vía JS -->
-      </div>
-    </section>
-
-    <!-- Nota informativa sobre el flujo de trabajo para clientes potenciales -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-studio-900/70 border border-zinc-800/80 rounded-2xl p-4 flex items-start gap-3">
-        <div class="p-2 rounded-xl bg-orange-500/10 text-orange-400 shrink-0 mt-0.5">
-          <i data-lucide="wind" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <h3 class="text-sm font-semibold text-white">SIT Granollers (Climatización)</h3>
-          <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-            Producción semanal continua: <strong class="text-zinc-200">Vídeo diario / Reels (Mar–Sáb)</strong> + <strong class="text-zinc-200">Vídeo Largo</strong> editado de viernes a jueves con entrega todos los <strong class="text-zinc-200">viernes</strong>.
-          </p>
-        </div>
-      </div>
-
-      <div class="bg-studio-900/70 border border-zinc-800/80 rounded-2xl p-4 flex items-start gap-3">
-        <div class="p-2 rounded-xl bg-blue-500/10 text-blue-400 shrink-0 mt-0.5">
-          <i data-lucide="scissors" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <h3 class="text-sm font-semibold text-white">Héctor Loza (Barbería & Escuela)</h3>
-          <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-            Estrategia de marca personal y lanzamiento de academia: <strong class="text-zinc-200">3 Reels semanales (Lunes, Martes y Miércoles)</strong> con máximo 1 jornada de rodaje mensual.
-          </p>
-        </div>
-      </div>
-
-      <div class="bg-studio-900/70 border border-zinc-800/80 rounded-2xl p-4 flex items-start gap-3">
-        <div class="p-2 rounded-xl bg-red-500/10 text-red-400 shrink-0 mt-0.5">
-          <i data-lucide="calendar-off" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <h3 class="text-sm font-semibold text-white">Viajes & Días Personales</h3>
-          <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-            Los desplazamientos en transporte público (<span class="text-purple-300 font-medium">morado</span>) y los días de pareja (<span class="text-red-300 font-medium">rojo</span>) quedan claramente diferenciados en la agenda.
-          </p>
-        </div>
+      <!-- Rejilla de Días -->
+      <div id="calendar-grid" class="grid grid-cols-7 divide-x divide-y divide-zinc-800/80">
+        <!-- Renderizado dinámicamente por JS -->
       </div>
     </section>
 
+    <!-- Nota informativa para clientes / visitas -->
+    <section class="rounded-2xl bg-studio-900/60 border border-zinc-800/70 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+          <i data-lucide="info" class="w-4 h-4 text-indigo-400"></i>
+          <span>¿Quieres agendar una grabación o proyecto?</span>
+        </h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">
+          Cada casilla muestra arriba mi <strong>localización</strong> (<em>Valladolid · Libre</em> cuando estoy en base, o desplazamiento activo) y abajo la <strong>carga de trabajo</strong> del día. Los días marcados como <strong>Viaje</strong> o <strong>Rodaje</strong> bloquean la jornada completa.
+        </p>
+      </div>
+      <div class="shrink-0 flex items-center gap-2 text-xs text-zinc-400 bg-studio-850 px-3.5 py-2 rounded-xl border border-zinc-800">
+        <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i>
+        <span>Entregas: Mar–Sáb (SIT) · Lun–Mié (Héctor)</span>
+      </div>
+    </section>
   </main>
 
-  <!-- Pie de página con acceso discreto para el propietario -->
-  <footer class="border-t border-zinc-800/80 bg-studio-900/50 py-5 mt-8">
+  <!-- Pie de página con acceso discreto de administración -->
+  <footer class="border-t border-zinc-900 bg-studio-950 py-5 mt-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
-      <div class="flex items-center gap-2">
-        <span>Agenda pública actualizada en tiempo real · Valladolid, España</span>
-        <span id="data-source-indicator" class="hidden sm:inline-block font-mono text-[10px] px-2 py-0.5 rounded bg-studio-850 text-zinc-400 border border-zinc-800">
-          Fuente: schedule.json
-        </span>
+      <p>Agenda de Producción Audiovisual · Actualización en tiempo real</p>
+      <div class="flex items-center gap-4">
+        <button id="footer-login-btn" onclick="openLoginModal()" class="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-200 transition py-1 px-2.5 rounded-lg hover:bg-zinc-900">
+          <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+          <span>Acceso Admin</span>
+        </button>
       </div>
-
-      <button onclick="handleAdminAccessClick()" class="inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-300 transition py-1 px-2.5 rounded-lg hover:bg-studio-800">
-        <i id="footer-lock-icon" data-lucide="lock" class="w-3.5 h-3.5"></i>
-        <span id="footer-lock-text">Acceso Admin</span>
-      </button>
     </div>
   </footer>
 
   <!-- ===================================================================== -->
-  <!-- MODAL 1: DETALLE DEL DÍA (Público + Controles si es Admin)            -->
+  <!-- MODAL 1: DETALLE DEL DÍA Y EDICIÓN ADMIN                              -->
   <!-- ===================================================================== -->
-  <div id="day-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-      <div class="px-5 py-4 bg-studio-850 border-b border-zinc-800 flex items-center justify-between">
+  <div id="day-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Cabecera Modal -->
+      <div class="px-5 py-4 bg-studio-850 border-b border-zinc-800 flex items-center justify-between gap-3">
         <div>
-          <span id="modal-day-weekday" class="text-xs font-mono uppercase text-indigo-400">Jueves</span>
-          <h3 id="modal-day-title" class="text-lg font-bold text-white capitalize">26 de Noviembre de 2026</h3>
+          <span id="modal-day-badge" class="inline-block text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-300 mb-1">
+            Estado del día
+          </span>
+          <h3 id="modal-day-title" class="text-lg font-bold text-white capitalize">
+            Lunes, 2 de Noviembre de 2026
+          </h3>
         </div>
-        <button onclick="closeModal('day-detail-modal')" class="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-studio-800 transition">
+        <button onclick="closeDayModal()" class="p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <div class="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
-        <!-- Banner de disponibilidad del día -->
-        <div id="modal-day-status-banner" class="p-3 rounded-xl border flex items-center gap-3">
-          <!-- Dinámico -->
+      <!-- Cuerpo Modal -->
+      <div class="p-5 overflow-y-auto space-y-5 flex-1">
+        <!-- Apartado 1: Localización del día -->
+        <div id="modal-location-box" class="rounded-xl border border-zinc-800 bg-studio-850 p-3.5 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div id="modal-location-icon" class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+              <i data-lucide="map-pin" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <p class="text-[11px] uppercase tracking-wider text-zinc-400 font-semibold">Localización</p>
+              <p id="modal-location-title" class="text-sm font-bold text-white">Valladolid · Libre</p>
+              <p id="modal-location-sub" class="text-xs text-zinc-400">Disponible en base para edición o reuniones</p>
+            </div>
+          </div>
+          <span id="modal-location-pill" class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+            Libre
+          </span>
         </div>
 
-        <!-- Apartado 1: Ubicación del día -->
-        <div class="space-y-1.5">
-          <div class="text-[11px] font-mono uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-            <span>📍 Apartado 1 · Ubicación del día</span>
+        <!-- Apartado 2: Carga de Trabajo -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Carga de trabajo del día</h4>
+            <span id="modal-day-load-label" class="text-xs font-medium text-zinc-300"></span>
           </div>
-          <div id="modal-day-location-box" class="p-3 rounded-xl border flex items-center justify-between gap-2">
-            <!-- Dinámico -->
+
+          <div id="modal-events-list" class="space-y-2.5">
+            <!-- Lista dinámica -->
           </div>
         </div>
 
-        <!-- Apartado 2: Trabajo / Rodajes / Edición -->
-        <div class="space-y-2">
-          <div class="text-[11px] font-mono uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-            <span>🎬 Apartado 2 · Trabajo (Rodajes y Edición)</span>
+        <!-- Formulario Admin para Añadir / Editar Evento (Oculto para visitantes) -->
+        <div id="admin-event-editor" class="hidden pt-4 border-t border-zinc-800 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <h4 id="editor-form-title" class="text-sm font-semibold text-indigo-300 flex items-center gap-1.5">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              <span>Añadir bloque o desplazamiento</span>
+            </h4>
+            <button id="btn-cancel-edit" onclick="resetEventForm()" class="hidden text-xs text-zinc-400 hover:text-white underline">
+              Cancelar edición
+            </button>
           </div>
-          <div id="modal-day-events-list" class="space-y-2.5">
-            <!-- Dinámico -->
-          </div>
-        </div>
-      </div>
 
-      <div class="px-5 py-3.5 bg-studio-850 border-t border-zinc-800 flex items-center justify-between gap-2">
-        <button id="modal-btn-add-day-event" onclick="openAddEventForSelectedDate()" class="hidden inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition">
-          <i data-lucide="plus" class="w-4 h-4"></i>
-          <span>Añadir bloque a este día</span>
-        </button>
-        <button onclick="closeModal('day-detail-modal')" class="ml-auto px-4 py-2 rounded-xl text-xs font-medium bg-studio-800 hover:bg-studio-700 text-zinc-200 transition">
-          Cerrar
-        </button>
+          <!-- Presets rápidos en 1 clic -->
+          <div class="space-y-1.5">
+            <p class="text-[11px] text-zinc-400">Acciones rápidas:</p>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="applyQuickPreset('trip_granollers')" class="text-[11px] px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 font-medium transition">
+                + Viaje Granollers (Ida + Rodaje + Vuelta)
+              </button>
+              <button type="button" onclick="applyQuickPreset('trip_castro')" class="text-[11px] px-2.5 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 font-medium transition">
+                + Viaje Castro Urdiales (Ida + Estancia + Vuelta)
+              </button>
+              <button type="button" onclick="applyQuickPreset('shoot_hector')" class="text-[11px] px-2.5 py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/25 text-blue-300 border border-blue-500/30 font-medium transition">
+                + Rodaje Héctor en Santoña
+              </button>
+            </div>
+          </div>
+
+          <form id="event-form" onsubmit="handleSaveEventForm(event)" class="space-y-3 bg-studio-850 p-3.5 rounded-xl border border-zinc-800">
+            <input type="hidden" id="edit-event-id" value="" />
+            <input type="hidden" id="edit-preset-mode" value="" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs text-zinc-400 mb-1">Cliente / Categoría</label>
+                <select id="event-client" onchange="syncFormWithType()" class="w-full rounded-xl bg-studio-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                  <option value="granollers">SIT Granollers (Aire Acondicionado)</option>
+                  <option value="hector">Héctor Loza (Barbería &amp; Escuela)</option>
+                  <option value="travel">Viajes (Transporte Público)</option>
+                  <option value="personal">Castro Urdiales / Pareja</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs text-zinc-400 mb-1">Tipo de bloque</label>
+                <select id="event-type" onchange="syncFormWithType()" class="w-full rounded-xl bg-studio-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                  <option value="reel">Entrega Reel Diario</option>
+                  <option value="long_video">Entrega Vídeo Largo (Viernes)</option>
+                  <option value="editing">Bloque de Edición</option>
+                  <option value="shoot_granollers">Estancia / Rodaje Granollers (07:00–19:00)</option>
+                  <option value="shoot_hector">Rodaje Héctor Loza en Santoña</option>
+                  <option value="travel_full">Día de Viaje (Ida / Vuelta)</option>
+                  <option value="stay_castro">Estancia en Castro Urdiales (Peso 0)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1">Título del evento</label>
+              <input type="text" id="event-title" required placeholder="Ej: Reel SIT Granollers · Instalación" class="w-full rounded-xl bg-studio-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs text-zinc-400 mb-1">Fecha inicio</label>
+                <input type="date" id="event-date-start" required class="w-full rounded-xl bg-studio-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+              </div>
+              <div>
+                <label class="block text-xs text-zinc-400 mb-1">Fecha fin (para viajes/rangos)</label>
+                <input type="date" id="event-date-end" class="w-full rounded-xl bg-studio-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1">Notas (opcional)</label>
+              <input type="text" id="event-notes" placeholder="Detalles de transporte, horario o entrega..." class="w-full rounded-xl bg-studio-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <label class="inline-flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
+                <input type="checkbox" id="event-fullday" class="rounded bg-studio-900 border-zinc-700 text-indigo-500 focus:ring-indigo-500" />
+                <span>Bloquea el día completo</span>
+              </label>
+
+              <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">
+                Guardar bloque
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ===================================================================== -->
-  <!-- MODAL 2: AÑADIR / EDITAR EVENTO (Solo Admin)                          -->
+  <!-- MODAL 2: LOGIN DE ADMINISTRACIÓN & CONEXIÓN GITHUB                    -->
   <!-- ===================================================================== -->
-  <div id="event-form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
-      <div class="px-5 py-4 bg-studio-850 border-b border-zinc-800 flex items-center justify-between">
-        <h3 id="event-form-title" class="text-base font-bold text-white">Nuevo Bloque en Agenda</h3>
-        <button onclick="closeModal('event-form-modal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-studio-800">
-          <i data-lucide="x" class="w-5 h-5"></i>
+  <div id="login-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+            <i data-lucide="key-round" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">Acceso Administrador</h3>
+            <p class="text-xs text-zinc-400">Edición privada y sincronización con GitHub</p>
+          </div>
+        </div>
+        <button onclick="closeLoginModal()" class="p-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400">
+          <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <form id="event-form" onsubmit="handleSaveEventForm(event)" class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
-        <input type="hidden" id="ev-id" />
-
-        <!-- Presets rápidos en 1 clic -->
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
         <div>
-          <label class="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">Presets rápidos de viaje y rodaje</label>
-          <div class="grid grid-cols-1 gap-2">
-            <button type="button" onclick="applyQuickPreset('granollers_trip_pack')" class="text-left px-3 py-2.5 rounded-xl bg-gradient-to-r from-purple-500/20 to-emerald-500/20 hover:from-purple-500/30 hover:to-emerald-500/30 border border-emerald-500/40 text-xs text-emerald-100 font-semibold transition flex items-center justify-between gap-2">
-              <span>🚆🎥 Viaje Granollers (Ida + Estancia Rodaje 07h–19h + Vuelta)</span>
-              <span class="shrink-0 text-[10px] font-mono bg-emerald-500/30 px-1.5 py-0.5 rounded text-emerald-200">RANGO</span>
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-xs font-medium text-zinc-300">Contraseña de acceso</label>
+            <button type="button" onclick="resetStoredAdminPassword()" class="text-[11px] text-indigo-400 hover:underline">
+              Restaurar clave por defecto
             </button>
-            <button type="button" onclick="applyQuickPreset('castro_trip_pack')" class="text-left px-3 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/45 text-xs text-red-100 font-semibold transition flex items-center justify-between gap-2">
-              <span>❤️🚆 Viaje Castro Urdiales (Ida + Estancia en Castro + Vuelta)</span>
-              <span class="shrink-0 text-[10px] font-mono bg-red-500/30 px-1.5 py-0.5 rounded text-red-200">RANGO</span>
-            </button>
-            <button type="button" onclick="applyQuickPreset('shoot_hector')" class="text-left px-3 py-2 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/40 text-xs text-blue-200 font-medium transition flex items-center justify-between gap-2">
-              <span>✂️ Jornada Rodaje Héctor Loza en Santoña (Día completo)</span>
-              <span class="shrink-0 text-[10px] font-mono bg-blue-500/30 px-1.5 py-0.5 rounded text-blue-200">1 DÍA</span>
+          </div>
+          <div class="relative">
+            <input type="password" id="login-password" required placeholder="Por defecto: admin1234" class="w-full rounded-xl bg-studio-850 border border-zinc-700 px-3.5 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-indigo-500" />
+            <button type="button" onclick="togglePasswordVisibility('login-password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white">
+              <i data-lucide="eye" class="w-4 h-4"></i>
             </button>
           </div>
         </div>
 
-        <input type="hidden" id="ev-is-trip-pack" value="" />
+        <div class="pt-3 border-t border-zinc-800 space-y-3">
+          <p class="text-xs font-medium text-zinc-300 flex items-center gap-1.5">
+            <i data-lucide="github" class="w-4 h-4 text-zinc-400"></i>
+            <span>Configuración de GitHub Pages (Opcional / Recomendado)</span>
+          </p>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label id="ev-date-label" class="block text-xs font-medium text-zinc-400 mb-1">Fecha Inicio</label>
-            <input type="date" id="ev-date" required class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-          </div>
-          <div>
-            <label id="ev-end-date-label" class="block text-xs font-medium text-zinc-400 mb-1">Fecha Fin (Opcional)</label>
-            <input type="date" id="ev-end-date" title="Útil para viajes de varios días seguidos" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-          </div>
-        </div>
-
-        <div id="trip-pack-hint" class="hidden p-2.5 rounded-xl bg-amber-950/40 border border-amber-500/30 text-[11px] text-amber-200 leading-relaxed">
-          <!-- Dinámico según el pack elegido -->
-        </div>
-
-        <div id="standard-event-fields" class="space-y-4">
-          <div>
-            <label class="block text-xs font-medium text-zinc-400 mb-1">Cliente / Categoría</label>
-            <select id="ev-category" required onchange="autoSuggestEventTitle()" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500">
-              <option value="sit">SIT Granollers (AACC / Climatización)</option>
-              <option value="hector">Héctor Loza (Barbería & Escuela)</option>
-              <option value="travel_shoot">Viaje / Estancia Fuera (Valladolid ↔ Granollers)</option>
-              <option value="personal">Personal / Visita Pareja (Castro Urdiales)</option>
-              <option value="editing">Edición / Guionización Interna</option>
-            </select>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] text-zinc-400 mb-1">Usuario / Owner</label>
+              <input type="text" id="gh-owner" placeholder="tu-usuario" class="w-full rounded-xl bg-studio-850 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+            </div>
+            <div>
+              <label class="block text-[11px] text-zinc-400 mb-1">Repositorio</label>
+              <input type="text" id="gh-repo" placeholder="mi-agenda" class="w-full rounded-xl bg-studio-850 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+            </div>
           </div>
 
-          <div>
-            <label class="block text-xs font-medium text-zinc-400 mb-1">Tipo de Entregable / Bloque</label>
-            <select id="ev-type" required onchange="autoSuggestEventTitle()" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500">
-              <option value="reel">Entrega / Publicación Reel</option>
-              <option value="long_video">Entrega Vídeo Largo (YouTube)</option>
-              <option value="stay_shoot">Estancia / Rodaje Intensivo (07:00–19:00)</option>
-              <option value="stay_couple">Estancia con Pareja (Castro Urdiales)</option>
-              <option value="shoot">Jornada de Rodaje / Grabación</option>
-              <option value="travel_full">Viaje Transporte Público (Día Completo)</option>
-              <option value="couple_full">Visita Pareja / Personal (Día Completo)</option>
-              <option value="editing">Bloque Edición / Guion</option>
-            </select>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] text-zinc-400 mb-1">Rama</label>
+              <input type="text" id="gh-branch" value="main" class="w-full rounded-xl bg-studio-850 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+            </div>
+            <div>
+              <label class="block text-[11px] text-zinc-400 mb-1">Archivo JSON</label>
+              <input type="text" id="gh-path" value="schedule.json" class="w-full rounded-xl bg-studio-850 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+            </div>
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-zinc-400 mb-1">Título visible en calendario</label>
-            <input type="text" id="ev-title" required placeholder="Ej: Reel #3 SIT Granollers" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-          </div>
-
-          <div class="flex items-center gap-2.5 p-3 rounded-xl bg-studio-850 border border-zinc-800">
-            <input type="checkbox" id="ev-full-day" class="w-4 h-4 rounded accent-rose-500" />
-            <label for="ev-full-day" class="text-xs text-zinc-300 select-none cursor-pointer">
-              Marcar como <strong class="text-rose-300">DÍA COMPLETO OCUPADO</strong> (bloquea disponibilidad todo el día)
-            </label>
+            <label class="block text-[11px] text-zinc-400 mb-1">Personal Access Token (PAT con permiso Contents)</label>
+            <input type="password" id="gh-token" placeholder="github_pat_..." class="w-full rounded-xl bg-studio-850 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1">Notas / Detalles (opcional)</label>
-          <textarea id="ev-notes" rows="2" placeholder="Ej: Rodaje instalaciones 07:00 a 19:00 en Granollers..." class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('event-form-modal')" class="px-4 py-2 rounded-xl text-xs font-medium bg-studio-800 hover:bg-studio-700 text-zinc-300">
-            Cancelar
-          </button>
-          <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow">
-            Guardar bloque
-          </button>
-        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold shadow-lg shadow-indigo-950/50 transition">
+          Entrar al Panel de Edición
+        </button>
       </form>
     </div>
   </div>
 
   <!-- ===================================================================== -->
-  <!-- MODAL 3: GENERADOR AUTOMÁTICO DE RUTINA MENSUAL                       -->
+  <!-- MODAL 3: AJUSTES DE CONTRASEÑA Y BACKUP JSON                          -->
   <!-- ===================================================================== -->
-  <div id="routine-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
-      <div class="px-5 py-4 bg-studio-850 border-b border-zinc-800 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i data-lucide="wand-2" class="w-4 h-4 text-purple-400"></i>
-          <h3 class="text-base font-bold text-white">Generar Rutina Base del Mes</h3>
-        </div>
-        <button onclick="closeModal('routine-modal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
+  <div id="settings-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="sliders" class="w-4 h-4 text-indigo-400"></i>
+          <span>Ajustes y Seguridad</span>
+        </h3>
+        <button onclick="closeSettingsModal()" class="p-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400">
+          <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <div class="p-5 space-y-4">
-        <p class="text-xs text-zinc-300 leading-relaxed">
-          Rellenará automáticamente <strong id="routine-target-month" class="text-indigo-400 capitalize"></strong> con tu estructura habitual de entregas semanales:
-        </p>
-
-        <ul class="space-y-2 text-xs text-zinc-300 bg-studio-850 p-3.5 rounded-xl border border-zinc-800">
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-orange-400 shrink-0"></span> <strong>SIT Granollers (Diario):</strong> Reels de Martes a Sábado (5/sem)</li>
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-400 shrink-0"></span> <strong>Héctor Loza:</strong> 3 Reels (Lunes, Martes y Miércoles)</li>
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-400 shrink-0"></span> <strong>Edición Vídeo Largo SIT:</strong> Viernes, Sábado, Lunes, Martes, Miércoles y Jueves</li>
-          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-orange-500 shrink-0"></span> <strong>Entrega Vídeo Largo SIT:</strong> Todos los Viernes</li>
-        </ul>
-
-        <div class="flex items-center gap-2 text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-xl">
-          <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
-          <span>Después podrás añadir en un clic tus días completos de viaje a Granollers, rodaje en barbería y visitas a tu pareja.</span>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-2">
-          <button onclick="closeModal('routine-modal')" class="px-4 py-2 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300">
-            Cancelar
+      <form onsubmit="handleChangePassword(event)" class="space-y-3">
+        <label class="block text-xs font-medium text-zinc-300">Cambiar contraseña de acceso</label>
+        <div class="flex gap-2">
+          <input type="password" id="new-admin-password" minlength="4" required placeholder="Nueva contraseña..." class="flex-1 rounded-xl bg-studio-850 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">
+            Actualizar
           </button>
-          <button onclick="generateMonthlyRoutine()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-purple-600 hover:bg-purple-500 text-white shadow">
-            Aplicar rutina a este mes
+        </div>
+      </form>
+
+      <div class="pt-4 border-t border-zinc-800 space-y-2.5">
+        <p class="text-xs font-medium text-zinc-300">Copia de seguridad manual</p>
+        <div class="flex gap-2">
+          <button onclick="downloadScheduleJson()" class="flex-1 py-2 px-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-200 border border-zinc-700 flex items-center justify-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Descargar schedule.json</span>
+          </button>
+          <button onclick="resetToDefaultRoutine()" class="flex-1 py-2 px-3 rounded-xl bg-red-950/40 hover:bg-red-900/50 text-xs text-red-300 border border-red-800/50 flex items-center justify-center gap-1.5">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            <span>Restaurar plantilla</span>
           </button>
         </div>
       </div>
@@ -576,131 +626,61 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- MODAL 4: LOGIN ADMIN & CONFIGURACIÓN GITHUB API SYNC                  -->
+  <!-- MODAL 4: GENERADOR DE RUTINA RECURRENTE DE UN MES                     -->
   <!-- ===================================================================== -->
-  <div id="admin-auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
-      <div class="px-5 py-4 bg-studio-850 border-b border-zinc-800 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i data-lucide="shield-check" class="w-5 h-5 text-indigo-400"></i>
-          <h3 class="text-base font-bold text-white">Panel de Administración & GitHub Sync</h3>
-        </div>
-        <button onclick="closeModal('admin-auth-modal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
+  <div id="bulk-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i>
+          <span>Generar Rutina Semanal en este Mes</span>
+        </h3>
+        <button onclick="closeBulkGeneratorModal()" class="p-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400">
+          <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <div class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
-        <!-- Aviso de seguridad sobre GitHub Tokens en repositorios públicos -->
-        <div class="rounded-xl bg-amber-950/30 border border-amber-500/30 p-3 text-xs text-amber-200/90 flex items-start gap-2.5">
-          <i data-lucide="shield-alert" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
-          <p class="leading-relaxed">
-            <strong>Importante:</strong> Nunca escribas tu token PAT dentro de <code>index.html</code> antes de subirlo a GitHub; GitHub revoca automáticamente cualquier token detectado en repositorios públicos. Guárdalo aquí en tu navegador (<code>localStorage</code>).
-          </p>
-        </div>
+      <p class="text-xs text-zinc-400 leading-relaxed">
+        Rellena automáticamente en <strong id="bulk-target-month-name" class="text-white"></strong> tu flujo semanal estándar sin borrar los viajes o días especiales que ya tengas agendados:
+      </p>
 
-        <!-- Acordeón / Guía rápida de 3 pasos para el Token de GitHub -->
-        <div class="rounded-xl bg-indigo-950/30 border border-indigo-500/30 p-3.5">
-          <button type="button" onclick="toggleGitHubGuide()" class="w-full flex items-center justify-between text-left text-xs font-semibold text-indigo-300">
-            <span class="flex items-center gap-2">
-              <i data-lucide="help-circle" class="w-4 h-4"></i>
-              ¿Cómo configurar el autoguardado en GitHub Pages? (Guía 3 pasos)
-            </span>
-            <i id="guide-chevron" data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
-          </button>
+      <ul class="text-xs space-y-2 bg-studio-850 p-3.5 rounded-xl border border-zinc-800 text-zinc-300">
+        <li class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+          <span><strong>SIT Granollers (Reels):</strong> Martes a Sábado (5/semana)</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-orange-700"></span>
+          <span><strong>SIT Granollers (Vídeo Largo):</strong> Edición Vie–Jue y entrega los Viernes</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+          <span><strong>Héctor Loza (Reels):</strong> Lunes, Martes y Miércoles (3/semana)</span>
+        </li>
+      </ul>
 
-          <div id="github-guide-content" class="hidden mt-3 pt-3 border-t border-indigo-500/20 space-y-2 text-xs text-zinc-300 leading-relaxed">
-            <p><strong class="text-white">Paso 1:</strong> Ve a GitHub → <em>Settings</em> → <em>Developer settings</em> → <em>Personal access tokens</em> → <strong>Fine-grained tokens</strong> → <em>Generate new token</em>.</p>
-            <p><strong class="text-white">Paso 2:</strong> En <em>Repository access</em>, selecciona solo el repositorio de tu agenda. En <em>Permissions → Repository permissions</em>, activa <strong>Contents: Read and Write</strong>.</p>
-            <p><strong class="text-white">Paso 3:</strong> Copia el token generado (`github_pat_...`), pégalo abajo junto a tu usuario y repositorio. Si <code>schedule.json</code> aún no existe, se inicializará automáticamente.</p>
-          </div>
-        </div>
-
-        <form onsubmit="handleAdminLoginAndSaveConfig(event)" class="space-y-3.5">
-          <!-- Contraseña Local -->
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <label class="text-xs font-medium text-zinc-300">Contraseña Local del Panel</label>
-              <div class="flex items-center gap-2">
-                <span id="password-hint-badge" class="text-[10px] font-mono text-zinc-400">Por defecto: admin1234</span>
-                <button type="button" onclick="resetDefaultLocalPassword()" class="text-[10px] text-indigo-400 hover:underline">Restaurar</button>
-              </div>
-            </div>
-            <div class="relative">
-              <input type="password" id="cfg-password" required placeholder="Introduce tu contraseña (ej: admin1234)" class="w-full pl-3 pr-10 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-              <button type="button" onclick="toggleInputVisibility('cfg-password', 'eye-icon-pass')" title="Mostrar/Ocultar contraseña" class="absolute inset-y-0 right-0 px-3 flex items-center text-zinc-400 hover:text-white">
-                <i id="eye-icon-pass" data-lucide="eye" class="w-4 h-4"></i>
-              </button>
-            </div>
-          </div>
-
-          <div id="new-password-wrapper" class="hidden">
-            <label class="block text-xs font-medium text-zinc-400 mb-1">Cambiar contraseña local (dejar vacío para mantener la actual)</label>
-            <input type="password" id="cfg-new-password" placeholder="Nueva contraseña personal" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-          </div>
-
-          <div class="pt-2 border-t border-zinc-800">
-            <h4 class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2.5 flex items-center gap-1.5">
-              <i data-lucide="github" class="w-3.5 h-3.5"></i> Conexión Directa a GitHub Pages (Opcional para auto-commit)
-            </h4>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-medium text-zinc-400 mb-1">Usuario de GitHub</label>
-                <input type="text" id="cfg-gh-owner" placeholder="ej: tu-usuario" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-zinc-400 mb-1">Nombre del Repositorio</label>
-                <input type="text" id="cfg-gh-repo" placeholder="ej: mi-agenda" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-              <div>
-                <label class="block text-xs font-medium text-zinc-400 mb-1">Rama (Branch)</label>
-                <input type="text" id="cfg-gh-branch" value="main" placeholder="main" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-zinc-400 mb-1">Archivo de datos</label>
-                <input type="text" id="cfg-gh-path" value="schedule.json" placeholder="schedule.json" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-              </div>
-            </div>
-
-            <div class="mt-3">
-              <label class="block text-xs font-medium text-zinc-400 mb-1">GitHub Personal Access Token (PAT)</label>
-              <div class="relative">
-                <input type="password" id="cfg-gh-token" placeholder="github_pat_xxxxxxxxxxxx" class="w-full pl-3 pr-10 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm font-mono text-white focus:outline-none focus:border-indigo-500" />
-                <button type="button" onclick="toggleInputVisibility('cfg-gh-token', 'eye-icon-pat')" title="Mostrar/Ocultar token" class="absolute inset-y-0 right-0 px-3 flex items-center text-zinc-400 hover:text-white">
-                  <i id="eye-icon-pat" data-lucide="eye" class="w-4 h-4"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-end gap-2 pt-3">
-            <button type="button" onclick="closeModal('admin-auth-modal')" class="px-4 py-2 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300">
-              Cancelar
-            </button>
-            <button type="submit" id="btn-submit-admin-login" class="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow">
-              Desbloquear Modo Edición
-            </button>
-          </div>
-        </form>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeBulkGeneratorModal()" class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-300">
+          Cancelar
+        </button>
+        <button onclick="generateRoutineForCurrentMonth()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">
+          Aplicar Rutina al Mes
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- ===================================================================== -->
+  <!-- LÓGICA DE APLICACIÓN                                                  -->
+  <!-- ===================================================================== -->
   <script>
-    /**
-     * ============================================================================
-     * CONSTANTES GLOBALES, ESTADO Y ESTILOS DE EVENTOS
-     * ============================================================================
-     */
     const DEFAULT_PLAIN_PASS = 'admin1234';
+    const MIN_YEAR = 2026;
+    const MIN_MONTH = 10; // Noviembre 2026 (0-indexed: 10 = Noviembre)
 
     const MONTHS_ES = [
-      'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
-      'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
     ];
 
     const WEEKDAYS_ES = [
@@ -708,227 +688,86 @@
     ];
 
     const TYPE_LABELS = {
-      reel: 'Entrega / Publicación Reel',
+      reel: 'Reel Diario',
       long_video: 'Entrega Vídeo Largo',
-      stay_shoot: 'Estancia / Rodaje Intensivo (07:00–19:00)',
-      stay_couple: 'Estancia con Pareja (Castro Urdiales)',
-      shoot: 'Jornada de Rodaje',
-      travel_full: 'Viaje Transporte Público (Día Completo)',
-      couple_full: 'Visita Pareja / Personal (Día Completo)',
-      editing: 'Bloque Edición / Guion'
+      editing: 'Edición Vídeo Largo',
+      shoot_granollers: 'Rodaje Granollers (07h–19h)',
+      shoot_hector: 'Rodaje Héctor en Santoña',
+      travel_full: 'Viaje (Día Completo)',
+      stay_castro: 'Estancia en Castro Urdiales'
     };
 
     const state = {
-      viewYear: new Date().getFullYear(),
-      viewMonth: new Date().getMonth(),
-      autoAdvancedToNextMonth: false,
-      activeFilter: 'all',
       events: [],
+      viewYear: MIN_YEAR,
+      viewMonth: MIN_MONTH,
+      activeFilter: 'all',
       isAdmin: false,
       hasUnsavedChanges: false,
-      ghFileMissing: false,
-      selectedDateStr: null
+      autoAdvancedToNextMonth: false,
+      selectedDateStr: null,
+      ghConfig: {
+        owner: '',
+        repo: '',
+        branch: 'main',
+        path: 'schedule.json',
+        token: ''
+      }
     };
-
-    function getEventStyle(ev) {
-      if (ev.type === 'stay_shoot' || (ev.category === 'sit' && ev.type === 'shoot')) {
-        return {
-          label: 'Rodaje Granollers',
-          badgeBg: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40',
-          cardBorder: 'border-l-emerald-500',
-          dot: 'bg-emerald-400'
-        };
-      }
-      if (ev.category === 'sit' && ev.type === 'long_video') {
-        return {
-          label: 'SIT Granollers (Largo)',
-          badgeBg: 'bg-orange-950/80 text-orange-200 border-orange-700/60',
-          cardBorder: 'border-l-orange-700',
-          dot: 'bg-orange-600'
-        };
-      }
-      if (ev.category === 'sit') {
-        return {
-          label: 'SIT Granollers',
-          badgeBg: 'bg-orange-500/20 text-orange-200 border-orange-500/40',
-          cardBorder: 'border-l-orange-500',
-          dot: 'bg-orange-400'
-        };
-      }
-      if (ev.category === 'hector') {
-        return {
-          label: 'Héctor Loza',
-          badgeBg: 'bg-blue-500/20 text-blue-200 border-blue-500/40',
-          cardBorder: 'border-l-blue-500',
-          dot: 'bg-blue-400'
-        };
-      }
-      if (ev.category === 'personal' || ev.type === 'stay_couple' || ev.type === 'couple_full') {
-        return {
-          label: 'Castro Urdiales / Pareja',
-          badgeBg: 'bg-red-500/20 text-red-200 border-red-500/40',
-          cardBorder: 'border-l-red-500',
-          dot: 'bg-red-400'
-        };
-      }
-      if (ev.category === 'travel_shoot' || ev.type === 'travel_full') {
-        return {
-          label: 'Viaje Trabajo',
-          badgeBg: 'bg-purple-500/20 text-purple-200 border-purple-500/40',
-          cardBorder: 'border-l-purple-500',
-          dot: 'bg-purple-400'
-        };
-      }
-      return {
-        label: 'Edición / Guion',
-        badgeBg: 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40',
-        cardBorder: 'border-l-cyan-500',
-        dot: 'bg-cyan-400'
-      };
-    }
-
-    function getEventWeight(ev) {
-      if (typeof ev.weight === 'number') return ev.weight;
-      if (ev.type === 'stay_shoot') return 2;
-      if (ev.type === 'stay_couple') return 0;
-      return 1;
-    }
-
-    function getDayTotalEventWeight(dayEvents) {
-      return dayEvents.reduce((sum, ev) => sum + getEventWeight(ev), 0);
-    }
-
-    /**
-     * Determina la ubicación principal del día y el tintado completo de la casilla:
-     * - 'travel': Viajando (morado o rojo si es viaje a Castro)
-     * - 'granollers': En Granollers grabando (verde esmeralda)
-     * - 'santona': En Santoña grabando con Héctor Loza (azul)
-     * - 'castro': En Castro Urdiales (rojo)
-     * - 'valladolid': Valladolid -> marcado como "Libre" en la mitad superior
-     */
-    function getDayLocationInfo(allDayEvents) {
-      const hasTravel = allDayEvents.some(ev => ev.type === 'travel_full');
-      if (hasTravel) {
-        const isCastroTravel = allDayEvents.some(ev => ev.category === 'personal' || (ev.title && ev.title.toLowerCase().includes('castro')));
-        return {
-          key: 'travel',
-          label: 'Viajando',
-          shortLabel: 'Viajando',
-          isFreeLocation: false,
-          cellBg: isCastroTravel
-            ? 'bg-red-950/35 hover:bg-red-950/45'
-            : 'bg-purple-950/35 hover:bg-purple-950/45',
-          topHalfBg: isCastroTravel
-            ? 'bg-red-500/25 text-red-100 border-red-500/40'
-            : 'bg-purple-500/25 text-purple-100 border-purple-500/40',
-          badgeClass: isCastroTravel
-            ? 'bg-red-500/20 text-red-200 border-red-500/40'
-            : 'bg-purple-500/20 text-purple-200 border-purple-500/40',
-          dotClass: isCastroTravel ? 'bg-red-400' : 'bg-purple-400',
-          description: 'Día de desplazamiento en transporte público.'
-        };
-      }
-
-      const inGranollers = allDayEvents.some(
-        ev => ev.type === 'stay_shoot' || (ev.category === 'sit' && ev.type === 'shoot')
-      );
-      if (inGranollers) {
-        return {
-          key: 'granollers',
-          label: 'En Granollers grabando',
-          shortLabel: 'Granollers (Grabando)',
-          isFreeLocation: false,
-          cellBg: 'bg-emerald-950/35 hover:bg-emerald-950/45',
-          topHalfBg: 'bg-emerald-500/25 text-emerald-100 border-emerald-500/40',
-          badgeClass: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40',
-          dotClass: 'bg-emerald-400',
-          description: 'Desplazado en Granollers (Barcelona) en jornada de grabación.'
-        };
-      }
-
-      const inSantona = allDayEvents.some(
-        ev => ev.category === 'hector' && ev.type === 'shoot'
-      );
-      if (inSantona) {
-        return {
-          key: 'santona',
-          label: 'En Santoña · Rodaje Héctor',
-          shortLabel: 'Santoña (Héctor)',
-          isFreeLocation: false,
-          cellBg: 'bg-blue-950/35 hover:bg-blue-950/45',
-          topHalfBg: 'bg-blue-500/25 text-blue-100 border-blue-500/40',
-          badgeClass: 'bg-blue-500/20 text-blue-200 border-blue-500/40',
-          dotClass: 'bg-blue-400',
-          description: 'Jornada de grabación con Héctor Loza en Santoña (Cantabria).'
-        };
-      }
-
-      const inCastro = allDayEvents.some(
-        ev => ev.type === 'stay_couple' || ev.type === 'couple_full' || ev.category === 'personal'
-      );
-      if (inCastro) {
-        return {
-          key: 'castro',
-          label: 'En Castro Urdiales',
-          shortLabel: 'Castro Urdiales',
-          isFreeLocation: false,
-          cellBg: 'bg-red-950/35 hover:bg-red-950/45',
-          topHalfBg: 'bg-red-500/25 text-red-100 border-red-500/40',
-          badgeClass: 'bg-red-500/20 text-red-200 border-red-500/40',
-          dotClass: 'bg-red-400',
-          description: 'Estancia en Castro Urdiales con mi pareja (sin peso extra en volumen laboral).'
-        };
-      }
-
-      return {
-        key: 'valladolid',
-        label: 'Valladolid · Libre',
-        shortLabel: 'Valladolid · Libre',
-        isFreeLocation: true,
-        cellBg: 'bg-studio-900 hover:bg-studio-850/90',
-        topHalfBg: 'bg-emerald-500/10 text-emerald-300 border-zinc-800/90',
-        badgeClass: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
-        dotClass: 'bg-emerald-400',
-        description: 'En Valladolid (ubicacion base libre de desplazamientos).'
-      };
-    }
-
-    /**
-     * Filtra los eventos de un día para mostrar únicamente el apartado de Trabajo
-     * (rodajes, ediciones y entregas) en la mitad inferior de la casilla.
-     */
-    function getDayWorkEvents(eventsList) {
-      return eventsList.filter(ev => ev.type !== 'travel_full' && ev.type !== 'stay_couple' && ev.type !== 'couple_full');
-    }
 
     /**
      * ============================================================================
-     * INICIALIZACIÓN Y LÓGICA INTELIGENTE DE LANDING PAGE (< 3 DÍAS PARA FIN DE MES)
+     * INICIALIZACIÓN
      * ============================================================================
      */
     document.addEventListener('DOMContentLoaded', async () => {
+      loadGitHubConfigFromStorage();
       calculateSmartInitialMonth();
       await loadScheduleData();
       renderAll();
       lucide.createIcons();
     });
 
+    function isBeforeMinMonth(year, month) {
+      return year < MIN_YEAR || (year === MIN_YEAR && month < MIN_MONTH);
+    }
+
     /**
-     * Calcula si faltan menos de 3 días para finalizar el mes actual.
-     * Si es así, salta automáticamente al mes siguiente en la landing page.
+     * Devuelve el siguiente día laboral (Lunes a Sábado; solo Domingo es descanso semanal).
+     */
+    function getNextBusinessDay(fromDate) {
+      const next = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() + 1);
+      while (next.getDay() === 0) {
+        next.setDate(next.getDate() + 1);
+      }
+      return next;
+    }
+
+    /**
+     * Primer mes disponible: Noviembre 2026.
+     * Muestra el mes actual salvo que el siguiente día laboral caiga ya en el mes siguiente.
      */
     function calculateSmartInitialMonth() {
       const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth();
-      const currentDay = today.getDate();
-      const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
-      const remainingDays = lastDayOfMonth - currentDay;
+      const targetYear = today.getFullYear();
+      const targetMonth = today.getMonth();
 
-      if (remainingDays < 3) {
-        const nextMonthDate = new Date(year, month + 1, 1);
-        state.viewYear = nextMonthDate.getFullYear();
-        state.viewMonth = nextMonthDate.getMonth();
+      if (isBeforeMinMonth(targetYear, targetMonth)) {
+        state.viewYear = MIN_YEAR;
+        state.viewMonth = MIN_MONTH;
+        state.autoAdvancedToNextMonth = false;
+        document.getElementById('auto-next-month-banner').classList.add('hidden');
+        return;
+      }
+
+      const nextWorkDay = getNextBusinessDay(today);
+      const crossesToNextMonth =
+        nextWorkDay.getFullYear() > targetYear ||
+        (nextWorkDay.getFullYear() === targetYear && nextWorkDay.getMonth() > targetMonth);
+
+      if (crossesToNextMonth) {
+        state.viewYear = nextWorkDay.getFullYear();
+        state.viewMonth = nextWorkDay.getMonth();
         state.autoAdvancedToNextMonth = true;
 
         const banner = document.getElementById('auto-next-month-banner');
@@ -936,8 +775,8 @@
         monthNameSpan.textContent = `${MONTHS_ES[state.viewMonth]} ${state.viewYear}`;
         banner.classList.remove('hidden');
       } else {
-        state.viewYear = year;
-        state.viewMonth = month;
+        state.viewYear = targetYear;
+        state.viewMonth = targetMonth;
         state.autoAdvancedToNextMonth = false;
         document.getElementById('auto-next-month-banner').classList.add('hidden');
       }
@@ -945,8 +784,13 @@
 
     function goToActualCurrentMonth() {
       const today = new Date();
-      state.viewYear = today.getFullYear();
-      state.viewMonth = today.getMonth();
+      if (isBeforeMinMonth(today.getFullYear(), today.getMonth())) {
+        state.viewYear = MIN_YEAR;
+        state.viewMonth = MIN_MONTH;
+      } else {
+        state.viewYear = today.getFullYear();
+        state.viewMonth = today.getMonth();
+      }
       document.getElementById('auto-next-month-banner').classList.add('hidden');
       renderAll();
     }
@@ -958,225 +802,359 @@
 
     /**
      * ============================================================================
-     * CARGA DE DATOS (schedule.json en GitHub Pages o Datos Iniciales Realistas)
+     * CARGA Y PERSISTENCIA DE DATOS (GITHUB + LOCALSTORAGE)
      * ============================================================================
      */
     async function loadScheduleData() {
-      const sourceIndicator = document.getElementById('data-source-indicator');
+      const syncLabel = document.getElementById('repo-sync-status');
+
+      // 1. Intentar leer ./schedule.json desde el mismo repositorio de GitHub Pages
       try {
-        // Intentar leer schedule.json desde el mismo hosting estático evitando caché
-        const response = await fetch(`./schedule.json?t=${Date.now()}`);
-        if (response.ok) {
-          const data = await response.json();
-          if (Array.isArray(data.events)) {
+        const res = await fetch(`./schedule.json?t=${Date.now()}`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.events)) {
             state.events = data.events;
-            sourceIndicator.textContent = 'Fuente: schedule.json (En vivo)';
+            localStorage.setItem('freelance_schedule_cache', JSON.stringify(state.events));
+            syncLabel.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i><span>Sincronizado con schedule.json</span>`;
             return;
           }
         }
-        throw new Error('schedule.json no encontrado aún');
       } catch (err) {
-        // Si es la primera vez y aún no existe schedule.json en el repo,
-        // cargamos automáticamente la agenda base realista para el mes visible y adyacentes
-        console.info('Cargando agenda base preconfigurada:', err.message);
-        state.events = buildDefaultRealisticSchedule();
-        sourceIndicator.textContent = 'Fuente: Plantilla Base Preconfigurada';
+        console.info('No se encontró schedule.json remoto todavía, usando caché local o plantilla.');
+      }
+
+      // 2. Fallback a caché local del navegador
+      const cached = localStorage.getItem('freelance_schedule_cache');
+      if (cached) {
+        try {
+          state.events = JSON.parse(cached);
+          syncLabel.innerHTML = `<i data-lucide="hard-drive" class="w-3.5 h-3.5 text-indigo-400"></i><span>Caché local del navegador</span>`;
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // 3. Primera ejecución: generar plantilla realista desde Noviembre 2026
+      state.events = buildDefaultRealisticSchedule();
+      localStorage.setItem('freelance_schedule_cache', JSON.stringify(state.events));
+      syncLabel.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i><span>Plantilla base cargada</span>`;
+    }
+
+    function saveLocalCache(markUnsaved = true) {
+      localStorage.setItem('freelance_schedule_cache', JSON.stringify(state.events));
+      if (markUnsaved && state.isAdmin) {
+        state.hasUnsavedChanges = true;
+        document.getElementById('unsaved-indicator').classList.remove('hidden');
       }
     }
 
     /**
-     * Genera un horario base realista para el mes actual y el mes siguiente
-     * con los flujos reales de SIT Granollers, Héctor Loza, viajes desde Valladolid y pareja.
+     * Genera el horario recurrente desde Noviembre 2026 (y meses siguientes):
+     * - SIT Granollers: Reels de Martes a Sábado + Edición vídeo largo (Vie a Jue) con entrega los Viernes
+     * - Héctor Loza: Reels de Lunes a Miércoles (3 días/semana)
      */
     function buildDefaultRealisticSchedule() {
-      const today = new Date();
+      const events = [];
       const baseMonths = [
-        { year: today.getFullYear(), month: today.getMonth() },
-        { year: new Date(today.getFullYear(), today.getMonth() + 1, 1).getFullYear(), month: new Date(today.getFullYear(), today.getMonth() + 1, 1).getMonth() }
+        { year: MIN_YEAR, month: MIN_MONTH },
+        { year: MIN_YEAR, month: MIN_MONTH + 1 },
+        { year: MIN_YEAR + 1, month: 0 }
       ];
 
-      let generated = [];
       baseMonths.forEach(({ year, month }) => {
-        // 1. Rutina semanal recurrente exacta:
-        generated = generated.concat(createRoutineEventsForMonth(year, month));
-
-        // 2. Viaje mensual Valladolid <-> Granollers (4 días seguidos: Ida + 2 días estancia/rodaje 07h-19h + Vuelta)
-        const tripStartDay = findNthWeekdayOfMonth(year, month, 2, 2); // 2º Martes
-        if (tripStartDay) {
-          const d1 = formatDateISO(year, month, tripStartDay);
-          const d2 = formatDateISO(year, month, tripStartDay + 1);
-          const d3 = formatDateISO(year, month, tripStartDay + 2);
-          const d4 = formatDateISO(year, month, tripStartDay + 3);
-
-          generated.push(
-            {
-              id: `trip-go-${year}-${month}`,
-              date: d1,
-              category: 'travel_shoot',
-              type: 'travel_full',
-              title: 'Viaje de Ida (Valladolid → Granollers)',
-              fullDay: true,
-              weight: 1,
-              notes: 'Desplazamiento en transporte público todo el día y preparación de equipo.'
-            },
-            {
-              id: `shoot-sit1-${year}-${month}`,
-              date: d2,
-              category: 'sit',
-              type: 'stay_shoot',
-              title: 'Estancia / Rodaje SIT (07:00–19:00)',
-              fullDay: true,
-              weight: 2,
-              notes: 'Jornada intensiva de 07:00 a 19:00 (Peso x2 eventos). Grabación en lote de vídeos diarios y vídeo largo.'
-            },
-            {
-              id: `shoot-sit2-${year}-${month}`,
-              date: d3,
-              category: 'sit',
-              type: 'stay_shoot',
-              title: 'Estancia / Rodaje SIT (07:00–19:00)',
-              fullDay: true,
-              weight: 2,
-              notes: 'Jornada intensiva de 07:00 a 19:00 (Peso x2 eventos). Grabación técnica en obra/cliente y recursos B-Roll.'
-            },
-            {
-              id: `trip-back-${year}-${month}`,
-              date: d4,
-              category: 'travel_shoot',
-              type: 'travel_full',
-              title: 'Viaje de Vuelta (Granollers → Valladolid)',
-              fullDay: true,
-              weight: 1,
-              notes: 'Regreso en transporte público y descarga/backup de tarjetas.'
-            }
-          );
-        }
-
-        // 4. Viaje mensual a Castro Urdiales (Ida día completo + Estancia en casa de pareja peso 0 + Vuelta día completo)
-        const coupleTripStart = findNthWeekdayOfMonth(year, month, 5, 3); // 3er Viernes
-        if (coupleTripStart && coupleTripStart + 2 <= new Date(year, month + 1, 0).getDate()) {
-          const c1 = formatDateISO(year, month, coupleTripStart);
-          const c2 = formatDateISO(year, month, coupleTripStart + 1);
-          const c3 = formatDateISO(year, month, coupleTripStart + 2);
-          generated.push(
-            {
-              id: `couple-ida-${year}-${month}`,
-              date: c1,
-              category: 'personal',
-              type: 'travel_full',
-              title: 'Viaje de Ida (Valladolid → Castro Urdiales)',
-              fullDay: true,
-              weight: 1,
-              notes: 'Desplazamiento en transporte público todo el día hacia Castro Urdiales.'
-            },
-            {
-              id: `couple-stay-${year}-${month}`,
-              date: c2,
-              category: 'personal',
-              type: 'stay_couple',
-              title: 'Estancia en Castro Urdiales',
-              fullDay: false,
-              weight: 0,
-              notes: 'Estancia en casa de mi pareja en Castro Urdiales. Marcado en rojo sin añadir peso extra al volumen de trabajo.'
-            },
-            {
-              id: `couple-vuelta-${year}-${month}`,
-              date: c3,
-              category: 'personal',
-              type: 'travel_full',
-              title: 'Viaje de Vuelta (Castro Urdiales → Valladolid)',
-              fullDay: true,
-              weight: 1,
-              notes: 'Regreso en transporte público todo el día hacia Valladolid.'
-            }
-          );
-        }
+        generateMonthEventsIntoArray(year, month, events);
       });
-
-      return generated;
-    }
-
-    /**
-     * Crea los entregables recurrentes exactos de un mes:
-     * - SIT Granollers (Vídeo diario / Reels): Martes a Sábado (dow 2..6)
-     * - Héctor Loza (3 Reels/semana): Lunes, Martes y Miércoles (dow 1, 2, 3)
-     * - SIT Granollers (Edición Vídeo Largo): Viernes, Sábado, Lunes, Martes, Miércoles y Jueves (dow 1..6)
-     * - SIT Granollers (Entrega Vídeo Largo): Todos los Viernes (dow 5)
-     */
-    function createRoutineEventsForMonth(year, month) {
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const events = [];
-
-      for (let d = 1; d <= daysInMonth; d++) {
-        const dateObj = new Date(year, month, d);
-        const dow = dateObj.getDay(); // 0=Dom, 1=Lun, 2=Mar, 3=Mié, 4=Jue, 5=Vie, 6=Sáb
-        const dateStr = formatDateISO(year, month, d);
-
-        // 1. SIT Granollers: Vídeo diario / Reels de Martes (2) a Sábado (6)
-        if (dow >= 2 && dow <= 6) {
-          events.push({
-            id: `sit-reel-${dateStr}`,
-            date: dateStr,
-            category: 'sit',
-            type: 'reel',
-            title: 'Vídeo Diario SIT Granollers',
-            fullDay: false,
-            notes: 'Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers.'
-          });
-        }
-
-        // 2. Héctor Loza: 3 días a la semana de Lunes (1) a Miércoles (3)
-        if (dow >= 1 && dow <= 3) {
-          events.push({
-            id: `hector-reel-${dateStr}`,
-            date: dateStr,
-            category: 'hector',
-            type: 'reel',
-            title: 'Reel Héctor Loza (Barbería)',
-            fullDay: false,
-            notes: 'Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza.'
-          });
-        }
-
-        // 3. Edición continua del Vídeo Largo SIT: Viernes (5), Sábado (6), Lunes (1), Martes (2), Miércoles (3) y Jueves (4)
-        if (dow >= 1 && dow <= 6) {
-          events.push({
-            id: `sit-long-edit-${dateStr}`,
-            date: dateStr,
-            category: 'editing',
-            type: 'editing',
-            title: 'Edición Vídeo Largo SIT',
-            fullDay: false,
-            notes: 'Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers.'
-          });
-        }
-
-        // 4. Entrega del Vídeo Largo SIT: Todos los Viernes (5)
-        if (dow === 5) {
-          events.push({
-            id: `sit-long-delivery-${dateStr}`,
-            date: dateStr,
-            category: 'sit',
-            type: 'long_video',
-            title: 'Entrega Vídeo Largo SIT',
-            fullDay: false,
-            notes: 'Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves.'
-          });
-        }
-      }
 
       return events;
     }
 
+    function generateMonthEventsIntoArray(year, month, targetArray) {
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateObj = new Date(year, month, d);
+        const dow = dateObj.getDay(); // 0=Dom, 1=Lun, 2=Mar, 3=Mié, 4=Jue, 5=Vie, 6=Sáb
+        const dateStr = formatDateISO(dateObj);
+
+        const existsSimilar = (client, type) =>
+          targetArray.some(ev => ev.date === dateStr && ev.client === client && ev.type === type);
+
+        // 1. SIT Granollers: Reels diarios de Martes (2) a Sábado (6)
+        if (dow >= 2 && dow <= 6) {
+          if (!existsSimilar('granollers', 'reel')) {
+            targetArray.push({
+              id: `sit-reel-${dateStr}`,
+              date: dateStr,
+              client: 'granollers',
+              type: 'reel',
+              title: 'Reel SIT Granollers',
+              notes: 'Publicación diaria Mar–Sáb',
+              fullDay: false,
+              weight: 1
+            });
+          }
+        }
+
+        // 2. SIT Granollers: Entrega vídeo largo los Viernes (5)
+        if (dow === 5) {
+          if (!existsSimilar('granollers', 'long_video')) {
+            targetArray.push({
+              id: `sit-long-${dateStr}`,
+              date: dateStr,
+              client: 'granollers',
+              type: 'long_video',
+              title: 'Entrega Vídeo Largo SIT',
+              notes: 'Entrega semanal formato largo',
+              fullDay: false,
+              weight: 1
+            });
+          }
+        }
+
+        // 3. SIT Granollers: Edición vídeo largo de Viernes (5) a Jueves (4) (todos menos Domingo 0)
+        if (dow !== 0) {
+          if (!existsSimilar('granollers', 'editing')) {
+            targetArray.push({
+              id: `sit-edit-${dateStr}`,
+              date: dateStr,
+              client: 'granollers',
+              type: 'editing',
+              title: 'Edición Largo SIT',
+              notes: 'Ciclo continuo Vie–Jue',
+              fullDay: false,
+              weight: 1
+            });
+          }
+        }
+
+        // 4. Héctor Loza: Reels de Lunes (1) a Miércoles (3)
+        if (dow >= 1 && dow <= 3) {
+          if (!existsSimilar('hector', 'reel')) {
+            targetArray.push({
+              id: `hector-reel-${dateStr}`,
+              date: dateStr,
+              client: 'hector',
+              type: 'reel',
+              title: 'Reel Héctor Loza',
+              notes: 'Barbería & Escuela (Lun–Mié)',
+              fullDay: false,
+              weight: 1
+            });
+          }
+        }
+      }
+    }
+
     /**
      * ============================================================================
-     * RENDERIZADO DE UI, KPIs Y CALENDARIO
+     * CLASIFICACIÓN DE ESTILOS, PESOS Y LOCALIZACIÓN DIARIA
+     * ============================================================================
+     */
+    function getEventStyle(ev) {
+      // Rodaje / Estancia intensiva en Granollers -> Verde
+      if (ev.type === 'shoot_granollers') {
+        return {
+          bg: 'bg-emerald-500/20',
+          border: 'border-emerald-500/40',
+          text: 'text-emerald-200',
+          dot: 'bg-emerald-400'
+        };
+      }
+
+      // Castro Urdiales (Viajes a Castro y Estancia con pareja) -> Rojo
+      if (ev.client === 'personal' || ev.type === 'stay_castro') {
+        return {
+          bg: 'bg-red-500/20',
+          border: 'border-red-500/40',
+          text: 'text-red-200',
+          dot: 'bg-red-400'
+        };
+      }
+
+      // Viajes generales (Granollers) -> Morado
+      if (ev.client === 'travel' || ev.type === 'travel_full') {
+        return {
+          bg: 'bg-purple-500/20',
+          border: 'border-purple-500/40',
+          text: 'text-purple-200',
+          dot: 'bg-purple-400'
+        };
+      }
+
+      // Héctor Loza (Reels y Rodaje en Santoña) -> Azul
+      if (ev.client === 'hector' || ev.type === 'shoot_hector') {
+        return {
+          bg: 'bg-blue-500/20',
+          border: 'border-blue-500/40',
+          text: 'text-blue-200',
+          dot: 'bg-blue-400'
+        };
+      }
+
+      // SIT Granollers -> Entrega Vídeo Largo en Naranja oscuro atenuado
+      if (ev.client === 'granollers' && ev.type === 'long_video') {
+        return {
+          bg: 'bg-orange-950/85',
+          border: 'border-orange-700/60',
+          text: 'text-orange-200',
+          dot: 'bg-orange-600'
+        };
+      }
+
+      // SIT Granollers -> Edición interna en Naranja suave / neutro cálido
+      if (ev.client === 'granollers' && ev.type === 'editing') {
+        return {
+          bg: 'bg-amber-500/15',
+          border: 'border-amber-500/30',
+          text: 'text-amber-200',
+          dot: 'bg-amber-400'
+        };
+      }
+
+      // SIT Granollers -> Reels diarios en Naranja vivo
+      return {
+        bg: 'bg-orange-500/20',
+        border: 'border-orange-500/45',
+        text: 'text-orange-200',
+        dot: 'bg-orange-400'
+      };
+    }
+
+    function getEventWeight(ev) {
+      if (ev.type === 'stay_castro') return 0;
+      if (typeof ev.weight === 'number') return ev.weight;
+      if (ev.type === 'shoot_granollers' || ev.type === 'shoot_hector') return 2;
+      return 1;
+    }
+
+    function getDayTotalEventWeight(dayEvents) {
+      return dayEvents.reduce((sum, ev) => sum + getEventWeight(ev), 0);
+    }
+
+    /**
+     * Determina la mitad superior de cada día (Localización y tintado de casilla):
+     * - Viajando (Granollers en morado / Castro en rojo)
+     * - En Granollers grabando (verde)
+     * - En Santoña grabando con Héctor (azul)
+     * - En Castro Urdiales (rojo)
+     * - En Valladolid · Libre (base)
+     */
+    function getDayLocationInfo(dayEvents) {
+      const hasGranollersShoot = dayEvents.some(e => e.type === 'shoot_granollers');
+      if (hasGranollersShoot) {
+        return {
+          label: 'En Granollers grabando',
+          shortLabel: 'Granollers · Rodaje',
+          sub: 'Jornada de grabación SIT (07:00–19:00)',
+          isValladolid: false,
+          cellTint: 'bg-emerald-950/35',
+          topBarTint: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/30',
+          dot: 'bg-emerald-400',
+          pill: 'Grabando'
+        };
+      }
+
+      const hasHectorShoot = dayEvents.some(e => e.type === 'shoot_hector');
+      if (hasHectorShoot) {
+        return {
+          label: 'En Santoña · Rodaje Héctor',
+          shortLabel: 'Santoña · Rodaje',
+          sub: 'Jornada de grabación Barbería & Escuela',
+          isValladolid: false,
+          cellTint: 'bg-blue-950/35',
+          topBarTint: 'bg-blue-500/20 text-blue-200 border-blue-500/30',
+          dot: 'bg-blue-400',
+          pill: 'Grabando'
+        };
+      }
+
+      const travelEvent = dayEvents.find(e => e.type === 'travel_full');
+      if (travelEvent) {
+        const isCastroTravel = travelEvent.client === 'personal' || /castro/i.test(travelEvent.title);
+        if (isCastroTravel) {
+          return {
+            label: 'Viajando · Castro Urdiales',
+            shortLabel: 'Viaje · Castro',
+            sub: travelEvent.title || 'Desplazamiento en transporte público',
+            isValladolid: false,
+            cellTint: 'bg-red-950/35',
+            topBarTint: 'bg-red-500/20 text-red-200 border-red-500/30',
+            dot: 'bg-red-400',
+            pill: 'Viajando'
+          };
+        }
+        return {
+          label: 'Viajando · Granollers',
+          shortLabel: 'Viaje · Granollers',
+          sub: travelEvent.title || 'Desplazamiento en transporte público',
+          isValladolid: false,
+          cellTint: 'bg-purple-950/35',
+          topBarTint: 'bg-purple-500/20 text-purple-200 border-purple-500/30',
+          dot: 'bg-purple-400',
+          pill: 'Viajando'
+        };
+      }
+
+      const hasCastroStay = dayEvents.some(e => e.type === 'stay_castro');
+      if (hasCastroStay) {
+        return {
+          label: 'En Castro Urdiales',
+          shortLabel: 'Castro Urdiales',
+          sub: 'Estancia en casa de mi pareja',
+          isValladolid: false,
+          cellTint: 'bg-red-950/30',
+          topBarTint: 'bg-red-500/20 text-red-200 border-red-500/30',
+          dot: 'bg-red-400',
+          pill: 'Estancia'
+        };
+      }
+
+      return {
+        label: 'Valladolid · Libre',
+        shortLabel: 'Valladolid · Libre',
+        sub: 'En base · Disponible para edición/reuniones',
+        isValladolid: true,
+        cellTint: 'bg-studio-900',
+        topBarTint: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20',
+        dot: 'bg-emerald-400',
+        pill: 'Libre'
+      };
+    }
+
+    /**
+     * Filtra los eventos que representan trabajo efectivo (excluyendo estancias sin carga laboral)
+     */
+    function getWorkEvents(dayEvents) {
+      return dayEvents.filter(ev => ev.type !== 'stay_castro');
+    }
+
+    /**
+     * Agrupa eventos repetidos idénticos en un mismo día para mostrar x2, x3, etc.
+     */
+    function groupRepeatedEvents(eventsList) {
+      const map = new Map();
+      eventsList.forEach(ev => {
+        const key = `${ev.client}__${ev.type}__${ev.title.trim().toLowerCase()}`;
+        if (!map.has(key)) {
+          map.set(key, { sample: ev, count: 1 });
+        } else {
+          map.get(key).count += 1;
+        }
+      });
+      return Array.from(map.values());
+    }
+
+    /**
+     * ============================================================================
+     * RENDERIZADO DE LA INTERFAZ
      * ============================================================================
      */
     function renderAll() {
       renderMonthHeader();
-      renderKPIs();
       renderLiveStatusBadge();
+      renderKPIs();
       renderCalendarGrid();
       lucide.createIcons();
     }
@@ -1184,7 +1162,13 @@
     function renderMonthHeader() {
       const label = document.getElementById('current-month-label');
       const sub = document.getElementById('current-month-sub');
+      const prevBtn = document.getElementById('btn-prev-month');
+
       label.textContent = `${MONTHS_ES[state.viewMonth]} ${state.viewYear}`;
+
+      if (prevBtn) {
+        prevBtn.disabled = state.viewYear === MIN_YEAR && state.viewMonth === MIN_MONTH;
+      }
 
       const today = new Date();
       if (state.viewYear === today.getFullYear() && state.viewMonth === today.getMonth()) {
@@ -1194,103 +1178,49 @@
       }
     }
 
-    function renderKPIs() {
-      const monthPrefix = `${state.viewYear}-${String(state.viewMonth + 1).padStart(2, '0')}`;
-      const monthEvents = state.events.filter(ev => ev.date.startsWith(monthPrefix));
-
-      const sitReels = monthEvents.filter(e => e.category === 'sit' && e.type === 'reel').length;
-      const hectorReels = monthEvents.filter(e => e.category === 'hector' && e.type === 'reel').length;
-      const totalReels = sitReels + hectorReels;
-
-      const longVideos = monthEvents.filter(e => e.type === 'long_video').length;
-      // Días únicos con rodaje, estancia intensiva o viaje de trabajo
-      const shootTravelDates = new Set(
-        monthEvents
-          .filter(e => e.type === 'shoot' || e.type === 'stay_shoot' || (e.type === 'travel_full' && e.category !== 'personal') || e.category === 'travel_shoot')
-          .map(e => e.date)
-      );
-
-      // Días únicos personales / pareja (viajes a Castro Urdiales y estancia)
-      const personalDates = new Set(
-        monthEvents
-          .filter(e => e.category === 'personal' || e.type === 'couple_full' || e.type === 'stay_couple')
-          .map(e => e.date)
-      );
-
-      // Cálculo de ocupación del mes considerando peso x2 en estancia/rodaje y peso 0 en estancia Castro Urdiales
-      const daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
-      const activeWorkDates = new Set(monthEvents.filter(e => getEventWeight(e) > 0).map(e => e.date));
-      const fullDayBlockedDates = new Set(monthEvents.filter(e => e.fullDay).map(e => e.date));
-      const intensiveStayDates = new Set(monthEvents.filter(e => e.type === 'stay_shoot').map(e => e.date));
-
-      let weightedLoad = 0;
-      for (let d = 1; d <= daysInMonth; d++) {
-        const dStr = formatDateISO(state.viewYear, state.viewMonth, d);
-        if (intensiveStayDates.has(dStr)) weightedLoad += 1.25; // Jornada 07:00-19:00 (peso doble)
-        else if (fullDayBlockedDates.has(dStr)) weightedLoad += 1;
-        else if (activeWorkDates.has(dStr)) weightedLoad += 0.72;
-      }
-      const loadPercent = Math.min(100, Math.round((weightedLoad / daysInMonth) * 100));
-
-      document.getElementById('kpi-reels').textContent = totalReels;
-      document.getElementById('kpi-reels-breakdown').textContent = `${sitReels} SIT · ${hectorReels} Héctor Loza`;
-      document.getElementById('kpi-long').textContent = longVideos;
-      document.getElementById('kpi-shoots').textContent = shootTravelDates.size;
-      document.getElementById('kpi-personal').textContent = personalDates.size;
-
-      document.getElementById('kpi-load-percent').textContent = `${loadPercent}%`;
-      document.getElementById('kpi-busy-days').textContent = `${activeWorkDates.size}/${daysInMonth} días con carga`;
-      document.getElementById('kpi-load-bar').style.width = `${loadPercent}%`;
-
-      const loadBadge = document.getElementById('kpi-load-badge');
-      if (loadPercent >= 80) {
-        loadBadge.textContent = 'MUY LIADO';
-        loadBadge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30';
-      } else if (loadPercent >= 55) {
-        loadBadge.textContent = 'CARGA MEDIA-ALTA';
-        loadBadge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30';
-      } else {
-        loadBadge.textContent = 'DISPONIBLE';
-        loadBadge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
-      }
-    }
-
     function renderLiveStatusBadge() {
-      const today = new Date();
-      const todayStr = formatDateISO(today.getFullYear(), today.getMonth(), today.getDate());
+      const todayStr = formatDateISO(new Date());
       const todayEvents = state.events.filter(e => e.date === todayStr);
+      const loc = getDayLocationInfo(todayEvents);
+      const totalWeight = getDayTotalEventWeight(todayEvents);
 
       const dot = document.getElementById('live-status-dot');
       const text = document.getElementById('live-status-text');
 
-      if (todayEvents.some(e => e.type === 'stay_shoot')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
-        text.textContent = 'En Granollers grabando (07:00–19:00)';
-      } else if (todayEvents.some(e => e.category === 'hector' && e.type === 'shoot')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse';
-        text.textContent = 'En Santoña grabando con Héctor Loza';
-      } else if (todayEvents.some(e => e.type === 'travel_full' && e.category === 'personal')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse';
-        text.textContent = 'Viajando a Castro Urdiales (Día completo)';
-      } else if (todayEvents.some(e => e.type === 'travel_full')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse';
-        text.textContent = 'Viajando (Transporte público · Día completo)';
-      } else if (todayEvents.some(e => e.type === 'shoot')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
-        text.textContent = 'En rodaje (Grabación activa)';
-      } else if (todayEvents.some(e => e.type === 'couple_full')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
-        text.textContent = 'En Castro Urdiales / No disponible';
-      } else if (todayEvents.some(e => e.type === 'stay_couple')) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
-        text.textContent = 'En Castro Urdiales (Edición remota activa)';
-      } else if (todayEvents.length > 0) {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400';
-        text.textContent = 'Valladolid · Edición & Entregas activas';
+      if (!loc.isValladolid) {
+        dot.className = `w-2 h-2 rounded-full ${loc.dot} animate-pulse-soft`;
+        text.textContent = `Hoy: ${loc.shortLabel}`;
+      } else if (totalWeight >= 2) {
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse-soft';
+        text.textContent = `Hoy: Valladolid · ${totalWeight} tareas`;
       } else {
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-indigo-400';
-        text.textContent = 'Valladolid · Libre';
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse-soft';
+        text.textContent = 'Hoy: Valladolid · Libre';
       }
+    }
+
+    function renderKPIs() {
+      const monthEvents = getEventsForMonth(state.viewYear, state.viewMonth);
+
+      const granollersCount = monthEvents.filter(e => e.client === 'granollers' && (e.type === 'reel' || e.type === 'long_video')).length;
+      const hectorCount = monthEvents.filter(e => e.client === 'hector' && e.type === 'reel').length;
+
+      // Días únicos fuera de Valladolid (viajes, rodajes fuera o estancia en Castro)
+      const awayDates = new Set(
+        monthEvents
+          .filter(e => ['travel_full', 'shoot_granollers', 'shoot_hector', 'stay_castro'].includes(e.type))
+          .map(e => e.date)
+      );
+
+      // Cálculo de carga laboral ponderada (100% = ~52 puntos de peso en el mes)
+      const totalWeight = getDayTotalEventWeight(monthEvents);
+      const loadPct = Math.min(100, Math.round((totalWeight / 52) * 100));
+
+      document.getElementById('kpi-granollers').textContent = granollersCount;
+      document.getElementById('kpi-hector').textContent = hectorCount;
+      document.getElementById('kpi-travel').textContent = `${awayDates.size}d`;
+      document.getElementById('kpi-load').textContent = `${loadPct}%`;
+      document.getElementById('kpi-load-bar').style.width = `${loadPct}%`;
     }
 
     function renderCalendarGrid() {
@@ -1300,875 +1230,696 @@
       const firstDayOfMonth = new Date(state.viewYear, state.viewMonth, 1);
       const daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
 
-      // Convertir domingo=0 a lunes=0 ... domingo=6
-      let startWeekday = firstDayOfMonth.getDay() - 1;
-      if (startWeekday < 0) startWeekday = 6;
+      // Ajuste Lunes=0 ... Domingo=6
+      const startOffset = (firstDayOfMonth.getDay() + 6) % 7;
+      const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+      const todayStr = formatDateISO(new Date());
 
-      const today = new Date();
-      const todayStr = formatDateISO(today.getFullYear(), today.getMonth(), today.getDate());
+      for (let cellIdx = 0; cellIdx < totalCells; cellIdx++) {
+        const dayNumber = cellIdx - startOffset + 1;
 
-      // Celdas vacías iniciales antes del día 1
-      for (let i = 0; i < startWeekday; i++) {
-        const emptyCell = document.createElement('div');
-        emptyCell.className = 'min-h-[135px] sm:min-h-[165px] bg-studio-950/50';
-        grid.appendChild(emptyCell);
-      }
+        if (dayNumber < 1 || dayNumber > daysInMonth) {
+          const emptyCell = document.createElement('div');
+          emptyCell.className = 'min-h-[135px] sm:min-h-[155px] bg-studio-950/60';
+          grid.appendChild(emptyCell);
+          continue;
+        }
 
-      // Días del mes
-      for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = formatDateISO(state.viewYear, state.viewMonth, day);
-        const isToday = dateStr === todayStr;
-
-        // Todos los eventos reales del día (para calcular ubicación exacta y tintado)
-        const allDayEvents = state.events.filter(ev => ev.date === dateStr);
+        const dateObj = new Date(state.viewYear, state.viewMonth, dayNumber);
+        const dateStr = formatDateISO(dateObj);
+        const allDayEvents = state.events.filter(e => e.date === dateStr);
         const locInfo = getDayLocationInfo(allDayEvents);
 
-        // Filtrar eventos del día según el filtro activo
-        let dayEvents = allDayEvents;
-        if (state.activeFilter !== 'all') {
-          dayEvents = dayEvents.filter(ev => ev.category === state.activeFilter);
-        }
+        // Filtrar eventos visibles según filtro activo
+        const filteredEvents = allDayEvents.filter(ev => {
+          if (state.activeFilter === 'all') return true;
+          if (state.activeFilter === 'granollers') return ev.client === 'granollers' || ev.type === 'shoot_granollers';
+          if (state.activeFilter === 'hector') return ev.client === 'hector' || ev.type === 'shoot_hector';
+          if (state.activeFilter === 'travel') return ['travel_full', 'shoot_granollers', 'shoot_hector'].includes(ev.type);
+          if (state.activeFilter === 'personal') return ev.client === 'personal' || ev.type === 'stay_castro';
+          return true;
+        });
 
-        const workEvents = getDayWorkEvents(dayEvents);
-        const isFullDayBlocked = allDayEvents.some(ev => ev.fullDay);
-        const dayEffectiveWeight = getDayTotalEventWeight(dayEvents);
+        const workEvents = getWorkEvents(filteredEvents);
+        const groupedWork = groupRepeatedEvents(workEvents);
+        const isToday = dateStr === todayStr;
 
-        // Casilla dividida en DOS MITADES exactas (grid-rows-2) y tintada según el estado
-        const cell = document.createElement('div');
-        cell.className = `min-h-[135px] sm:min-h-[165px] grid grid-rows-2 cursor-pointer transition relative group overflow-hidden ${locInfo.cellBg} ${isToday ? 'ring-2 ring-inset ring-indigo-500' : ''}`;
-        cell.onclick = () => openDayDetailModal(dateStr);
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.onclick = () => openDayModal(dateStr);
+        cell.className = `calendar-cell text-left min-h-[135px] sm:min-h-[155px] ${locInfo.cellTint} flex flex-col justify-between focus:outline-none relative group ${
+          isToday ? 'ring-2 ring-inset ring-indigo-500' : ''
+        }`;
 
-        // =========================================================================
-        // MITAD SUPERIOR: NÚMERO DEL DÍA + MI LOCALIZACIÓN (Valladolid = Libre)
-        // =========================================================================
+        // MITAD SUPERIOR: Número de día + Localización
         const topHalf = document.createElement('div');
-        topHalf.className = `p-1.5 sm:p-2 border-b flex flex-col justify-between transition ${locInfo.topHalfBg}`;
+        topHalf.className = 'w-full p-2 sm:p-2.5 border-b border-zinc-800/80 flex flex-col justify-between gap-1.5 min-h-[54px]';
 
-        const topRow = document.createElement('div');
-        topRow.className = 'flex items-center justify-between gap-1';
-
-        const dayNum = document.createElement('span');
-        dayNum.className = isToday
-          ? 'w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center shadow'
-          : 'text-xs sm:text-sm font-bold text-white/95';
-        dayNum.textContent = day;
-        topRow.appendChild(dayNum);
-
-        if (dayEvents.some(e => e.type === 'stay_shoot')) {
-          const lockBadge = document.createElement('span');
-          lockBadge.className = 'text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 truncate';
-          lockBadge.textContent = '07h–19h';
-          topRow.appendChild(lockBadge);
-        } else if (isFullDayBlocked) {
-          const lockBadge = document.createElement('span');
-          lockBadge.className = 'text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-black/30 text-white/90 border border-white/15 truncate';
-          lockBadge.textContent = '100%';
-          topRow.appendChild(lockBadge);
-        } else if (dayEffectiveWeight >= 3) {
-          const busyBadge = document.createElement('span');
-          busyBadge.className = 'hidden sm:inline-block text-[9px] font-mono font-semibold uppercase px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-200';
-          busyBadge.textContent = 'Muy liado';
-          topRow.appendChild(busyBadge);
-        }
-
-        topHalf.appendChild(topRow);
-
-        // Etiqueta destacada de Localización en la mitad superior
-        const locLabelRow = document.createElement('div');
-        locLabelRow.className = 'flex items-center gap-1.5 mt-1';
-        locLabelRow.innerHTML = `
-          <span class="w-2 h-2 rounded-full shrink-0 ${locInfo.dotClass}"></span>
-          <span class="text-[10px] sm:text-xs font-bold tracking-tight truncate">${escapeHtml(locInfo.label)}</span>
+        topHalf.innerHTML = `
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-xs sm:text-sm font-bold ${
+              isToday
+                ? 'w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center'
+                : 'text-zinc-200'
+            }">${dayNumber}</span>
+            ${state.isAdmin ? `<span class="opacity-0 group-hover:opacity-100 text-[10px] text-indigo-300 font-medium transition">+ Editar</span>` : ''}
+          </div>
+          <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md border text-[10px] sm:text-[11px] font-semibold truncate ${locInfo.topBarTint}">
+            <span class="w-1.5 h-1.5 rounded-full shrink-0 ${locInfo.dot}"></span>
+            <span class="truncate">${locInfo.shortLabel}</span>
+          </div>
         `;
-        topHalf.appendChild(locLabelRow);
-        cell.appendChild(topHalf);
 
-        // =========================================================================
-        // MITAD INFERIOR: CARGA DE TRABAJO ACTUAL DEL DÍA
-        // =========================================================================
+        // MITAD INFERIOR: Carga de trabajo del día
         const bottomHalf = document.createElement('div');
-        bottomHalf.className = 'p-1.5 sm:p-2 flex flex-col justify-center space-y-1 overflow-hidden bg-black/15';
+        bottomHalf.className = 'w-full flex-1 p-2 sm:p-2.5 flex flex-col gap-1 overflow-hidden';
 
-        if (workEvents.length === 0) {
-          const noWork = document.createElement('div');
-          noWork.className = 'text-[10px] font-mono text-zinc-400/90 truncate flex items-center gap-1';
-          noWork.textContent = locInfo.key === 'travel' ? '• Sin edición (Viaje)' : '• Sin trabajo asignado';
-          bottomHalf.appendChild(noWork);
+        if (groupedWork.length === 0) {
+          bottomHalf.innerHTML = `
+            <span class="text-[10px] text-zinc-500 italic my-auto">Sin entregas asignadas</span>
+          `;
         } else {
-          // Agrupar eventos repetidos en el mismo día (misma categoría, tipo y título)
-          const groupedWork = [];
-          const groupMap = new Map();
-
-          workEvents.forEach(ev => {
-            const key = `${ev.category}::${ev.type}::${ev.title.trim().toLowerCase()}`;
-            if (groupMap.has(key)) {
-              groupMap.get(key).count += 1;
-            } else {
-              const entry = { ev, count: 1 };
-              groupMap.set(key, entry);
-              groupedWork.push(entry);
-            }
-          });
-
-          const maxVisible = 2;
-          groupedWork.slice(0, maxVisible).forEach(({ ev, count }) => {
-            const style = getEventStyle(ev);
-            const pill = document.createElement('div');
-            pill.className = `px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium border truncate flex items-center justify-between gap-1 ${style.badgeBg}`;
-            pill.innerHTML = `
-              <div class="flex items-center gap-1 min-w-0">
-                <span class="w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}"></span>
-                <span class="truncate">${escapeHtml(ev.title)}</span>
-              </div>
-              ${count > 1 ? `<span class="shrink-0 text-[9px] font-mono font-extrabold px-1 rounded bg-black/35 text-white border border-white/15">x${count}</span>` : ''}
+          const maxVisible = 3;
+          groupedWork.slice(0, maxVisible).forEach(({ sample, count }) => {
+            const st = getEventStyle(sample);
+            const tag = document.createElement('div');
+            tag.className = `px-1.5 py-0.5 rounded-md border ${st.bg} ${st.border} ${st.text} text-[10px] sm:text-[11px] font-medium flex items-center justify-between gap-1 truncate`;
+            tag.innerHTML = `
+              <span class="flex items-center gap-1 truncate">
+                <span class="w-1.5 h-1.5 rounded-full shrink-0 ${st.dot}"></span>
+                <span class="truncate">${escapeHtml(sample.title)}</span>
+              </span>
+              ${count > 1 ? `<span class="shrink-0 px-1 rounded bg-black/35 text-[10px] font-bold text-white">x${count}</span>` : ''}
             `;
-            bottomHalf.appendChild(pill);
+            bottomHalf.appendChild(tag);
           });
 
           if (groupedWork.length > maxVisible) {
-            const more = document.createElement('div');
-            more.className = 'text-[10px] font-mono text-zinc-300/80 pl-1';
+            const more = document.createElement('span');
+            more.className = 'text-[10px] text-zinc-400 font-medium pl-1';
             more.textContent = `+${groupedWork.length - maxVisible} más...`;
             bottomHalf.appendChild(more);
           }
         }
 
+        cell.appendChild(topHalf);
         cell.appendChild(bottomHalf);
         grid.appendChild(cell);
       }
-
-      // Rellenar celdas sobrantes al final para mantener cuadrícula limpia
-      const totalCells = startWeekday + daysInMonth;
-      const remainder = totalCells % 7;
-      if (remainder !== 0) {
-        for (let i = 0; i < 7 - remainder; i++) {
-          const emptyCell = document.createElement('div');
-          emptyCell.className = 'min-h-[135px] sm:min-h-[165px] bg-studio-950/50';
-          grid.appendChild(emptyCell);
-        }
-      }
-    }
-
-    function changeMonth(delta) {
-      const next = new Date(state.viewYear, state.viewMonth + delta, 1);
-      state.viewYear = next.getFullYear();
-      state.viewMonth = next.getMonth();
-      renderAll();
-    }
-
-    function setFilter(filterKey) {
-      state.activeFilter = filterKey;
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        if (btn.dataset.filter === filterKey) {
-          btn.className = 'filter-btn active px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-studio-950 transition shrink-0 flex items-center gap-1.5';
-        } else {
-          btn.className = 'filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5';
-        }
-      });
-      renderCalendarGrid();
     }
 
     /**
      * ============================================================================
-     * MODAL DE DETALLE DIARIO
+     * MODAL DE DETALLE DEL DÍA Y GESTIÓN DE EVENTOS
      * ============================================================================
      */
-    function openDayDetailModal(dateStr) {
+    function openDayModal(dateStr) {
       state.selectedDateStr = dateStr;
-      const [y, m, d] = dateStr.split('-').map(Number);
-      const dateObj = new Date(y, m - 1, d);
+      const modal = document.getElementById('day-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
 
-      document.getElementById('modal-day-weekday').textContent = WEEKDAYS_ES[dateObj.getDay()];
-      document.getElementById('modal-day-title').textContent = `${d} de ${MONTHS_ES[m - 1]} de ${y}`;
+      renderDayModalContent();
 
-      const dayEvents = state.events.filter(ev => ev.date === dateStr);
-      const locInfo = getDayLocationInfo(dayEvents);
-      const workEvents = getDayWorkEvents(dayEvents);
-      const isFullBlocked = dayEvents.some(ev => ev.fullDay);
-
-      // Rellenar Apartado 1: Ubicación del día
-      const locBox = document.getElementById('modal-day-location-box');
-      locBox.className = `p-3.5 rounded-xl border flex items-center justify-between gap-3 ${locInfo.badgeClass}`;
-      locBox.innerHTML = `
-        <div class="flex items-center gap-2.5">
-          <span class="w-2.5 h-2.5 rounded-full shrink-0 ${locInfo.dotClass}"></span>
-          <div>
-            <div class="text-sm font-bold text-white">${escapeHtml(locInfo.label)}</div>
-            <div class="text-xs opacity-85">${escapeHtml(locInfo.description)}</div>
-          </div>
-        </div>
-        ${locInfo.isFreeLocation
-          ? '<span class="shrink-0 text-[10px] font-mono font-bold uppercase px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-200 border border-emerald-500/40">LIBRE EN BASE</span>'
-          : ''}
-      `;
-
-      const banner = document.getElementById('modal-day-status-banner');
-      if (isFullBlocked) {
-        const isOnlyTravel = dayEvents.some(ev => ev.type === 'travel_full') && !dayEvents.some(ev => ev.category === 'personal');
-        const isCoupleDay = dayEvents.some(ev => ev.category === 'personal');
-        const isGreenShoot = dayEvents.some(ev => ev.type === 'stay_shoot' || (ev.category === 'sit' && ev.type === 'shoot'));
-        banner.className = isOnlyTravel
-          ? 'p-3 rounded-xl border bg-purple-950/40 border-purple-500/40 text-purple-200 flex items-center gap-3'
-          : (isCoupleDay
-            ? 'p-3 rounded-xl border bg-red-950/40 border-red-500/40 text-red-200 flex items-center gap-3'
-            : (isGreenShoot
-              ? 'p-3 rounded-xl border bg-emerald-950/40 border-emerald-500/40 text-emerald-200 flex items-center gap-3'
-              : 'p-3 rounded-xl border bg-orange-950/40 border-orange-500/40 text-orange-200 flex items-center gap-3'));
-        banner.innerHTML = `
-          <i data-lucide="ban" class="w-5 h-5 ${isOnlyTravel ? 'text-purple-400' : (isCoupleDay ? 'text-red-400' : (isGreenShoot ? 'text-emerald-400' : 'text-orange-400'))} shrink-0"></i>
-          <div class="text-xs">
-            <strong class="block text-sm text-white">Día Completo Ocupado</strong>
-            No disponible para nuevos rodajes, llamadas largas ni entregas urgentes.
-          </div>
-        `;
-      } else if (workEvents.length > 0) {
-        banner.className = 'p-3 rounded-xl border bg-amber-950/30 border-amber-500/30 text-amber-200 flex items-center gap-3';
-        banner.innerHTML = `
-          <i data-lucide="clock" class="w-5 h-5 text-amber-400 shrink-0"></i>
-          <div class="text-xs">
-            <strong class="block text-sm text-white">Jornada con Entregas / Edición Programada</strong>
-            Disponibilidad reducida según carga de postproducción.
-          </div>
-        `;
+      const editor = document.getElementById('admin-event-editor');
+      if (state.isAdmin) {
+        editor.classList.remove('hidden');
+        resetEventForm();
       } else {
-        banner.className = 'p-3 rounded-xl border bg-emerald-950/30 border-emerald-500/30 text-emerald-200 flex items-center gap-3';
-        banner.innerHTML = `
-          <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0"></i>
-          <div class="text-xs">
-            <strong class="block text-sm text-white">Día Despejado / Disponible</strong>
-            Sin bloqueos fijos registrados para esta fecha.
-          </div>
-        `;
+        editor.classList.add('hidden');
       }
 
-      const list = document.getElementById('modal-day-events-list');
-      list.innerHTML = '';
-
-      if (dayEvents.length === 0) {
-        list.innerHTML = `<p class="text-xs text-zinc-500 text-center py-4">No hay tareas de rodaje o edición registradas este día.</p>`;
-      } else {
-        dayEvents.forEach(ev => {
-          const style = getEventStyle(ev);
-          const item = document.createElement('div');
-          item.className = `p-3.5 rounded-xl bg-studio-850 border border-zinc-800 border-l-4 ${style.cardBorder} flex items-start justify-between gap-3`;
-
-          item.innerHTML = `
-            <div class="space-y-1">
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${style.badgeBg}">${style.label}</span>
-                <span class="text-[10px] font-mono text-zinc-400">${TYPE_LABELS[ev.type] || ev.type}</span>
-                ${ev.type === 'stay_shoot' ? '<span class="text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 px-1.5 py-0.5 rounded">JORNADA INTENSIVA (07h–19h)</span>' : ''}
-                ${ev.type === 'stay_couple' ? '<span class="text-[10px] font-mono bg-red-500/20 text-red-300 border border-red-500/35 px-1.5 py-0.5 rounded">ESTANCIA EN CASTRO</span>' : ''}
-                ${ev.fullDay ? '<span class="text-[10px] font-mono bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded">DÍA COMPLETO</span>' : ''}
-              </div>
-              <h4 class="text-sm font-semibold text-white">${escapeHtml(ev.title)}</h4>
-              ${ev.notes ? `<p class="text-xs text-zinc-400 leading-relaxed">${escapeHtml(ev.notes)}</p>` : ''}
-            </div>
-            ${state.isAdmin ? `
-              <div class="flex items-center gap-1 shrink-0">
-                <button onclick="openEditEventModal('${ev.id}')" title="Editar" class="p-1.5 rounded-lg bg-studio-800 hover:bg-studio-700 text-zinc-300">
-                  <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                </button>
-                <button onclick="deleteEvent('${ev.id}')" title="Eliminar" class="p-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900 text-rose-300">
-                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                </button>
-              </div>
-            ` : ''}
-          `;
-          list.appendChild(item);
-        });
-      }
-
-      const addBtn = document.getElementById('modal-btn-add-day-event');
-      if (state.isAdmin) addBtn.classList.remove('hidden');
-      else addBtn.classList.add('hidden');
-
-      openModal('day-detail-modal');
       lucide.createIcons();
     }
 
-    /**
-     * ============================================================================
-     * FUNCIONES CRUD DEL ADMINISTRADOR
-     * ============================================================================
-     */
-    function openAddEventModal(prefillDate = null) {
-      if (!state.isAdmin) return;
-      document.getElementById('event-form-title').textContent = 'Nuevo Bloque en Agenda';
-      document.getElementById('ev-id').value = '';
-      document.getElementById('ev-is-trip-pack').value = '';
-      document.getElementById('trip-pack-hint').classList.add('hidden');
-      document.getElementById('standard-event-fields').classList.remove('hidden');
-      document.getElementById('ev-date-label').textContent = 'Fecha Inicio';
-      document.getElementById('ev-end-date-label').textContent = 'Fecha Fin (Opcional)';
-      document.getElementById('ev-end-date').required = false;
-
-      document.getElementById('ev-date').value = prefillDate || formatDateISO(state.viewYear, state.viewMonth, 1);
-      document.getElementById('ev-end-date').value = '';
-      document.getElementById('ev-category').value = 'sit';
-      document.getElementById('ev-type').value = 'reel';
-      document.getElementById('ev-title').value = 'Vídeo Diario SIT Granollers';
-      document.getElementById('ev-full-day').checked = false;
-      document.getElementById('ev-notes').value = '';
-      openModal('event-form-modal');
+    function closeDayModal() {
+      const modal = document.getElementById('day-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      state.selectedDateStr = null;
     }
 
-    function openAddEventForSelectedDate() {
-      closeModal('day-detail-modal');
-      openAddEventModal(state.selectedDateStr);
+    function renderDayModalContent() {
+      const dateStr = state.selectedDateStr;
+      if (!dateStr) return;
+
+      const [y, m, d] = dateStr.split('-').map(Number);
+      const dateObj = new Date(y, m - 1, d);
+      const dayName = WEEKDAYS_ES[dateObj.getDay()];
+      const monthName = MONTHS_ES[m - 1];
+
+      document.getElementById('modal-day-title').textContent = `${dayName}, ${d} de ${monthName} de ${y}`;
+
+      const dayEvents = state.events.filter(e => e.date === dateStr);
+      const locInfo = getDayLocationInfo(dayEvents);
+      const totalWeight = getDayTotalEventWeight(dayEvents);
+
+      // Badge superior
+      const badge = document.getElementById('modal-day-badge');
+      badge.textContent = locInfo.pill;
+
+      // Caja de localización
+      document.getElementById('modal-location-title').textContent = locInfo.label;
+      document.getElementById('modal-location-sub').textContent = locInfo.sub;
+      document.getElementById('modal-location-pill').textContent = locInfo.pill;
+
+      // Nivel de ocupación
+      const loadLabel = document.getElementById('modal-day-load-label');
+      if (totalWeight === 0) {
+        loadLabel.textContent = 'Carga: Libre';
+      } else if (totalWeight <= 2) {
+        loadLabel.textContent = `Carga: Moderada (${totalWeight})`;
+      } else {
+        loadLabel.textContent = `Carga: Día Muy Liado (${totalWeight})`;
+      }
+
+      // Lista de bloques del día
+      const list = document.getElementById('modal-events-list');
+      list.innerHTML = '';
+
+      if (dayEvents.length === 0) {
+        list.innerHTML = `
+          <div class="rounded-xl border border-dashed border-zinc-800 p-4 text-center text-xs text-zinc-400">
+            No hay bloques registrados para este día. Ubicación en Valladolid (Libre).
+          </div>
+        `;
+        return;
+      }
+
+      dayEvents.forEach(ev => {
+        const st = getEventStyle(ev);
+        const item = document.createElement('div');
+        item.className = `rounded-xl border ${st.border} ${st.bg} p-3 flex items-start justify-between gap-3`;
+
+        item.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full ${st.dot}"></span>
+              <span class="text-xs font-bold text-white">${escapeHtml(ev.title)}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-black/30 text-zinc-300 border border-white/10">
+                ${TYPE_LABELS[ev.type] || ev.type}
+              </span>
+            </div>
+            ${ev.notes ? `<p class="text-xs text-zinc-300 pl-4">${escapeHtml(ev.notes)}</p>` : ''}
+          </div>
+          ${
+            state.isAdmin
+              ? `<div class="flex items-center gap-1 shrink-0">
+                  <button onclick="editEventItem('${ev.id}')" title="Editar" class="p-1.5 rounded-lg bg-black/30 hover:bg-black/50 text-zinc-200 transition">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                  </button>
+                  <button onclick="deleteEventItem('${ev.id}')" title="Eliminar" class="p-1.5 rounded-lg bg-red-950/60 hover:bg-red-900/80 text-red-200 transition">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>`
+              : ''
+          }
+        `;
+        list.appendChild(item);
+      });
+
+      lucide.createIcons();
     }
 
-    function openEditEventModal(eventId) {
-      if (!state.isAdmin) return;
-      const ev = state.events.find(e => e.id === eventId);
+    function applyQuickPreset(preset) {
+      const startInput = document.getElementById('event-date-start');
+      const endInput = document.getElementById('event-date-end');
+      const clientSelect = document.getElementById('event-client');
+      const typeSelect = document.getElementById('event-type');
+      const titleInput = document.getElementById('event-title');
+      const notesInput = document.getElementById('event-notes');
+      const fullDayCheck = document.getElementById('event-fullday');
+      const presetInput = document.getElementById('edit-preset-mode');
+
+      const baseDate = state.selectedDateStr || formatDateISO(new Date());
+      startInput.value = baseDate;
+      presetInput.value = preset;
+
+      if (preset === 'trip_granollers') {
+        const [y, m, d] = baseDate.split('-').map(Number);
+        const endObj = new Date(y, m - 1, d + 2);
+        endInput.value = formatDateISO(endObj);
+        clientSelect.value = 'granollers';
+        typeSelect.value = 'shoot_granollers';
+        titleInput.value = 'Pack Viaje Granollers (Ida + Rodaje + Vuelta)';
+        notesInput.value = 'Día 1: Ida · Días intermedios: Rodaje 07h–19h · Último día: Vuelta';
+        fullDayCheck.checked = true;
+        showToast('Selecciona la fecha de ida y vuelta para generar el paquete completo.', 'info');
+      } else if (preset === 'trip_castro') {
+        const [y, m, d] = baseDate.split('-').map(Number);
+        const endObj = new Date(y, m - 1, d + 2);
+        endInput.value = formatDateISO(endObj);
+        clientSelect.value = 'personal';
+        typeSelect.value = 'stay_castro';
+        titleInput.value = 'Pack Viaje Castro Urdiales (Ida + Estancia + Vuelta)';
+        notesInput.value = 'Ida/Vuelta bloquean día completo · Estancia con peso laboral 0';
+        fullDayCheck.checked = true;
+        showToast('Selecciona fecha de ida y vuelta para Castro Urdiales.', 'info');
+      } else if (preset === 'shoot_hector') {
+        endInput.value = baseDate;
+        clientSelect.value = 'hector';
+        typeSelect.value = 'shoot_hector';
+        titleInput.value = 'Jornada Rodaje Héctor Loza (Santoña)';
+        notesInput.value = 'Grabación mensual barbería y escuela en Santoña';
+        fullDayCheck.checked = true;
+      }
+    }
+
+    function syncFormWithType() {
+      const type = document.getElementById('event-type').value;
+      const fullDayCheck = document.getElementById('event-fullday');
+      const presetInput = document.getElementById('edit-preset-mode');
+      presetInput.value = '';
+
+      if (['travel_full', 'shoot_granollers', 'shoot_hector'].includes(type)) {
+        fullDayCheck.checked = true;
+      } else if (type === 'stay_castro') {
+        fullDayCheck.checked = false;
+      }
+    }
+
+    function resetEventForm() {
+      document.getElementById('edit-event-id').value = '';
+      document.getElementById('edit-preset-mode').value = '';
+      document.getElementById('editor-form-title').innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4"></i><span>Añadir bloque o desplazamiento</span>`;
+      document.getElementById('btn-cancel-edit').classList.add('hidden');
+      document.getElementById('event-client').value = 'granollers';
+      document.getElementById('event-type').value = 'reel';
+      document.getElementById('event-title').value = '';
+      document.getElementById('event-notes').value = '';
+      document.getElementById('event-fullday').checked = false;
+      document.getElementById('event-date-start').value = state.selectedDateStr || formatDateISO(new Date());
+      document.getElementById('event-date-end').value = state.selectedDateStr || formatDateISO(new Date());
+      lucide.createIcons();
+    }
+
+    function editEventItem(id) {
+      const ev = state.events.find(e => e.id === id);
       if (!ev) return;
 
-      closeModal('day-detail-modal');
-      document.getElementById('event-form-title').textContent = 'Editar Bloque';
-      document.getElementById('ev-id').value = ev.id;
-      document.getElementById('ev-is-trip-pack').value = '';
-      document.getElementById('trip-pack-hint').classList.add('hidden');
-      document.getElementById('standard-event-fields').classList.remove('hidden');
-      document.getElementById('ev-date-label').textContent = 'Fecha Inicio';
-      document.getElementById('ev-end-date-label').textContent = 'Fecha Fin (Opcional)';
-      document.getElementById('ev-end-date').required = false;
+      document.getElementById('edit-event-id').value = ev.id;
+      document.getElementById('edit-preset-mode').value = '';
+      document.getElementById('editor-form-title').innerHTML = `<i data-lucide="pencil" class="w-4 h-4"></i><span>Editando bloque</span>`;
+      document.getElementById('btn-cancel-edit').classList.remove('hidden');
 
-      document.getElementById('ev-date').value = ev.date;
-      document.getElementById('ev-end-date').value = '';
-      document.getElementById('ev-category').value = ev.category;
-      document.getElementById('ev-type').value = ev.type;
-      document.getElementById('ev-title').value = ev.title;
-      document.getElementById('ev-full-day').checked = !!ev.fullDay;
-      document.getElementById('ev-notes').value = ev.notes || '';
-      openModal('event-form-modal');
+      document.getElementById('event-client').value = ev.client;
+      document.getElementById('event-type').value = ev.type;
+      document.getElementById('event-title').value = ev.title;
+      document.getElementById('event-notes').value = ev.notes || '';
+      document.getElementById('event-fullday').checked = Boolean(ev.fullDay);
+      document.getElementById('event-date-start').value = ev.date;
+      document.getElementById('event-date-end').value = ev.date;
+      lucide.createIcons();
     }
 
-    function applyQuickPreset(presetKey) {
-      const isTripPackEl = document.getElementById('ev-is-trip-pack');
-      const tripHintEl = document.getElementById('trip-pack-hint');
-      const standardFieldsEl = document.getElementById('standard-event-fields');
-      const dateLabel = document.getElementById('ev-date-label');
-      const endDateLabel = document.getElementById('ev-end-date-label');
-      const endDateInput = document.getElementById('ev-end-date');
-
-      const catEl = document.getElementById('ev-category');
-      const typeEl = document.getElementById('ev-type');
-      const titleEl = document.getElementById('ev-title');
-      const fullDayEl = document.getElementById('ev-full-day');
-      const notesEl = document.getElementById('ev-notes');
-
-      if (presetKey === 'granollers_trip_pack') {
-        isTripPackEl.value = 'granollers';
-        tripHintEl.className = 'p-2.5 rounded-xl bg-amber-950/40 border border-amber-500/30 text-[11px] text-amber-200 leading-relaxed';
-        tripHintEl.innerHTML = '<strong>Modo Pack Viaje Granollers:</strong> El 1er día se creará como <em>Viaje de Ida</em> (día completo), los días intermedios como <em>Estancia / Rodaje Intensivo (07:00–19:00)</em> y el último día como <em>Viaje de Vuelta</em> (día completo).';
-        tripHintEl.classList.remove('hidden');
-        standardFieldsEl.classList.add('hidden');
-        dateLabel.textContent = 'Día Viaje de Ida';
-        endDateLabel.textContent = 'Día Viaje de Vuelta (Obligatorio)';
-        endDateInput.required = true;
-        titleEl.value = 'Viaje Granollers';
-        notesEl.value = 'Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.';
-
-        const startVal = document.getElementById('ev-date').value;
-        if (startVal && !endDateInput.value) {
-          const d = new Date(startVal + 'T00:00:00');
-          d.setDate(d.getDate() + 3);
-          endDateInput.value = formatDateISO(d.getFullYear(), d.getMonth(), d.getDate());
-        }
-        return;
-      }
-
-      if (presetKey === 'castro_trip_pack') {
-        isTripPackEl.value = 'castro';
-        tripHintEl.className = 'p-2.5 rounded-xl bg-red-950/40 border border-red-500/35 text-[11px] text-red-200 leading-relaxed';
-        tripHintEl.innerHTML = '<strong>Modo Pack Viaje Castro Urdiales (Todo en Rojo):</strong> El 1er día se creará como <em>Viaje de Ida</em> (día completo), los días intermedios como <em>Estancia en Castro Urdiales</em> (<strong>Peso 0</strong>) y el último día como <em>Viaje de Vuelta</em> (día completo).';
-        tripHintEl.classList.remove('hidden');
-        standardFieldsEl.classList.add('hidden');
-        dateLabel.textContent = 'Día Viaje de Ida';
-        endDateLabel.textContent = 'Día Viaje de Vuelta (Obligatorio)';
-        endDateInput.required = true;
-        titleEl.value = 'Viaje Castro Urdiales';
-        notesEl.value = 'Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja.';
-
-        const startVal = document.getElementById('ev-date').value;
-        if (startVal && !endDateInput.value) {
-          const d = new Date(startVal + 'T00:00:00');
-          d.setDate(d.getDate() + 2);
-          endDateInput.value = formatDateISO(d.getFullYear(), d.getMonth(), d.getDate());
-        }
-        return;
-      }
-
-      // Restaurar modo evento individual si se elige otro preset
-      isTripPackEl.value = '';
-      tripHintEl.classList.add('hidden');
-      standardFieldsEl.classList.remove('hidden');
-      dateLabel.textContent = 'Fecha Inicio';
-      endDateLabel.textContent = 'Fecha Fin (Opcional)';
-      endDateInput.required = false;
-
-      if (presetKey === 'shoot_hector') {
-        catEl.value = 'hector';
-        typeEl.value = 'shoot';
-        titleEl.value = 'Rodaje Héctor Loza (Santoña)';
-        fullDayEl.checked = true;
-        notesEl.value = 'Grabación mensual en Santoña (barbería / escuela de barbería).';
-      }
-    }
-
-    function autoSuggestEventTitle() {
-      const cat = document.getElementById('ev-category').value;
-      const type = document.getElementById('ev-type').value;
-      const titleInput = document.getElementById('ev-title');
-      const fullDayCheck = document.getElementById('ev-full-day');
-
-      if (type === 'stay_shoot') {
-        titleInput.value = 'Estancia / Rodaje SIT (07:00–19:00)';
-        fullDayCheck.checked = true;
-      } else if (type === 'stay_couple') {
-        titleInput.value = 'Estancia en Castro Urdiales';
-        fullDayCheck.checked = false;
-      } else if (type === 'travel_full') {
-        titleInput.value = cat === 'personal'
-          ? 'Viaje Valladolid ↔ Castro Urdiales (Día completo)'
-          : 'Viaje Valladolid ↔ Granollers (Día completo)';
-        fullDayCheck.checked = true;
-      } else if (type === 'couple_full' || cat === 'personal') {
-        titleInput.value = 'Estancia en Castro Urdiales';
-        fullDayCheck.checked = true;
-      } else if (cat === 'sit' && type === 'reel') {
-        titleInput.value = 'Vídeo Diario SIT Granollers';
-        fullDayCheck.checked = false;
-      } else if (cat === 'sit' && type === 'long_video') {
-        titleInput.value = 'Entrega Vídeo Largo SIT';
-        fullDayCheck.checked = false;
-      } else if (cat === 'sit' && type === 'shoot') {
-        titleInput.value = 'Rodaje SIT Granollers (Día completo)';
-        fullDayCheck.checked = true;
-      } else if (cat === 'hector' && type === 'reel') {
-        titleInput.value = 'Reel Héctor Loza (Barbería)';
-        fullDayCheck.checked = false;
-      } else if (cat === 'hector' && type === 'shoot') {
-        titleInput.value = 'Rodaje Héctor Loza (Santoña)';
-        fullDayCheck.checked = true;
-      } else if (cat === 'editing') {
-        titleInput.value = 'Edición Vídeo Largo SIT';
-        fullDayCheck.checked = false;
-      }
+    function deleteEventItem(id) {
+      state.events = state.events.filter(e => e.id !== id);
+      saveLocalCache(true);
+      renderDayModalContent();
+      renderAll();
+      showToast('Bloque eliminado.', 'success');
     }
 
     function handleSaveEventForm(e) {
       e.preventDefault();
       if (!state.isAdmin) return;
 
-      const id = document.getElementById('ev-id').value;
-      const tripPackMode = document.getElementById('ev-is-trip-pack').value;
-      const startDate = document.getElementById('ev-date').value;
-      const endDate = document.getElementById('ev-end-date').value;
-      const category = document.getElementById('ev-category').value;
-      const type = document.getElementById('ev-type').value;
-      const title = document.getElementById('ev-title').value.trim();
-      const fullDay = document.getElementById('ev-full-day').checked;
-      const notes = document.getElementById('ev-notes').value.trim();
-      const weight = type === 'stay_shoot' ? 2 : (type === 'stay_couple' ? 0 : 1);
+      const editId = document.getElementById('edit-event-id').value;
+      const presetMode = document.getElementById('edit-preset-mode').value;
+      const client = document.getElementById('event-client').value;
+      const type = document.getElementById('event-type').value;
+      const title = document.getElementById('event-title').value.trim();
+      const notes = document.getElementById('event-notes').value.trim();
+      const fullDay = document.getElementById('event-fullday').checked;
+      const startStr = document.getElementById('event-date-start').value;
+      const endStr = document.getElementById('event-date-end').value || startStr;
 
-      if (tripPackMode === 'granollers' || tripPackMode === 'castro') {
-        const datesToCreate = getDatesInRange(startDate, endDate || startDate);
-        if (datesToCreate.length < 2) {
-          showToast('Selecciona al menos 2 días (Ida y Vuelta) para el pack de viaje.', 'error');
-          return;
+      const datesRange = enumerateDates(startStr, endStr);
+      if (datesRange.length === 0) {
+        showToast('La fecha de fin no puede ser anterior a la fecha de inicio.', 'error');
+        return;
+      }
+
+      // Edición de un bloque existente
+      if (editId) {
+        const idx = state.events.findIndex(ev => ev.id === editId);
+        if (idx !== -1) {
+          state.events[idx] = {
+            ...state.events[idx],
+            date: startStr,
+            client,
+            type,
+            title,
+            notes,
+            fullDay,
+            weight: type === 'stay_castro' ? 0 : (type === 'shoot_granollers' || type === 'shoot_hector' ? 2 : 1)
+          };
         }
+        saveLocalCache(true);
+        resetEventForm();
+        renderDayModalContent();
+        renderAll();
+        showToast('Bloque actualizado correctamente.', 'success');
+        return;
+      }
 
-        const isCastro = tripPackMode === 'castro';
-
-        datesToCreate.forEach((dStr, index) => {
-          if (index === 0) {
+      // Pack Viaje Granollers (Ida + Estancia Rodaje + Vuelta)
+      if (presetMode === 'trip_granollers') {
+        datesRange.forEach((dStr, idx) => {
+          if (idx === 0) {
             state.events.push({
-              id: `trip-ida-${Date.now()}-${index}`,
+              id: `ev-${Date.now()}-${idx}-ida`,
               date: dStr,
-              category: isCastro ? 'personal' : 'travel_shoot',
+              client: 'travel',
               type: 'travel_full',
-              title: isCastro ? 'Viaje de Ida (Valladolid → Castro Urdiales)' : 'Viaje de Ida (Valladolid → Granollers)',
+              title: 'Viaje de Ida (Valladolid → Granollers)',
+              notes: notes || 'Transporte público · Día completo bloqueado',
               fullDay: true,
-              weight: 1,
-              notes: notes || 'Desplazamiento en transporte público todo el día.'
+              weight: 1
             });
-          } else if (index === datesToCreate.length - 1) {
+          } else if (idx === datesRange.length - 1 && datesRange.length > 1) {
             state.events.push({
-              id: `trip-vuelta-${Date.now()}-${index}`,
+              id: `ev-${Date.now()}-${idx}-vuelta`,
               date: dStr,
-              category: isCastro ? 'personal' : 'travel_shoot',
+              client: 'travel',
               type: 'travel_full',
-              title: isCastro ? 'Viaje de Vuelta (Castro Urdiales → Valladolid)' : 'Viaje de Vuelta (Granollers → Valladolid)',
+              title: 'Viaje de Vuelta (Granollers → Valladolid)',
+              notes: notes || 'Transporte público · Día completo bloqueado',
               fullDay: true,
-              weight: 1,
-              notes: notes || 'Regreso en transporte público todo el día.'
-            });
-          } else if (isCastro) {
-            state.events.push({
-              id: `stay-castro-${Date.now()}-${index}`,
-              date: dStr,
-              category: 'personal',
-              type: 'stay_couple',
-              title: 'Estancia en Castro Urdiales',
-              fullDay: false,
-              weight: 0,
-              notes: notes || 'Estancia con mi pareja en Castro Urdiales (sin peso extra en volumen de trabajo).'
+              weight: 1
             });
           } else {
             state.events.push({
-              id: `stay-shoot-${Date.now()}-${index}`,
+              id: `ev-${Date.now()}-${idx}-shoot`,
               date: dStr,
-              category: 'sit',
-              type: 'stay_shoot',
-              title: 'Estancia / Rodaje SIT (07:00–19:00)',
+              client: 'granollers',
+              type: 'shoot_granollers',
+              title: 'Rodaje SIT Granollers (07:00–19:00)',
+              notes: notes || 'Jornada completa de grabación en Granollers',
               fullDay: true,
-              weight: 2,
-              notes: notes || 'Jornada intensiva de grabación de 07:00 a 19:00.'
+              weight: 2
             });
           }
         });
-
-        markUnsavedChanges();
-        closeModal('event-form-modal');
-        renderAll();
-        showToast(
-          isCastro
-            ? `Viaje Castro Urdiales creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} Estancia en Castro y Vuelta).`
-            : `Viaje Granollers creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} Estancia/Rodaje y Vuelta).`,
-          'success'
-        );
-        return;
       }
-
-      if (id) {
-        // Actualizar existente
-        const idx = state.events.findIndex(ev => ev.id === id);
-        if (idx !== -1) {
-          state.events[idx] = { ...state.events[idx], date: startDate, category, type, title, fullDay, weight, notes };
-        }
-        showToast('Bloque actualizado correctamente.', 'success');
-      } else {
-        // Crear uno o un rango de días
-        const datesToCreate = getDatesInRange(startDate, endDate || startDate);
-        datesToCreate.forEach((dStr, index) => {
+      // Pack Viaje Castro Urdiales (Ida rojo + Estancia Castro peso 0 + Vuelta rojo)
+      else if (presetMode === 'trip_castro') {
+        datesRange.forEach((dStr, idx) => {
+          if (idx === 0) {
+            state.events.push({
+              id: `ev-${Date.now()}-${idx}-castro-ida`,
+              date: dStr,
+              client: 'personal',
+              type: 'travel_full',
+              title: 'Viaje de Ida a Castro Urdiales',
+              notes: notes || 'Desplazamiento · Día completo ocupado',
+              fullDay: true,
+              weight: 1
+            });
+          } else if (idx === datesRange.length - 1 && datesRange.length > 1) {
+            state.events.push({
+              id: `ev-${Date.now()}-${idx}-castro-vuelta`,
+              date: dStr,
+              client: 'personal',
+              type: 'travel_full',
+              title: 'Viaje de Vuelta desde Castro Urdiales',
+              notes: notes || 'Desplazamiento · Día completo ocupado',
+              fullDay: true,
+              weight: 1
+            });
+          } else {
+            state.events.push({
+              id: `ev-${Date.now()}-${idx}-castro-stay`,
+              date: dStr,
+              client: 'personal',
+              type: 'stay_castro',
+              title: 'Estancia en Castro Urdiales',
+              notes: notes || 'En casa de mi pareja · Sin peso en volumen laboral',
+              fullDay: false,
+              weight: 0
+            });
+          }
+        });
+      }
+      // Bloque estándar o rango normal
+      else {
+        datesRange.forEach((dStr, idx) => {
           state.events.push({
-            id: `ev-${Date.now()}-${index}`,
+            id: `ev-${Date.now()}-${idx}`,
             date: dStr,
-            category,
+            client,
             type,
-            title: datesToCreate.length > 1 ? `${title} (Día ${index + 1}/${datesToCreate.length})` : title,
+            title,
+            notes,
             fullDay,
-            weight,
-            notes
+            weight: type === 'stay_castro' ? 0 : (type === 'shoot_granollers' || type === 'shoot_hector' ? 2 : 1)
           });
         });
-        showToast(`Añadido${datesToCreate.length > 1 ? `s ${datesToCreate.length} días` : ''} a la agenda.`, 'success');
       }
 
-      markUnsavedChanges();
-      closeModal('event-form-modal');
+      saveLocalCache(true);
+      resetEventForm();
+      renderDayModalContent();
       renderAll();
-    }
-
-    function deleteEvent(eventId) {
-      if (!state.isAdmin) return;
-      state.events = state.events.filter(ev => ev.id !== eventId);
-      markUnsavedChanges();
-      renderAll();
-      if (state.selectedDateStr) {
-        openDayDetailModal(state.selectedDateStr);
-      }
-      showToast('Bloque eliminado.', 'info');
-    }
-
-    function openRoutineModal() {
-      if (!state.isAdmin) return;
-      document.getElementById('routine-target-month').textContent = `${MONTHS_ES[state.viewMonth]} ${state.viewYear}`;
-      openModal('routine-modal');
-    }
-
-    function generateMonthlyRoutine() {
-      if (!state.isAdmin) return;
-      const monthPrefix = `${state.viewYear}-${String(state.viewMonth + 1).padStart(2, '0')}`;
-      // Evitar duplicar IDs de rutina si ya existen en este mes
-      const existingIds = new Set(state.events.map(e => e.id));
-      const newRoutine = createRoutineEventsForMonth(state.viewYear, state.viewMonth)
-        .filter(ev => !existingIds.has(ev.id));
-
-      state.events = state.events.concat(newRoutine);
-      markUnsavedChanges();
-      closeModal('routine-modal');
-      renderAll();
-      showToast(`Rutina generada para ${MONTHS_ES[state.viewMonth]} (${newRoutine.length} bloques).`, 'success');
-    }
-
-    function markUnsavedChanges() {
-      state.hasUnsavedChanges = true;
-      document.getElementById('unsaved-badge').classList.remove('hidden');
+      showToast('Planificación añadida.', 'success');
     }
 
     /**
      * ============================================================================
-     * AUTENTICACIÓN ADMIN (SHA-256) Y SINCRONIZACIÓN DIRECTA CON GITHUB API
+     * GENERADOR DE RUTINA MENSUAL
      * ============================================================================
      */
-    function handleAdminAccessClick() {
-      if (state.isAdmin) {
-        openAdminSettingsModal();
-      } else {
-        loadSavedAdminConfigIntoForm();
-        document.getElementById('new-password-wrapper').classList.add('hidden');
-        openModal('admin-auth-modal');
+    function openBulkGeneratorModal() {
+      document.getElementById('bulk-target-month-name').textContent = `${MONTHS_ES[state.viewMonth]} ${state.viewYear}`;
+      const modal = document.getElementById('bulk-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeBulkGeneratorModal() {
+      const modal = document.getElementById('bulk-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function generateRoutineForCurrentMonth() {
+      generateMonthEventsIntoArray(state.viewYear, state.viewMonth, state.events);
+      saveLocalCache(true);
+      closeBulkGeneratorModal();
+      renderAll();
+      showToast(`Rutina semanal aplicada a ${MONTHS_ES[state.viewMonth]} ${state.viewYear}.`, 'success');
+    }
+
+    /**
+     * ============================================================================
+     * AUTENTICACIÓN ADMIN & API DE GITHUB (SINCRONIZACIÓN CON SCHEDULE.JSON)
+     * ============================================================================
+     */
+    function loadGitHubConfigFromStorage() {
+      try {
+        const saved = localStorage.getItem('freelance_gh_config');
+        if (saved) {
+          state.ghConfig = { ...state.ghConfig, ...JSON.parse(saved) };
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      // Autodetectar owner y repo si está alojado en *.github.io/<repo>
+      if (!state.ghConfig.owner && window.location.hostname.endsWith('.github.io')) {
+        state.ghConfig.owner = window.location.hostname.split('.')[0];
+        const parts = window.location.pathname.split('/').filter(Boolean);
+        if (parts.length > 0 && !state.ghConfig.repo) {
+          state.ghConfig.repo = parts[0];
+        }
       }
     }
 
-    function openAdminSettingsModal() {
-      loadSavedAdminConfigIntoForm();
-      document.getElementById('new-password-wrapper').classList.remove('hidden');
-      openModal('admin-auth-modal');
-    }
+    function openLoginModal() {
+      document.getElementById('gh-owner').value = state.ghConfig.owner || '';
+      document.getElementById('gh-repo').value = state.ghConfig.repo || '';
+      document.getElementById('gh-branch').value = state.ghConfig.branch || 'main';
+      document.getElementById('gh-path').value = state.ghConfig.path || 'schedule.json';
+      document.getElementById('gh-token').value = state.ghConfig.token || '';
 
-    function loadSavedAdminConfigIntoForm() {
-      const cfg = JSON.parse(localStorage.getItem('agenda_gh_config') || '{}');
-      document.getElementById('cfg-gh-owner').value = cfg.owner || '';
-      document.getElementById('cfg-gh-repo').value = cfg.repo || '';
-      document.getElementById('cfg-gh-branch').value = cfg.branch || 'main';
-      document.getElementById('cfg-gh-path').value = cfg.path || 'schedule.json';
-      document.getElementById('cfg-gh-token').value = cfg.token || '';
-
-      const customPass = localStorage.getItem('agenda_admin_plain_pass');
-      document.getElementById('password-hint-badge').textContent = customPass
-        ? 'Contraseña personalizada activa'
-        : 'Por defecto: admin1234';
-    }
-
-    function resetDefaultLocalPassword() {
-      localStorage.removeItem('agenda_admin_plain_pass');
-      localStorage.removeItem('agenda_admin_hash');
-      document.getElementById('cfg-password').value = DEFAULT_PLAIN_PASS;
-      document.getElementById('password-hint-badge').textContent = 'Restaurada: admin1234';
-      showToast('Contraseña local restaurada a "admin1234".', 'info');
-    }
-
-    function toggleInputVisibility(inputId, iconId) {
-      const input = document.getElementById(inputId);
-      const icon = document.getElementById(iconId);
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.setAttribute('data-lucide', 'eye-off');
-      } else {
-        input.type = 'password';
-        icon.setAttribute('data-lucide', 'eye');
-      }
+      const modal = document.getElementById('login-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
       lucide.createIcons();
     }
 
-    async function handleAdminLoginAndSaveConfig(e) {
+    function closeLoginModal() {
+      const modal = document.getElementById('login-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function resetStoredAdminPassword() {
+      localStorage.removeItem('freelance_admin_pass');
+      document.getElementById('login-password').value = DEFAULT_PLAIN_PASS;
+      showToast('Contraseña restaurada a admin1234.', 'info');
+    }
+
+    function handleAdminLogin(e) {
       e.preventDefault();
-      const inputPass = document.getElementById('cfg-password').value.trim();
-      const newPass = document.getElementById('cfg-new-password').value.trim();
+      const entered = document.getElementById('login-password').value.trim();
+      const storedPass = localStorage.getItem('freelance_admin_pass') || DEFAULT_PLAIN_PASS;
 
-      const savedPlainPass = localStorage.getItem('agenda_admin_plain_pass') || DEFAULT_PLAIN_PASS;
-
-      // Verificación directa y fiable de contraseña local (sin bloquear por API externa)
-      if (inputPass !== savedPlainPass) {
-        showToast('Contraseña incorrecta. Verifica el texto con el icono del ojo o pulsa "Restaurar".', 'error');
+      if (entered !== storedPass) {
+        showToast('Contraseña incorrecta. Por defecto es: admin1234', 'error');
         return;
       }
 
-      // Si el usuario quiso cambiar su contraseña local
-      if (newPass.length >= 4) {
-        localStorage.setItem('agenda_admin_plain_pass', newPass);
-        showToast('Contraseña local actualizada correctamente.', 'success');
-      }
-
-      // Guardar configuración de GitHub API localmente en el navegador del propietario
-      const ghConfig = {
-        owner: document.getElementById('cfg-gh-owner').value.trim(),
-        repo: document.getElementById('cfg-gh-repo').value.trim(),
-        branch: document.getElementById('cfg-gh-branch').value.trim() || 'main',
-        path: document.getElementById('cfg-gh-path').value.trim() || 'schedule.json',
-        token: document.getElementById('cfg-gh-token').value.trim()
+      state.ghConfig = {
+        owner: document.getElementById('gh-owner').value.trim(),
+        repo: document.getElementById('gh-repo').value.trim(),
+        branch: document.getElementById('gh-branch').value.trim() || 'main',
+        path: document.getElementById('gh-path').value.trim() || 'schedule.json',
+        token: document.getElementById('gh-token').value.trim()
       };
-      localStorage.setItem('agenda_gh_config', JSON.stringify(ghConfig));
+      localStorage.setItem('freelance_gh_config', JSON.stringify(state.ghConfig));
 
       state.isAdmin = true;
+      closeLoginModal();
+
       document.getElementById('admin-toolbar').classList.remove('hidden');
-      document.getElementById('footer-lock-text').textContent = 'Admin Conectado';
-      document.getElementById('footer-lock-icon').setAttribute('data-lucide', 'unlock');
+      document.getElementById('admin-toolbar').classList.add('flex');
+      document.getElementById('admin-active-banner').classList.remove('hidden');
+      document.getElementById('footer-login-btn').classList.add('hidden');
 
-      closeModal('admin-auth-modal');
       renderAll();
-      showToast('Modo Edición desbloqueado correctamente.', 'success');
-
-      // Comprobar estado del archivo schedule.json en GitHub si se proporcionaron credenciales
-      if (ghConfig.owner && ghConfig.repo && ghConfig.token) {
-        await checkGitHubScheduleStatus(ghConfig);
-      }
-    }
-
-    /**
-     * Comprueba si schedule.json existe en el repo de GitHub y valida el token PAT sin bloquear el login.
-     */
-    async function checkGitHubScheduleStatus(cfg) {
-      const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}?ref=${encodeURIComponent(cfg.branch)}`;
-      const initBtn = document.getElementById('btn-init-schedule');
-
-      try {
-        const res = await fetch(apiUrl, {
-          headers: {
-            'Authorization': `Bearer ${cfg.token}`,
-            'Accept': 'application/vnd.github+json'
-          }
-        });
-
-        if (res.status === 401 || res.status === 403) {
-          showToast('El token PAT de GitHub fue rechazado (401/403). Revisa que no haya sido revocado o tenga permisos "Contents: Read & Write".', 'error');
-          return;
-        }
-
-        if (res.status === 404) {
-          state.ghFileMissing = true;
-          initBtn.classList.remove('hidden');
-          showToast('schedule.json aún no existe en tu repo. Pulsa "Inicializar schedule.json en GitHub ahora".', 'info');
-          return;
-        }
-
-        if (res.ok) {
-          state.ghFileMissing = false;
-          initBtn.classList.add('hidden');
-          showToast('Conectado correctamente con schedule.json en GitHub.', 'success');
-        }
-      } catch (err) {
-        console.warn('No se pudo verificar GitHub en este momento:', err);
-      }
-    }
-
-    async function initializeScheduleOnGitHub() {
-      showToast('Creando schedule.json inicial en tu repositorio de GitHub...', 'info');
-      await saveToGitHub(true);
+      showToast('Sesión de administrador iniciada.', 'success');
+      checkGitHubFileExists();
     }
 
     function logoutAdmin() {
       state.isAdmin = false;
       document.getElementById('admin-toolbar').classList.add('hidden');
-      document.getElementById('footer-lock-text').textContent = 'Acceso Admin';
-      document.getElementById('footer-lock-icon').setAttribute('data-lucide', 'lock');
+      document.getElementById('admin-toolbar').classList.remove('flex');
+      document.getElementById('admin-active-banner').classList.add('hidden');
+      document.getElementById('footer-login-btn').classList.remove('hidden');
       renderAll();
-      showToast('Sesión de edición cerrada.', 'info');
+      showToast('Sesión cerrada.', 'info');
     }
 
-    function toggleGitHubGuide() {
-      const content = document.getElementById('github-guide-content');
-      const chevron = document.getElementById('guide-chevron');
-      content.classList.toggle('hidden');
-      chevron.classList.toggle('rotate-180');
+    async function checkGitHubFileExists() {
+      const { owner, repo, branch, path, token } = state.ghConfig;
+      const initBtn = document.getElementById('btn-init-github-file');
+      if (!owner || !repo || !token) return;
+
+      try {
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}&t=${Date.now()}`;
+        const res = await fetch(url, {
+          cache: 'no-store',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github+json'
+          }
+        });
+
+        if (res.status === 404) {
+          initBtn.classList.remove('hidden');
+          showToast('schedule.json aún no existe en tu repo. Pulsa "Inicializar schedule.json".', 'info');
+        } else {
+          initBtn.classList.add('hidden');
+        }
+      } catch (err) {
+        console.warn('No se pudo verificar schedule.json en GitHub:', err);
+      }
     }
 
-    /**
-     * Guarda directamente `schedule.json` en el repositorio de GitHub mediante la API REST
-     * haciendo un commit real que actualiza GitHub Pages automáticamente.
-     */
-    async function saveToGitHub(isInitialCreation = false) {
-      if (!state.isAdmin) return;
+    async function initializeScheduleOnGitHub() {
+      await saveToGitHub(true);
+    }
 
-      const cfg = JSON.parse(localStorage.getItem('agenda_gh_config') || '{}');
-      if (!cfg.owner || !cfg.repo || !cfg.token) {
-        showToast('Configura primero tu Usuario, Repo y Token en el icono de engranaje.', 'error');
-        openAdminSettingsModal();
+    async function saveToGitHub(isInitialCreate = false) {
+      const { owner, repo, branch, path, token } = state.ghConfig;
+
+      if (!owner || !repo || !token) {
+        showToast('Configura Owner, Repositorio y PAT de GitHub en el acceso admin.', 'error');
+        openLoginModal();
         return;
       }
 
       const btn = document.getElementById('btn-sync-github');
       const originalHtml = btn.innerHTML;
       btn.disabled = true;
-      btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>Subiendo...</span>`;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>Guardando...</span>`;
       lucide.createIcons();
 
-      const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`;
+      const payloadObj = {
+        updatedAt: new Date().toISOString(),
+        owner: 'Freelance Audiovisual Valladolid',
+        events: state.events
+      };
+      const jsonContent = JSON.stringify(payloadObj, null, 2);
+      const base64Content = btoa(unescape(encodeURIComponent(jsonContent)));
 
-      // Función auxiliar para obtener siempre el SHA más reciente sin caché de navegador/CDN
-      async function fetchLatestSha() {
-        const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`, {
+      const putFileWithFreshSha = async () => {
+        let currentSha = null;
+        const getUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}&t=${Date.now()}`;
+        const getRes = await fetch(getUrl, {
           cache: 'no-store',
           headers: {
-            'Authorization': `Bearer ${cfg.token}`,
-            'Accept': 'application/vnd.github+json'
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github+json'
           }
         });
 
-        if (getRes.status === 401 || getRes.status === 403) {
-          throw new Error('Token PAT inválido o revocado (401/403). Genera uno nuevo con permiso Contents: Read and Write.');
-        }
-
         if (getRes.ok) {
           const fileData = await getRes.json();
-          return fileData.sha;
+          currentSha = fileData.sha;
         }
-        return null;
-      }
+
+        const putUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+        const body = {
+          message: isInitialCreate
+            ? 'Inicializar schedule.json de agenda audiovisual'
+            : `Actualizar agenda audiovisual (${new Date().toLocaleDateString('es-ES')})`,
+          content: base64Content,
+          branch
+        };
+        if (currentSha) {
+          body.sha = currentSha;
+        }
+
+        return fetch(putUrl, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+      };
 
       try {
-        // 1. Preparar contenido JSON ordenado y codificado en Base64 UTF-8
-        const payloadObj = {
-          updatedAt: new Date().toISOString(),
-          owner: 'Freelance Filmmaker & Editor (Valladolid)',
-          events: state.events.sort((a, b) => a.date.localeCompare(b.date))
-        };
-        const jsonString = JSON.stringify(payloadObj, null, 2);
-        const base64Content = utf8ToBase64(jsonString);
+        let putRes = await putFileWithFreshSha();
 
-        // 2. Obtener SHA actual fresco y ejecutar PUT (con 1 reintento automático ante conflicto 409)
-        let currentSha = await fetchLatestSha();
-
-        const executePut = async (shaToUse) => {
-          const putBody = {
-            message: isInitialCreation
-              ? 'Inicialización de schedule.json con agenda base'
-              : `Actualización de agenda (${new Date().toLocaleDateString('es-ES')})`,
-            content: base64Content,
-            branch: cfg.branch
-          };
-          if (shaToUse) putBody.sha = shaToUse;
-
-          return fetch(apiUrl, {
-            method: 'PUT',
-            headers: {
-              'Authorization': `Bearer ${cfg.token}`,
-              'Accept': 'application/vnd.github+json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(putBody)
-          });
-        };
-
-        let putRes = await executePut(currentSha);
-
-        // Si GitHub responde 409 (SHA desactualizado por caché), volvemos a pedir el SHA fresco y reintentamos
+        // Reintento automático si GitHub devuelve 409 (SHA desactualizado)
         if (putRes.status === 409) {
-          currentSha = await fetchLatestSha();
-          putRes = await executePut(currentSha);
+          putRes = await putFileWithFreshSha();
         }
 
         if (!putRes.ok) {
-          const errData = await putRes.json();
-          throw new Error(errData.message || `Error HTTP ${putRes.status}`);
+          const errJson = await putRes.json().catch(() => ({}));
+          throw new Error(errJson.message || `HTTP ${putRes.status}`);
         }
 
         state.hasUnsavedChanges = false;
-        state.ghFileMissing = false;
-        document.getElementById('unsaved-badge').classList.add('hidden');
-        document.getElementById('btn-init-schedule').classList.add('hidden');
-        document.getElementById('data-source-indicator').textContent = 'Fuente: schedule.json (Sincronizado)';
-        showToast(
-          isInitialCreation
-            ? '¡schedule.json creado en tu repositorio! Tu agenda ya está persistida en GitHub.'
-            : '¡Agenda guardada en GitHub! Se actualizará en tu web pública en segundos.',
-          'success'
-        );
+        document.getElementById('unsaved-indicator').classList.add('hidden');
+        document.getElementById('btn-init-github-file').classList.add('hidden');
+        document.getElementById('repo-sync-status').innerHTML =
+          `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i><span>Guardado en GitHub</span>`;
+
+        showToast('¡Agenda guardada en GitHub Pages correctamente!', 'success');
       } catch (err) {
-        console.error('Error sincronizando con GitHub:', err);
         showToast(`Error GitHub: ${err.message}`, 'error');
       } finally {
         btn.disabled = false;
@@ -2177,86 +1928,108 @@
       }
     }
 
+    /**
+     * ============================================================================
+     * AJUSTES DE SEGURIDAD Y UTILIDADES
+     * ============================================================================
+     */
+    function openSettingsModal() {
+      const modal = document.getElementById('settings-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSettingsModal() {
+      const modal = document.getElementById('settings-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function handleChangePassword(e) {
+      e.preventDefault();
+      const newPass = document.getElementById('new-admin-password').value.trim();
+      if (newPass.length < 4) return;
+      localStorage.setItem('freelance_admin_pass', newPass);
+      document.getElementById('new-admin-password').value = '';
+      closeSettingsModal();
+      showToast('Contraseña de administrador actualizada.', 'success');
+    }
+
     function downloadScheduleJson() {
-      const payloadObj = {
-        updatedAt: new Date().toISOString(),
-        events: state.events.sort((a, b) => a.date.localeCompare(b.date))
-      };
-      const blob = new Blob([JSON.stringify(payloadObj, null, 2)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify({ updatedAt: new Date().toISOString(), events: state.events }, null, 2)], {
+        type: 'application/json'
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = 'schedule.json';
-      document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast('Archivo schedule.json descargado como respaldo.', 'info');
     }
 
-    /**
-     * ============================================================================
-     * UTILIDADES GENERALES (FECHAS, CRYPTO SHA-256, BASE64, MODALES Y TOASTS)
-     * ============================================================================
-     */
-    function formatDateISO(year, monthZeroIndexed, day) {
-      return `${year}-${String(monthZeroIndexed + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    function resetToDefaultRoutine() {
+      state.events = buildDefaultRealisticSchedule();
+      saveLocalCache(true);
+      closeSettingsModal();
+      renderAll();
+      showToast('Plantilla base restaurada.', 'info');
     }
 
-    function findNthWeekdayOfMonth(year, month, targetWeekday, nth) {
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      let count = 0;
-      for (let d = 1; d <= daysInMonth; d++) {
-        if (new Date(year, month, d).getDay() === targetWeekday) {
-          count++;
-          if (count === nth) return d;
-        }
+    function changeMonth(delta) {
+      const next = new Date(state.viewYear, state.viewMonth + delta, 1);
+      if (isBeforeMinMonth(next.getFullYear(), next.getMonth())) {
+        return;
       }
-      return null;
+      state.viewYear = next.getFullYear();
+      state.viewMonth = next.getMonth();
+      renderAll();
     }
 
-    function getDatesInRange(startStr, endStr) {
-      const start = new Date(startStr + 'T00:00:00');
-      const end = new Date(endStr + 'T00:00:00');
-      if (end < start) return [startStr];
+    function setFilter(filterKey) {
+      state.activeFilter = filterKey;
+      document.querySelectorAll('.filter-chip').forEach(btn => {
+        if (btn.dataset.filter === filterKey) {
+          btn.classList.add('ring-2', 'ring-indigo-500/60', 'bg-zinc-800');
+        } else {
+          btn.classList.remove('ring-2', 'ring-indigo-500/60', 'bg-zinc-800');
+        }
+      });
+      renderCalendarGrid();
+    }
+
+    function getEventsForMonth(year, month) {
+      const prefix = `${year}-${String(month + 1).padStart(2, '0')}-`;
+      return state.events.filter(e => e.date.startsWith(prefix));
+    }
+
+    function formatDateISO(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function enumerateDates(startStr, endStr) {
+      const [sy, sm, sd] = startStr.split('-').map(Number);
+      const [ey, em, ed] = endStr.split('-').map(Number);
+      const cur = new Date(sy, sm - 1, sd);
+      const end = new Date(ey, em - 1, ed);
+      if (cur > end) return [];
 
       const list = [];
-      const cur = new Date(start);
-      while (cur <= end && list.length < 31) {
-        list.push(formatDateISO(cur.getFullYear(), cur.getMonth(), cur.getDate()));
+      while (cur <= end) {
+        list.push(formatDateISO(cur));
         cur.setDate(cur.getDate() + 1);
       }
       return list;
     }
 
-    async function sha256(message) {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    function utf8ToBase64(str) {
-      const bytes = new TextEncoder().encode(str);
-      let binString = '';
-      for (let i = 0; i < bytes.byteLength; i++) {
-        binString += String.fromCharCode(bytes[i]);
-      }
-      return btoa(binString);
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
     }
 
     function showToast(message, type = 'info') {
@@ -2265,26 +2038,33 @@
 
       const styles = {
         success: 'bg-emerald-950/95 border-emerald-500/50 text-emerald-100',
-        error: 'bg-rose-950/95 border-rose-500/50 text-rose-100',
+        error: 'bg-red-950/95 border-red-500/50 text-red-100',
         info: 'bg-studio-850/95 border-indigo-500/50 text-zinc-100'
       };
+
       const icons = {
         success: 'check-circle-2',
         error: 'alert-circle',
         info: 'info'
       };
 
-      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl border shadow-xl text-xs font-medium transition-all duration-300 ${styles[type] || styles.info}`;
-      toast.innerHTML = `<i data-lucide="${icons[type]}" class="w-4 h-4 shrink-0"></i><span>${escapeHtml(message)}</span>`;
+      toast.className = `pointer-events-auto rounded-xl border px-4 py-3 shadow-2xl backdrop-blur-md flex items-center gap-2.5 text-xs font-medium transition-all duration-300 ${
+        styles[type] || styles.info
+      }`;
+
+      toast.innerHTML = `
+        <i data-lucide="${icons[type] || 'info'}" class="w-4 h-4 shrink-0"></i>
+        <span>${escapeHtml(message)}</span>
+      `;
 
       container.appendChild(toast);
       lucide.createIcons();
 
       setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transform = 'translateY(-8px)';
+        toast.style.transform = 'translateY(8px)';
         setTimeout(() => toast.remove(), 300);
-      }, 4000);
+      }, 4200);
     }
   </script>
 </body>
