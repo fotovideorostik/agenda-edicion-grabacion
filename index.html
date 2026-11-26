@@ -723,7 +723,11 @@
     // Normaliza eventos de schedule.json para compatibilidad total
     function normalizeEventSchema(ev) {
       const normalized = { ...ev };
-      if (normalized.type === 'stay_couple') {
+      const text = `${normalized.title || ''} ${normalized.notes || ''}`.toLowerCase();
+      const mentionsCastroOrCouple = text.includes('castro') || text.includes('pareja') || text.includes('estancia');
+
+      if (normalized.type === 'stay_couple' || (mentionsCastroOrCouple && normalized.type !== 'travel_full' && normalized.type !== 'stay_shoot' && normalized.category !== 'sit')) {
+        normalized.type = 'stay_couple';
         normalized.category = 'personal';
         normalized.weight = 0;
         normalized.fullDay = false;
@@ -741,6 +745,37 @@
     function isCastroEvent(ev) {
       const text = `${ev.title || ''} ${ev.notes || ''}`.toLowerCase();
       return ev.type === 'stay_couple' || text.includes('castro') || text.includes('pareja');
+    }
+
+    /**
+     * Comprueba si una fecha (YYYY-MM-DD) cae dentro de un viaje abierto a Castro Urdiales
+     * (entre un Viaje de Ida y su correspondiente Viaje de Vuelta, incluso cruzando de mes/año)
+     */
+    function isDateInsideOpenCastroTrip(dateStr) {
+      const castroTrips = state.events
+        .filter(ev => ev.type === 'travel_full' && (isCastroEvent(ev) || ev.category === 'personal'))
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      let activeStart = null;
+      for (const trip of castroTrips) {
+        const titleLower = (trip.title || '').toLowerCase();
+        const isReturn = titleLower.includes('vuelta') || titleLower.includes('→ valladolid') || titleLower.includes('a valladolid');
+        const isOutbound = titleLower.includes('ida') || titleLower.includes('→ castro') || titleLower.includes('a castro');
+
+        if (isOutbound && !isReturn) {
+          activeStart = trip.date;
+        } else if (isReturn && activeStart) {
+          if (dateStr > activeStart && dateStr < trip.date) {
+            return true;
+          }
+          activeStart = null;
+        }
+      }
+      // Si hay un viaje de ida sin viaje de vuelta registrado aún en meses futuros
+      if (activeStart && dateStr > activeStart) {
+        return true;
+      }
+      return false;
     }
 
     function getEventStyle(ev) {
@@ -840,7 +875,7 @@
      * Calcula localización única de la mitad superior de cada casilla
      * Móvil: Libre (Valladolid), Grnll, Stñ, Cstr, Viaje
      */
-    function getDayLocationState(dayEvents) {
+    function getDayLocationState(dayEvents, dateStr = null) {
       const hasGranollersShoot = dayEvents.some(e =>
         e.type === 'stay_shoot' ||
         (e.category === 'sit' && e.type === 'shoot') ||
@@ -852,8 +887,9 @@
       );
       const travelEv = dayEvents.find(e => e.type === 'travel_full');
       const hasCastroStay = dayEvents.some(e =>
-        e.type === 'stay_couple' || (e.category === 'personal' && isCastroEvent(e))
-      );
+        e.type === 'stay_couple' ||
+        ((e.category === 'personal' || (e.title || '').toLowerCase().includes('estancia')) && isCastroEvent(e))
+      ) || (dateStr ? isDateInsideOpenCastroTrip(dateStr) : false);
 
       if (hasGranollersShoot) {
         return {
@@ -931,7 +967,14 @@
     }
 
     function getWorkEvents(dayEvents) {
-      return dayEvents.filter(ev => ev.type !== 'stay_couple');
+      return dayEvents.filter(ev => {
+        if (ev.type === 'stay_couple') return false;
+        const titleLower = (ev.title || '').toLowerCase();
+        if (titleLower.includes('estancia en castro') || (titleLower.includes('estancia') && isCastroEvent(ev))) {
+          return false;
+        }
+        return true;
+      });
     }
 
     function getMobileSingleWordWorkLabel(ev) {
@@ -1237,10 +1280,12 @@
       const hectorCount = monthEvents.filter(e => e.category === 'hector').length;
 
       const awayDates = new Set();
-      monthEvents.forEach(e => {
-        const loc = getDayLocationState([e]);
-        if (!loc.isValladolid) awayDates.add(e.date);
-      });
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dStr = formatDateISO(year, month, d);
+        const dayEvs = monthEvents.filter(e => e.date === dStr);
+        const loc = getDayLocationState(dayEvs, dStr);
+        if (!loc.isValladolid) awayDates.add(dStr);
+      }
 
       let totalWeight = 0;
       for (let d = 1; d <= daysInMonth; d++) {
@@ -1296,7 +1341,7 @@
         });
 
         const isToday = dateStr === todayStr;
-        const locState = getDayLocationState(allDayEvents);
+        const locState = getDayLocationState(allDayEvents, dateStr);
         const workEvents = getWorkEvents(filteredEvents);
         const totalWeight = getDayTotalEventWeight(allDayEvents);
 
@@ -1383,7 +1428,7 @@
       const today = new Date();
       const todayStr = formatDateISO(today.getFullYear(), today.getMonth(), today.getDate());
       const todayEvents = state.events.filter(e => e.date === todayStr);
-      const locState = getDayLocationState(todayEvents);
+      const locState = getDayLocationState(todayEvents, todayStr);
       const totalWeight = getDayTotalEventWeight(todayEvents);
 
       const dot = document.getElementById('live-status-dot');
@@ -1437,7 +1482,7 @@
       document.getElementById('modal-day-title').textContent = `${d} de ${MONTHS_ES[m - 1]}, ${y}`;
 
       const dayEvents = state.events.filter(e => e.date === dateStr);
-      const locState = getDayLocationState(dayEvents);
+      const locState = getDayLocationState(dayEvents, dateStr);
       const workEvents = getWorkEvents(dayEvents);
       const totalWeight = getDayTotalEventWeight(dayEvents);
 
