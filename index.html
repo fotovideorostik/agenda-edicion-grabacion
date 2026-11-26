@@ -452,7 +452,7 @@
               <span class="shrink-0 text-[10px] font-mono bg-red-500/30 px-1.5 py-0.5 rounded text-red-200">RANGO</span>
             </button>
             <button type="button" onclick="applyQuickPreset('shoot_hector')" class="text-left px-3 py-2 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/40 text-xs text-blue-200 font-medium transition flex items-center justify-between gap-2">
-              <span>✂️ Jornada Rodaje Héctor Loza (Día completo)</span>
+              <span>✂️ Jornada Rodaje Héctor Loza en Santoña (Día completo)</span>
               <span class="shrink-0 text-[10px] font-mono bg-blue-500/30 px-1.5 py-0.5 rounded text-blue-200">1 DÍA</span>
             </button>
           </div>
@@ -693,112 +693,100 @@
   <script>
     /**
      * ============================================================================
-     * CONFIGURACIÓN Y ESTADO GLOBAL DE LA APLICACIÓN
+     * CONSTANTES GLOBALES, ESTADO Y ESTILOS DE EVENTOS
      * ============================================================================
      */
-    const MONTHS_ES = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
-    const WEEKDAYS_ES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-
-    // Contraseña por defecto en texto claro local (se compara directo o contra SHA-256)
     const DEFAULT_PLAIN_PASS = 'admin1234';
 
-    // Paletas visuales por categoría
-    const CATEGORY_STYLES = {
-      sit: {
-        label: 'SIT Granollers',
-        badgeBg: 'bg-orange-500/15 text-orange-300 border-orange-500/35',
-        dot: 'bg-orange-400',
-        cardBorder: 'border-l-orange-400'
-      },
-      sit_long: {
-        label: 'SIT Granollers · Largo',
-        badgeBg: 'bg-orange-950/75 text-orange-300/85 border-orange-700/50',
-        dot: 'bg-orange-600',
-        cardBorder: 'border-l-orange-700'
-      },
-      hector: {
-        label: 'Héctor Loza',
-        badgeBg: 'bg-blue-500/15 text-blue-300 border-blue-500/35',
-        dot: 'bg-blue-400',
-        cardBorder: 'border-l-blue-400'
-      },
-      travel_shoot: {
-        label: 'Viaje / Rodaje',
-        badgeBg: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
-        dot: 'bg-purple-400',
-        cardBorder: 'border-l-purple-400'
-      },
-      personal: {
-        label: 'Personal / Pareja',
-        badgeBg: 'bg-red-500/20 text-red-300 border-red-500/40',
-        dot: 'bg-red-400',
-        cardBorder: 'border-l-red-400'
-      },
-      editing: {
-        label: 'Edición Vídeo Largo',
-        badgeBg: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
-        dot: 'bg-cyan-400',
-        cardBorder: 'border-l-cyan-400'
-      },
-      shoot_granollers: {
-        label: 'Rodaje SIT Granollers',
-        badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-        dot: 'bg-emerald-400',
-        cardBorder: 'border-l-emerald-400'
-      }
-    };
+    const MONTHS_ES = [
+      'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+      'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+    ];
 
-    /**
-     * Resuelve el estilo visual exacto de un evento según su tipo y categoría.
-     */
-    function getEventStyle(ev) {
-      if (ev.type === 'stay_shoot' || (ev.category === 'sit' && ev.type === 'shoot')) {
-        return CATEGORY_STYLES.shoot_granollers;
-      }
-      if (ev.category === 'sit' && ev.type === 'long_video') {
-        return CATEGORY_STYLES.sit_long;
-      }
-      if (ev.category === 'personal' || ev.type === 'stay_couple' || ev.type === 'couple_full') {
-        return CATEGORY_STYLES.personal;
-      }
-      if (ev.type === 'travel_full') {
-        return CATEGORY_STYLES.travel_shoot;
-      }
-      return CATEGORY_STYLES[ev.category] || CATEGORY_STYLES.editing;
-    }
+    const WEEKDAYS_ES = [
+      'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'
+    ];
 
     const TYPE_LABELS = {
-      reel: 'Reel / Vídeo Diario',
+      reel: 'Entrega / Publicación Reel',
       long_video: 'Entrega Vídeo Largo',
-      stay_shoot: 'Estancia / Rodaje Intensivo (07h–19h · Peso x2)',
-      stay_couple: 'Estancia en Castro Urdiales (Peso 0)',
-      shoot: 'Rodaje Día Completo',
-      travel_full: 'Viaje Día Completo',
-      couple_full: 'Pareja Día Completo',
-      editing: 'Edición Vídeo Largo'
+      stay_shoot: 'Estancia / Rodaje Intensivo (07:00–19:00 · x2)',
+      stay_couple: 'Estancia con Pareja (Castro Urdiales · Peso 0)',
+      shoot: 'Jornada de Rodaje',
+      travel_full: 'Viaje Transporte Público (Día Completo)',
+      couple_full: 'Visita Pareja / Personal (Día Completo)',
+      editing: 'Bloque Edición / Guion'
     };
 
-    // Estado reactivo global
-    let state = {
+    const state = {
       viewYear: new Date().getFullYear(),
-      viewMonth: new Date().getMonth(), // 0-11
-      activeFilter: 'all',
-      isAdmin: false,
-      events: [],
-      selectedDateStr: null,
-      hasUnsavedChanges: false,
+      viewMonth: new Date().getMonth(),
       autoAdvancedToNextMonth: false,
-      ghFileMissing: false
+      activeFilter: 'all',
+      events: [],
+      isAdmin: false,
+      hasUnsavedChanges: false,
+      ghFileMissing: false,
+      selectedDateStr: null
     };
 
-    /**
-     * Devuelve el peso de carga de un evento.
-     * - Estancia/Rodaje Intensivo (07:00 a 19:00): peso 2.
-     * - Estancia en casa de pareja (Castro Urdiales): peso 0 (no suma carga extra al volumen de trabajo).
-     */
+    function getEventStyle(ev) {
+      if (ev.type === 'stay_shoot' || (ev.category === 'sit' && ev.type === 'shoot')) {
+        return {
+          label: 'Rodaje Granollers',
+          badgeBg: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40',
+          cardBorder: 'border-l-emerald-500',
+          dot: 'bg-emerald-400'
+        };
+      }
+      if (ev.category === 'sit' && ev.type === 'long_video') {
+        return {
+          label: 'SIT Granollers (Largo)',
+          badgeBg: 'bg-orange-950/80 text-orange-200 border-orange-700/60',
+          cardBorder: 'border-l-orange-700',
+          dot: 'bg-orange-600'
+        };
+      }
+      if (ev.category === 'sit') {
+        return {
+          label: 'SIT Granollers',
+          badgeBg: 'bg-orange-500/20 text-orange-200 border-orange-500/40',
+          cardBorder: 'border-l-orange-500',
+          dot: 'bg-orange-400'
+        };
+      }
+      if (ev.category === 'hector') {
+        return {
+          label: 'Héctor Loza',
+          badgeBg: 'bg-blue-500/20 text-blue-200 border-blue-500/40',
+          cardBorder: 'border-l-blue-500',
+          dot: 'bg-blue-400'
+        };
+      }
+      if (ev.category === 'personal' || ev.type === 'stay_couple' || ev.type === 'couple_full') {
+        return {
+          label: 'Castro Urdiales / Pareja',
+          badgeBg: 'bg-red-500/20 text-red-200 border-red-500/40',
+          cardBorder: 'border-l-red-500',
+          dot: 'bg-red-400'
+        };
+      }
+      if (ev.category === 'travel_shoot' || ev.type === 'travel_full') {
+        return {
+          label: 'Viaje Trabajo',
+          badgeBg: 'bg-purple-500/20 text-purple-200 border-purple-500/40',
+          cardBorder: 'border-l-purple-500',
+          dot: 'bg-purple-400'
+        };
+      }
+      return {
+        label: 'Edición / Guion',
+        badgeBg: 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40',
+        cardBorder: 'border-l-cyan-500',
+        dot: 'bg-cyan-400'
+      };
+    }
+
     function getEventWeight(ev) {
       if (typeof ev.weight === 'number') return ev.weight;
       if (ev.type === 'stay_shoot') return 2;
@@ -806,16 +794,17 @@
       return 1;
     }
 
-    function getDayTotalEventWeight(eventsList) {
-      return eventsList.reduce((acc, ev) => acc + getEventWeight(ev), 0);
+    function getDayTotalEventWeight(dayEvents) {
+      return dayEvents.reduce((sum, ev) => sum + getEventWeight(ev), 0);
     }
 
     /**
-     * Determina la ubicación principal del día a partir de los eventos registrados:
-     * - 'travel': Día de viaje
-     * - 'granollers': En Granollers (rodaje/estancia SIT)
-     * - 'castro': En Castro Urdiales (estancia con pareja)
-     * - 'valladolid': Base en Valladolid -> se marca como "Libre" en este apartado
+     * Determina la ubicación principal del día y el tintado completo de la casilla:
+     * - 'travel': Viajando (morado o rojo si es viaje a Castro)
+     * - 'granollers': En Granollers grabando (verde esmeralda)
+     * - 'santona': En Santoña grabando con Héctor Loza (azul)
+     * - 'castro': En Castro Urdiales (rojo)
+     * - 'valladolid': Valladolid -> marcado como "Libre" en la mitad superior
      */
     function getDayLocationInfo(allDayEvents) {
       const hasTravel = allDayEvents.some(ev => ev.type === 'travel_full');
@@ -823,14 +812,20 @@
         const isCastroTravel = allDayEvents.some(ev => ev.category === 'personal' || (ev.title && ev.title.toLowerCase().includes('castro')));
         return {
           key: 'travel',
-          label: 'Día de viaje',
-          shortLabel: 'Viaje',
+          label: 'Viajando',
+          shortLabel: 'Viajando',
           isFreeLocation: false,
+          cellBg: isCastroTravel
+            ? 'bg-red-950/35 hover:bg-red-950/45'
+            : 'bg-purple-950/35 hover:bg-purple-950/45',
+          topHalfBg: isCastroTravel
+            ? 'bg-red-500/25 text-red-100 border-red-500/40'
+            : 'bg-purple-500/25 text-purple-100 border-purple-500/40',
           badgeClass: isCastroTravel
             ? 'bg-red-500/20 text-red-200 border-red-500/40'
             : 'bg-purple-500/20 text-purple-200 border-purple-500/40',
           dotClass: isCastroTravel ? 'bg-red-400' : 'bg-purple-400',
-          description: 'Desplazamiento en transporte público durante la jornada.'
+          description: 'Día de desplazamiento en transporte público.'
         };
       }
 
@@ -840,12 +835,31 @@
       if (inGranollers) {
         return {
           key: 'granollers',
-          label: 'En Granollers',
-          shortLabel: 'Granollers',
+          label: 'En Granollers grabando',
+          shortLabel: 'Granollers (Grabando)',
           isFreeLocation: false,
+          cellBg: 'bg-emerald-950/35 hover:bg-emerald-950/45',
+          topHalfBg: 'bg-emerald-500/25 text-emerald-100 border-emerald-500/40',
           badgeClass: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40',
           dotClass: 'bg-emerald-400',
-          description: 'Desplazado en Granollers (Barcelona) para producción y rodaje.'
+          description: 'Desplazado en Granollers (Barcelona) en jornada de grabación.'
+        };
+      }
+
+      const inSantona = allDayEvents.some(
+        ev => ev.category === 'hector' && ev.type === 'shoot'
+      );
+      if (inSantona) {
+        return {
+          key: 'santona',
+          label: 'En Santoña · Rodaje Héctor',
+          shortLabel: 'Santoña (Héctor)',
+          isFreeLocation: false,
+          cellBg: 'bg-blue-950/35 hover:bg-blue-950/45',
+          topHalfBg: 'bg-blue-500/25 text-blue-100 border-blue-500/40',
+          badgeClass: 'bg-blue-500/20 text-blue-200 border-blue-500/40',
+          dotClass: 'bg-blue-400',
+          description: 'Jornada de grabación con Héctor Loza en Santoña (Cantabria).'
         };
       }
 
@@ -858,9 +872,11 @@
           label: 'En Castro Urdiales',
           shortLabel: 'Castro Urdiales',
           isFreeLocation: false,
+          cellBg: 'bg-red-950/35 hover:bg-red-950/45',
+          topHalfBg: 'bg-red-500/25 text-red-100 border-red-500/40',
           badgeClass: 'bg-red-500/20 text-red-200 border-red-500/40',
           dotClass: 'bg-red-400',
-          description: 'Estancia en Castro Urdiales (sin peso extra en el volumen de edición).'
+          description: 'Estancia en Castro Urdiales con mi pareja (sin peso extra en volumen laboral).'
         };
       }
 
@@ -869,15 +885,17 @@
         label: 'Valladolid · Libre',
         shortLabel: 'Valladolid · Libre',
         isFreeLocation: true,
+        cellBg: 'bg-studio-900 hover:bg-studio-850/90',
+        topHalfBg: 'bg-emerald-500/10 text-emerald-300 border-zinc-800/90',
         badgeClass: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
         dotClass: 'bg-emerald-400',
-        description: 'Sin viajes ni estancias fuera: disponible en ubicación base (Valladolid).'
+        description: 'En Valladolid (ubicacion base libre de desplazamientos).'
       };
     }
 
     /**
      * Filtra los eventos de un día para mostrar únicamente el apartado de Trabajo
-     * (rodajes, ediciones y entregas), evitando duplicar la tarjeta de ubicación/viaje.
+     * (rodajes, ediciones y entregas) en la mitad inferior de la casilla.
      */
     function getDayWorkEvents(eventsList) {
       return eventsList.filter(ev => ev.type !== 'travel_full' && ev.type !== 'stay_couple' && ev.type !== 'couple_full');
@@ -1247,28 +1265,31 @@
 
       if (todayEvents.some(e => e.type === 'stay_shoot')) {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
-        text.textContent = 'Estancia / Rodaje Intensivo Granollers (07:00–19:00)';
+        text.textContent = 'En Granollers grabando (07:00–19:00)';
+      } else if (todayEvents.some(e => e.category === 'hector' && e.type === 'shoot')) {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse';
+        text.textContent = 'En Santoña grabando con Héctor Loza';
       } else if (todayEvents.some(e => e.type === 'travel_full' && e.category === 'personal')) {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse';
-        text.textContent = 'En viaje a Castro Urdiales (Día completo)';
+        text.textContent = 'Viajando a Castro Urdiales (Día completo)';
       } else if (todayEvents.some(e => e.type === 'travel_full')) {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse';
-        text.textContent = 'En viaje (Transporte público · Día completo)';
+        text.textContent = 'Viajando (Transporte público · Día completo)';
       } else if (todayEvents.some(e => e.type === 'shoot')) {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
         text.textContent = 'En rodaje (Grabación activa)';
       } else if (todayEvents.some(e => e.type === 'couple_full')) {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
-        text.textContent = 'Día personal / No disponible';
+        text.textContent = 'En Castro Urdiales / No disponible';
       } else if (todayEvents.some(e => e.type === 'stay_couple')) {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
-        text.textContent = 'Estancia en Castro Urdiales (Edición remota activa)';
+        text.textContent = 'En Castro Urdiales (Edición remota activa)';
       } else if (todayEvents.length > 0) {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400';
-        text.textContent = 'Full Edición & Entregas (Valladolid)';
+        text.textContent = 'Valladolid · Edición & Entregas activas';
       } else {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-indigo-400';
-        text.textContent = 'Huecos limitados disponibles';
+        text.textContent = 'Valladolid · Libre';
       }
     }
 
@@ -1289,7 +1310,7 @@
       // Celdas vacías iniciales antes del día 1
       for (let i = 0; i < startWeekday; i++) {
         const emptyCell = document.createElement('div');
-        emptyCell.className = 'min-h-[105px] sm:min-h-[135px] bg-studio-950/50 p-2';
+        emptyCell.className = 'min-h-[135px] sm:min-h-[165px] bg-studio-950/50';
         grid.appendChild(emptyCell);
       }
 
@@ -1298,7 +1319,7 @@
         const dateStr = formatDateISO(state.viewYear, state.viewMonth, day);
         const isToday = dateStr === todayStr;
 
-        // Todos los eventos reales del día (para calcular ubicación exacta aunque haya filtro activo)
+        // Todos los eventos reales del día (para calcular ubicación exacta y tintado)
         const allDayEvents = state.events.filter(ev => ev.date === dateStr);
         const locInfo = getDayLocationInfo(allDayEvents);
 
@@ -1312,78 +1333,67 @@
         const isFullDayBlocked = allDayEvents.some(ev => ev.fullDay);
         const dayEffectiveWeight = getDayTotalEventWeight(dayEvents);
 
+        // Casilla dividida en DOS MITADES exactas (grid-rows-2) y tintada según el estado
         const cell = document.createElement('div');
-        let bgClass = 'bg-studio-900 hover:bg-studio-850/90';
-        if (locInfo.key === 'castro') bgClass = 'bg-red-950/20 hover:bg-red-950/30';
-        else if (locInfo.key === 'granollers') bgClass = 'bg-emerald-950/20 hover:bg-emerald-950/30';
-        else if (locInfo.key === 'travel') {
-          bgClass = allDayEvents.some(ev => ev.category === 'personal')
-            ? 'bg-red-950/20 hover:bg-red-950/30'
-            : 'bg-purple-950/20 hover:bg-purple-950/30';
-        }
-
-        cell.className = `min-h-[125px] sm:min-h-[155px] p-1.5 sm:p-2.5 flex flex-col justify-between cursor-pointer transition relative group ${bgClass} ${isToday ? 'ring-2 ring-inset ring-indigo-500' : ''}`;
+        cell.className = `min-h-[135px] sm:min-h-[165px] grid grid-rows-2 cursor-pointer transition relative group overflow-hidden ${locInfo.cellBg} ${isToday ? 'ring-2 ring-inset ring-indigo-500' : ''}`;
         cell.onclick = () => openDayDetailModal(dateStr);
 
-        // Cabecera de la celda (Número de día + indicador de carga)
+        // =========================================================================
+        // MITAD SUPERIOR: NÚMERO DEL DÍA + MI LOCALIZACIÓN (Valladolid = Libre)
+        // =========================================================================
+        const topHalf = document.createElement('div');
+        topHalf.className = `p-1.5 sm:p-2 border-b flex flex-col justify-between transition ${locInfo.topHalfBg}`;
+
         const topRow = document.createElement('div');
-        topRow.className = 'flex items-center justify-between gap-1 mb-1.5';
+        topRow.className = 'flex items-center justify-between gap-1';
 
         const dayNum = document.createElement('span');
         dayNum.className = isToday
-          ? 'w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center shadow'
-          : 'text-xs sm:text-sm font-semibold text-zinc-300 group-hover:text-white';
+          ? 'w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center shadow'
+          : 'text-xs sm:text-sm font-bold text-white/95';
         dayNum.textContent = day;
         topRow.appendChild(dayNum);
 
         if (dayEvents.some(e => e.type === 'stay_shoot')) {
           const lockBadge = document.createElement('span');
-          lockBadge.className = 'text-[9px] sm:text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 truncate';
+          lockBadge.className = 'text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 truncate';
           lockBadge.textContent = '07h–19h (x2)';
           topRow.appendChild(lockBadge);
         } else if (isFullDayBlocked) {
           const lockBadge = document.createElement('span');
-          lockBadge.className = 'text-[9px] sm:text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700 truncate';
+          lockBadge.className = 'text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-black/30 text-white/90 border border-white/15 truncate';
           lockBadge.textContent = '100%';
           topRow.appendChild(lockBadge);
         } else if (dayEffectiveWeight >= 3) {
           const busyBadge = document.createElement('span');
-          busyBadge.className = 'hidden sm:inline-block text-[9px] font-mono font-semibold uppercase px-1.5 py-0.5 rounded bg-orange-500/15 text-orange-300';
+          busyBadge.className = 'hidden sm:inline-block text-[9px] font-mono font-semibold uppercase px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-200';
           busyBadge.textContent = 'Muy liado';
           topRow.appendChild(busyBadge);
-        } else if (dayEffectiveWeight > 0) {
-          const medBadge = document.createElement('span');
-          medBadge.className = 'hidden sm:inline-block text-[9px] font-mono text-zinc-400';
-          medBadge.textContent = 'Carga media';
-          topRow.appendChild(medBadge);
         }
 
-        cell.appendChild(topRow);
+        topHalf.appendChild(topRow);
 
-        // Contenedor de los DOS APARTADOS del día
-        const sectionsWrapper = document.createElement('div');
-        sectionsWrapper.className = 'space-y-1.5 flex-1 flex flex-col justify-between overflow-hidden';
-
-        // APARTADO 1: DÓNDE ESTOY (Valladolid · Libre / Castro Urdiales / Granollers / Día de viaje)
-        const locBox = document.createElement('div');
-        locBox.className = `px-1.5 py-1 rounded-md border text-[10px] font-semibold flex items-center justify-between gap-1 ${locInfo.badgeClass}`;
-        locBox.innerHTML = `
-          <span class="flex items-center gap-1 truncate">
-            <span class="w-1.5 h-1.5 rounded-full shrink-0 ${locInfo.dotClass}"></span>
-            <span class="truncate">${escapeHtml(locInfo.label)}</span>
-          </span>
+        // Etiqueta destacada de Localización en la mitad superior
+        const locLabelRow = document.createElement('div');
+        locLabelRow.className = 'flex items-center gap-1.5 mt-1';
+        locLabelRow.innerHTML = `
+          <span class="w-2 h-2 rounded-full shrink-0 ${locInfo.dotClass}"></span>
+          <span class="text-[10px] sm:text-xs font-bold tracking-tight truncate">${escapeHtml(locInfo.label)}</span>
         `;
-        sectionsWrapper.appendChild(locBox);
+        topHalf.appendChild(locLabelRow);
+        cell.appendChild(topHalf);
 
-        // APARTADO 2: TRABAJO (Rodaje o Vídeos en edición / entrega)
-        const workBox = document.createElement('div');
-        workBox.className = 'space-y-1 flex-1 overflow-hidden pt-0.5 border-t border-zinc-800/70';
+        // =========================================================================
+        // MITAD INFERIOR: CARGA DE TRABAJO ACTUAL DEL DÍA
+        // =========================================================================
+        const bottomHalf = document.createElement('div');
+        bottomHalf.className = 'p-1.5 sm:p-2 flex flex-col justify-center space-y-1 overflow-hidden bg-black/15';
 
         if (workEvents.length === 0) {
           const noWork = document.createElement('div');
-          noWork.className = 'text-[10px] font-mono text-zinc-500 px-1 py-0.5 truncate';
-          noWork.textContent = locInfo.key === 'travel' ? 'Sin edición (Viaje)' : 'Sin rodaje / edición';
-          workBox.appendChild(noWork);
+          noWork.className = 'text-[10px] font-mono text-zinc-400/90 truncate flex items-center gap-1';
+          noWork.textContent = locInfo.key === 'travel' ? '• Sin edición (Viaje)' : '• Sin trabajo asignado';
+          bottomHalf.appendChild(noWork);
         } else {
           const maxVisible = 2;
           workEvents.slice(0, maxVisible).forEach(ev => {
@@ -1399,19 +1409,18 @@
               </span>
               ${isDoubleWeight ? '<span class="shrink-0 text-[9px] font-mono font-bold px-1 rounded bg-emerald-500/30 text-emerald-100">x2</span>' : ''}
             `;
-            workBox.appendChild(pill);
+            bottomHalf.appendChild(pill);
           });
 
           if (workEvents.length > maxVisible) {
             const more = document.createElement('div');
-            more.className = 'text-[10px] font-mono text-zinc-400 pl-1';
+            more.className = 'text-[10px] font-mono text-zinc-300/80 pl-1';
             more.textContent = `+${workEvents.length - maxVisible} más...`;
-            workBox.appendChild(more);
+            bottomHalf.appendChild(more);
           }
         }
 
-        sectionsWrapper.appendChild(workBox);
-        cell.appendChild(sectionsWrapper);
+        cell.appendChild(bottomHalf);
         grid.appendChild(cell);
       }
 
@@ -1421,7 +1430,7 @@
       if (remainder !== 0) {
         for (let i = 0; i < 7 - remainder; i++) {
           const emptyCell = document.createElement('div');
-          emptyCell.className = 'min-h-[105px] sm:min-h-[135px] bg-studio-950/50 p-2';
+          emptyCell.className = 'min-h-[135px] sm:min-h-[165px] bg-studio-950/50';
           grid.appendChild(emptyCell);
         }
       }
@@ -1689,9 +1698,9 @@
       if (presetKey === 'shoot_hector') {
         catEl.value = 'hector';
         typeEl.value = 'shoot';
-        titleEl.value = 'Rodaje Héctor Loza (Día completo)';
+        titleEl.value = 'Rodaje Héctor Loza (Santoña)';
         fullDayEl.checked = true;
-        notesEl.value = 'Grabación mensual en barbería / escuela de barbería.';
+        notesEl.value = 'Grabación mensual en Santoña (barbería / escuela de barbería).';
       }
     }
 
@@ -1728,7 +1737,7 @@
         titleInput.value = 'Reel Héctor Loza (Barbería)';
         fullDayCheck.checked = false;
       } else if (cat === 'hector' && type === 'shoot') {
-        titleInput.value = 'Rodaje Héctor Loza (Día completo)';
+        titleInput.value = 'Rodaje Héctor Loza (Santoña)';
         fullDayCheck.checked = true;
       } else if (cat === 'editing') {
         titleInput.value = 'Edición Vídeo Largo SIT';
