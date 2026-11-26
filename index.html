@@ -1244,15 +1244,17 @@
         state.hasUnsavedChanges = false;
         localStorage.setItem('freelance_agenda_events_cache', jsonString);
         document.getElementById('data-source-label').textContent = 'GitHub (Sincronizado)';
+        syncBtn.innerHTML = originalHtml;
         updateAdminUI();
         renderAll();
         showToast('¡Agenda guardada en GitHub Pages correctamente!', 'success');
       } catch (err) {
-        console.error(err);
+        console.error('Error guardando en GitHub:', err);
         showToast(`Error GitHub: ${err.message}`, 'error');
       } finally {
         syncBtn.disabled = false;
         syncBtn.innerHTML = originalHtml;
+        updateAdminUI();
       }
     }
 
