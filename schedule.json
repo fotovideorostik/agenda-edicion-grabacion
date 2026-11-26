@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-26T02:11:44.540Z",
-  "owner": "Freelance Audiovisual Valladolid",
+  "updatedAt": "2026-11-26T11:22:03.410Z",
+  "owner": "Freelance Filmmaker & Editor (Valladolid)",
   "events": [
     {
       "id": "sit-reel-2026-11-03",
@@ -830,124 +830,124 @@
       "client": "granollers"
     },
     {
-      "id": "ev-1795658985331-0-castro-ida",
+      "id": "trip-ida-1795692118938-0",
       "date": "2026-12-23",
-      "client": "personal",
+      "category": "personal",
       "type": "travel_full",
-      "title": "Viaje de Ida a Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "title": "Viaje de Ida (Valladolid → Castro Urdiales)",
       "fullDay": true,
-      "weight": 1
+      "weight": 1,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-1-castro-stay",
+      "id": "stay-castro-1795692118938-1",
       "date": "2026-12-24",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-2-castro-stay",
+      "id": "stay-castro-1795692118938-2",
       "date": "2026-12-25",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-3-castro-stay",
+      "id": "stay-castro-1795692118938-3",
       "date": "2026-12-26",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-4-castro-stay",
+      "id": "stay-castro-1795692118938-4",
       "date": "2026-12-27",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-5-castro-stay",
+      "id": "stay-castro-1795692118938-5",
       "date": "2026-12-28",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-6-castro-stay",
+      "id": "stay-castro-1795692118938-6",
       "date": "2026-12-29",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-7-castro-stay",
+      "id": "stay-castro-1795692118938-7",
       "date": "2026-12-30",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-8-castro-stay",
+      "id": "stay-castro-1795692118938-8",
       "date": "2026-12-31",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-9-castro-stay",
+      "id": "stay-castro-1795692118938-9",
       "date": "2027-01-01",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-10-castro-stay",
+      "id": "stay-castro-1795692118938-10",
       "date": "2027-01-02",
-      "client": "personal",
-      "type": "stay_castro",
+      "category": "personal",
+      "type": "stay_couple",
       "title": "Estancia en Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
       "fullDay": false,
-      "weight": 0
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
-      "id": "ev-1795658985331-11-castro-vuelta",
+      "id": "trip-vuelta-1795692118938-11",
       "date": "2027-01-03",
-      "client": "personal",
+      "category": "personal",
       "type": "travel_full",
-      "title": "Viaje de Vuelta desde Castro Urdiales",
-      "notes": "Ida/Vuelta bloquean día completo · Estancia con peso laboral 0",
+      "title": "Viaje de Vuelta (Castro Urdiales → Valladolid)",
       "fullDay": true,
-      "weight": 1
+      "weight": 1,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     }
   ]
 }
