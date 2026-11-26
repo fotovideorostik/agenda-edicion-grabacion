@@ -416,18 +416,22 @@
         </button>
       </div>
 
-      <form id="event-form" onsubmit="handleSaveEventForm(event)" class="p-5 space-y-4">
+      <form id="event-form" onsubmit="handleSaveEventForm(event)" class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
         <input type="hidden" id="ev-id" />
 
-        <!-- Presets rápidos en 1 clic para días completos -->
+        <!-- Presets rápidos en 1 clic -->
         <div>
-          <label class="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">Presets rápidos (Día completo 100%)</label>
+          <label class="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">Presets rápidos (Día completo / Viaje)</label>
           <div class="grid grid-cols-2 gap-1.5">
-            <button type="button" onclick="applyQuickPreset('travel_valladolid')" class="text-left px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-[11px] text-amber-200 font-medium transition truncate">
-              🚆 Viaje Valladolid ↔ Granollers
+            <button type="button" onclick="applyQuickPreset('granollers_trip_pack')" class="col-span-2 text-left px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500/20 to-cyan-500/20 hover:from-amber-500/30 hover:to-cyan-500/30 border border-amber-500/40 text-xs text-amber-100 font-semibold transition flex items-center justify-between">
+              <span>🚆🎥 Pack Viaje Granollers (Ida + Estancia Rodaje + Vuelta)</span>
+              <span class="text-[10px] font-mono bg-amber-500/30 px-1.5 py-0.5 rounded text-amber-200">RANGO FECHAS</span>
             </button>
-            <button type="button" onclick="applyQuickPreset('shoot_sit')" class="text-left px-2.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-[11px] text-cyan-200 font-medium transition truncate">
-              🎥 Rodaje SIT Granollers
+            <button type="button" onclick="applyQuickPreset('stay_shoot_intensive')" class="text-left px-2.5 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-[11px] text-cyan-200 font-medium transition truncate">
+              🎬 Estancia/Rodaje (07h–19h · x2)
+            </button>
+            <button type="button" onclick="applyQuickPreset('travel_valladolid')" class="text-left px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-[11px] text-amber-200 font-medium transition truncate">
+              🚆 Viaje Ida / Vuelta (Día 100%)
             </button>
             <button type="button" onclick="applyQuickPreset('shoot_hector')" class="text-left px-2.5 py-1.5 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-[11px] text-purple-200 font-medium transition truncate">
               ✂️ Rodaje Héctor Loza
@@ -438,55 +442,64 @@
           </div>
         </div>
 
+        <input type="hidden" id="ev-is-trip-pack" value="false" />
+
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-medium text-zinc-400 mb-1">Fecha Inicio</label>
+            <label id="ev-date-label" class="block text-xs font-medium text-zinc-400 mb-1">Fecha Inicio</label>
             <input type="date" id="ev-date" required class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
           </div>
           <div>
-            <label class="block text-xs font-medium text-zinc-400 mb-1">Fecha Fin (Opcional)</label>
+            <label id="ev-end-date-label" class="block text-xs font-medium text-zinc-400 mb-1">Fecha Fin (Opcional)</label>
             <input type="date" id="ev-end-date" title="Útil para viajes de varios días seguidos" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1">Cliente / Categoría</label>
-          <select id="ev-category" required onchange="autoSuggestEventTitle()" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500">
-            <option value="sit">SIT Granollers (AACC / Climatización)</option>
-            <option value="hector">Héctor Loza (Barbería & Escuela)</option>
-            <option value="travel_shoot">Viaje / Rodaje Fuera (Valladolid ↔ Granollers)</option>
-            <option value="personal">Personal / Visita Pareja</option>
-            <option value="editing">Edición / Guionización Interna</option>
-          </select>
+        <div id="trip-pack-hint" class="hidden p-2.5 rounded-xl bg-amber-950/40 border border-amber-500/30 text-[11px] text-amber-200 leading-relaxed">
+          <strong>Modo Pack Viaje Granollers:</strong> El 1er día se creará como <em>Viaje de Ida</em>, los días intermedios como <em>Estancia / Rodaje Intensivo (07:00–19:00 · Peso x2)</em> y el último día como <em>Viaje de Vuelta</em>. (Mínimo 2-3 días recomendados).
         </div>
 
-        <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1">Tipo de Entregable / Bloque</label>
-          <select id="ev-type" required onchange="autoSuggestEventTitle()" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500">
-            <option value="reel">Entrega / Publicación Reel</option>
-            <option value="long_video">Entrega Vídeo Largo (YouTube)</option>
-            <option value="shoot">Jornada de Rodaje / Grabación</option>
-            <option value="travel_full">Viaje Transporte Público (Día Completo)</option>
-            <option value="couple_full">Visita Pareja / Personal (Día Completo)</option>
-            <option value="editing">Bloque Edición / Guion</option>
-          </select>
-        </div>
+        <div id="standard-event-fields" class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-zinc-400 mb-1">Cliente / Categoría</label>
+            <select id="ev-category" required onchange="autoSuggestEventTitle()" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500">
+              <option value="sit">SIT Granollers (AACC / Climatización)</option>
+              <option value="hector">Héctor Loza (Barbería & Escuela)</option>
+              <option value="travel_shoot">Viaje / Estancia Fuera (Valladolid ↔ Granollers)</option>
+              <option value="personal">Personal / Visita Pareja</option>
+              <option value="editing">Edición / Guionización Interna</option>
+            </select>
+          </div>
 
-        <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1">Título visible en calendario</label>
-          <input type="text" id="ev-title" required placeholder="Ej: Reel #3 SIT Granollers" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
-        </div>
+          <div>
+            <label class="block text-xs font-medium text-zinc-400 mb-1">Tipo de Entregable / Bloque</label>
+            <select id="ev-type" required onchange="autoSuggestEventTitle()" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500">
+              <option value="reel">Entrega / Publicación Reel</option>
+              <option value="long_video">Entrega Vídeo Largo (YouTube)</option>
+              <option value="stay_shoot">Estancia / Rodaje Intensivo (07:00–19:00 · Peso x2)</option>
+              <option value="shoot">Jornada de Rodaje / Grabación</option>
+              <option value="travel_full">Viaje Transporte Público (Día Completo)</option>
+              <option value="couple_full">Visita Pareja / Personal (Día Completo)</option>
+              <option value="editing">Bloque Edición / Guion</option>
+            </select>
+          </div>
 
-        <div class="flex items-center gap-2.5 p-3 rounded-xl bg-studio-850 border border-zinc-800">
-          <input type="checkbox" id="ev-full-day" class="w-4 h-4 rounded accent-rose-500" />
-          <label for="ev-full-day" class="text-xs text-zinc-300 select-none cursor-pointer">
-            Marcar como <strong class="text-rose-300">DÍA COMPLETO OCUPADO</strong> (bloquea disponibilidad todo el día)
-          </label>
+          <div>
+            <label class="block text-xs font-medium text-zinc-400 mb-1">Título visible en calendario</label>
+            <input type="text" id="ev-title" required placeholder="Ej: Reel #3 SIT Granollers" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+
+          <div class="flex items-center gap-2.5 p-3 rounded-xl bg-studio-850 border border-zinc-800">
+            <input type="checkbox" id="ev-full-day" class="w-4 h-4 rounded accent-rose-500" />
+            <label for="ev-full-day" class="text-xs text-zinc-300 select-none cursor-pointer">
+              Marcar como <strong class="text-rose-300">DÍA COMPLETO OCUPADO</strong> (bloquea disponibilidad todo el día)
+            </label>
+          </div>
         </div>
 
         <div>
           <label class="block text-xs font-medium text-zinc-400 mb-1">Notas / Detalles (opcional)</label>
-          <textarea id="ev-notes" rows="2" placeholder="Ej: Tren salida 07:15 desde Valladolid Campo Grande..." class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
+          <textarea id="ev-notes" rows="2" placeholder="Ej: Rodaje instalaciones 07:00 a 19:00 en Granollers..." class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2">
@@ -712,27 +725,44 @@
     const TYPE_LABELS = {
       reel: 'Reel / Vídeo Diario',
       long_video: 'Entrega Vídeo Largo',
+      stay_shoot: 'Estancia / Rodaje Intensivo (07h–19h · Peso x2)',
       shoot: 'Rodaje Día Completo',
       travel_full: 'Viaje Día Completo',
       couple_full: 'Pareja Día Completo',
       editing: 'Edición Vídeo Largo'
     };
 
+    // Estado reactivo global
     let state = {
-      events: [],
       viewYear: new Date().getFullYear(),
       viewMonth: new Date().getMonth(), // 0-11
-      autoJumpedToNextMonth: false,
       activeFilter: 'all',
       isAdmin: false,
-      hasUnsavedChanges: false,
+      events: [],
       selectedDateStr: null,
-      ghFileMissing: false // Indica si schedule.json aún no existe (404) en GitHub
+      hasUnsavedChanges: false,
+      autoAdvancedToNextMonth: false,
+      ghFileMissing: false
     };
 
     /**
+     * Devuelve el peso de carga de un evento.
+     * Los días de Estancia/Rodaje Intensivo (07:00 a 19:00) ocupan 1 hueco visual
+     * pero tienen el peso equivalente a 2 eventos por su alta intensidad horaria.
+     */
+    function getEventWeight(ev) {
+      if (typeof ev.weight === 'number') return ev.weight;
+      if (ev.type === 'stay_shoot') return 2;
+      return 1;
+    }
+
+    function getDayTotalEventWeight(eventsList) {
+      return eventsList.reduce((acc, ev) => acc + getEventWeight(ev), 0);
+    }
+
+    /**
      * ============================================================================
-     * INICIALIZACIÓN Y LÓGICA INTELIGENTE DE FECHA (LANDING PAGE)
+     * INICIALIZACIÓN Y LÓGICA INTELIGENTE DE LANDING PAGE (< 3 DÍAS PARA FIN DE MES)
      * ============================================================================
      */
     document.addEventListener('DOMContentLoaded', async () => {
@@ -743,24 +773,22 @@
     });
 
     /**
-     * Calcula si quedan menos de 3 días para terminar el mes actual.
-     * Ejemplo: Noviembre tiene 30 días. Hoy 26 (30-26 = 4 >= 3) muestra Noviembre.
-     * A partir del 28 de Noviembre (30-28 = 2 < 3) salta automáticamente a Diciembre.
+     * Calcula si faltan menos de 3 días para finalizar el mes actual.
+     * Si es así, salta automáticamente al mes siguiente en la landing page.
      */
     function calculateSmartInitialMonth() {
       const today = new Date();
       const year = today.getFullYear();
       const month = today.getMonth();
-      const dayOfMonth = today.getDate();
-
-      const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
-      const remainingDays = daysInCurrentMonth - dayOfMonth;
+      const currentDay = today.getDate();
+      const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+      const remainingDays = lastDayOfMonth - currentDay;
 
       if (remainingDays < 3) {
         const nextMonthDate = new Date(year, month + 1, 1);
         state.viewYear = nextMonthDate.getFullYear();
         state.viewMonth = nextMonthDate.getMonth();
-        state.autoJumpedToNextMonth = true;
+        state.autoAdvancedToNextMonth = true;
 
         const banner = document.getElementById('auto-next-month-banner');
         const monthNameSpan = document.getElementById('auto-month-name');
@@ -769,7 +797,8 @@
       } else {
         state.viewYear = year;
         state.viewMonth = month;
-        state.autoJumpedToNextMonth = false;
+        state.autoAdvancedToNextMonth = false;
+        document.getElementById('auto-next-month-banner').classList.add('hidden');
       }
     }
 
@@ -828,11 +857,9 @@
       let generated = [];
       baseMonths.forEach(({ year, month }) => {
         // 1. Rutina semanal recurrente exacta:
-        // - SIT Granollers: Vídeo diario (Mar a Sáb) + Vídeo Largo (Edición Vie-Jue, Entrega Viernes)
-        // - Héctor Loza: 3 Reels (Lunes, Martes, Miércoles)
         generated = generated.concat(createRoutineEventsForMonth(year, month));
 
-        // 2. Viaje mensual Valladolid <-> Granollers (4 días seguidos: Ida + 2 días rodaje intensivo + Vuelta)
+        // 2. Viaje mensual Valladolid <-> Granollers (4 días seguidos: Ida + 2 días estancia/rodaje 07h-19h + Vuelta)
         const tripStartDay = findNthWeekdayOfMonth(year, month, 2, 2); // 2º Martes
         if (tripStartDay) {
           const d1 = formatDateISO(year, month, tripStartDay);
@@ -846,35 +873,39 @@
               date: d1,
               category: 'travel_shoot',
               type: 'travel_full',
-              title: 'Viaje Valladolid ↔ Granollers (Ida)',
+              title: 'Viaje de Ida (Valladolid → Granollers)',
               fullDay: true,
+              weight: 1,
               notes: 'Desplazamiento en transporte público todo el día y preparación de equipo.'
             },
             {
               id: `shoot-sit1-${year}-${month}`,
               date: d2,
               category: 'sit',
-              type: 'shoot',
-              title: 'Rodaje SIT Granollers (Día 1)',
+              type: 'stay_shoot',
+              title: 'Estancia / Rodaje SIT (07:00–19:00)',
               fullDay: true,
-              notes: 'Grabación en lote de vídeos diarios y vídeos largos de instalaciones AACC.'
+              weight: 2,
+              notes: 'Jornada intensiva de 07:00 a 19:00 (Peso x2 eventos). Grabación en lote de vídeos diarios y vídeo largo.'
             },
             {
               id: `shoot-sit2-${year}-${month}`,
               date: d3,
               category: 'sit',
-              type: 'shoot',
-              title: 'Rodaje SIT Granollers (Día 2)',
+              type: 'stay_shoot',
+              title: 'Estancia / Rodaje SIT (07:00–19:00)',
               fullDay: true,
-              notes: 'Grabación técnica en obra/cliente y recursos B-Roll.'
+              weight: 2,
+              notes: 'Jornada intensiva de 07:00 a 19:00 (Peso x2 eventos). Grabación técnica en obra/cliente y recursos B-Roll.'
             },
             {
               id: `trip-back-${year}-${month}`,
               date: d4,
               category: 'travel_shoot',
               type: 'travel_full',
-              title: 'Viaje Valladolid ↔ Granollers (Vuelta)',
+              title: 'Viaje de Vuelta (Granollers → Valladolid)',
               fullDay: true,
+              weight: 1,
               notes: 'Regreso en transporte público y descarga/backup de tarjetas.'
             }
           );
@@ -1031,11 +1062,10 @@
       const totalReels = sitReels + hectorReels;
 
       const longVideos = monthEvents.filter(e => e.type === 'long_video').length;
-
-      // Días únicos con rodaje o viaje de trabajo
+      // Días únicos con rodaje, estancia intensiva o viaje de trabajo
       const shootTravelDates = new Set(
         monthEvents
-          .filter(e => e.type === 'shoot' || e.type === 'travel_full' || e.category === 'travel_shoot')
+          .filter(e => e.type === 'shoot' || e.type === 'stay_shoot' || e.type === 'travel_full' || e.category === 'travel_shoot')
           .map(e => e.date)
       );
 
@@ -1046,16 +1076,17 @@
           .map(e => e.date)
       );
 
-      // Cálculo de ocupación del mes
+      // Cálculo de ocupación del mes considerando peso x2 en días de estancia/rodaje
       const daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
       const activeDates = new Set(monthEvents.map(e => e.date));
       const fullDayBlockedDates = new Set(monthEvents.filter(e => e.fullDay).map(e => e.date));
+      const intensiveStayDates = new Set(monthEvents.filter(e => e.type === 'stay_shoot').map(e => e.date));
 
-      // Ponderación realista: días completos valen 100% del día, días con entregas/edición valen 75%
       let weightedLoad = 0;
       for (let d = 1; d <= daysInMonth; d++) {
         const dStr = formatDateISO(state.viewYear, state.viewMonth, d);
-        if (fullDayBlockedDates.has(dStr)) weightedLoad += 1;
+        if (intensiveStayDates.has(dStr)) weightedLoad += 1.25; // Jornada 07:00-19:00 (peso doble)
+        else if (fullDayBlockedDates.has(dStr)) weightedLoad += 1;
         else if (activeDates.has(dStr)) weightedLoad += 0.72;
       }
       const loadPercent = Math.min(100, Math.round((weightedLoad / daysInMonth) * 100));
@@ -1091,7 +1122,10 @@
       const dot = document.getElementById('live-status-dot');
       const text = document.getElementById('live-status-text');
 
-      if (todayEvents.some(e => e.type === 'travel_full')) {
+      if (todayEvents.some(e => e.type === 'stay_shoot')) {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse';
+        text.textContent = 'Estancia / Rodaje Intensivo (07:00–19:00)';
+      } else if (todayEvents.some(e => e.type === 'travel_full')) {
         dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse';
         text.textContent = 'En viaje (Transporte público)';
       } else if (todayEvents.some(e => e.type === 'shoot')) {
@@ -1143,7 +1177,8 @@
 
         const isFullDayBlocked = dayEvents.some(ev => ev.fullDay);
         const isPersonalDay = dayEvents.some(ev => ev.category === 'personal');
-        const isTravelShootDay = dayEvents.some(ev => ev.category === 'travel_shoot' || ev.type === 'shoot');
+        const isTravelShootDay = dayEvents.some(ev => ev.category === 'travel_shoot' || ev.type === 'shoot' || ev.type === 'stay_shoot');
+        const dayEffectiveWeight = getDayTotalEventWeight(dayEvents);
 
         const cell = document.createElement('div');
         let bgClass = 'bg-studio-900 hover:bg-studio-850/90';
@@ -1167,19 +1202,19 @@
         if (isFullDayBlocked) {
           const lockBadge = document.createElement('span');
           lockBadge.className = 'text-[9px] sm:text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 truncate';
-          lockBadge.textContent = 'DÍA COMPLETO';
+          lockBadge.textContent = dayEvents.some(e => e.type === 'stay_shoot') ? '07h–19h (x2)' : 'DÍA COMPLETO';
           topRow.appendChild(lockBadge);
         } else if (dayEvents.length === 0 && state.activeFilter === 'all') {
           const freeDot = document.createElement('span');
           freeDot.className = 'text-[10px] text-emerald-400/80 font-mono transition';
           freeDot.textContent = 'Libre';
           topRow.appendChild(freeDot);
-        } else if (dayEvents.length >= 3) {
+        } else if (dayEffectiveWeight >= 3) {
           const busyBadge = document.createElement('span');
           busyBadge.className = 'hidden sm:inline-block text-[9px] font-mono font-semibold uppercase px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300';
           busyBadge.textContent = 'Muy liado';
           topRow.appendChild(busyBadge);
-        } else if (dayEvents.length > 0) {
+        } else if (dayEffectiveWeight > 0) {
           const medBadge = document.createElement('span');
           medBadge.className = 'hidden sm:inline-block text-[9px] font-mono text-zinc-400';
           medBadge.textContent = 'Carga media';
@@ -1196,9 +1231,16 @@
         const maxVisible = 3;
         dayEvents.slice(0, maxVisible).forEach(ev => {
           const style = CATEGORY_STYLES[ev.category] || CATEGORY_STYLES.editing;
+          const isDoubleWeight = getEventWeight(ev) >= 2;
           const pill = document.createElement('div');
-          pill.className = `px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium border truncate flex items-center gap-1 ${style.badgeBg}`;
-          pill.innerHTML = `<span class="w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}"></span><span class="truncate">${escapeHtml(ev.title)}</span>`;
+          pill.className = `px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium border truncate flex items-center justify-between gap-1 ${style.badgeBg}`;
+          pill.innerHTML = `
+            <span class="flex items-center gap-1 truncate">
+              <span class="w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}"></span>
+              <span class="truncate">${escapeHtml(ev.title)}</span>
+            </span>
+            ${isDoubleWeight ? '<span class="shrink-0 text-[9px] font-mono font-bold px-1 rounded bg-white/15 text-white">x2</span>' : ''}
+          `;
           eventsContainer.appendChild(pill);
         });
 
@@ -1306,6 +1348,7 @@
               <div class="flex flex-wrap items-center gap-2">
                 <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${style.badgeBg}">${style.label}</span>
                 <span class="text-[10px] font-mono text-zinc-400">${TYPE_LABELS[ev.type] || ev.type}</span>
+                ${getEventWeight(ev) >= 2 ? '<span class="text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded">PESO x2 EVENTOS (07h–19h)</span>' : ''}
                 ${ev.fullDay ? '<span class="text-[10px] font-mono bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded">DÍA COMPLETO</span>' : ''}
               </div>
               <h4 class="text-sm font-semibold text-white">${escapeHtml(ev.title)}</h4>
@@ -1343,11 +1386,18 @@
       if (!state.isAdmin) return;
       document.getElementById('event-form-title').textContent = 'Nuevo Bloque en Agenda';
       document.getElementById('ev-id').value = '';
+      document.getElementById('ev-is-trip-pack').value = 'false';
+      document.getElementById('trip-pack-hint').classList.add('hidden');
+      document.getElementById('standard-event-fields').classList.remove('hidden');
+      document.getElementById('ev-date-label').textContent = 'Fecha Inicio';
+      document.getElementById('ev-end-date-label').textContent = 'Fecha Fin (Opcional)';
+      document.getElementById('ev-end-date').required = false;
+
       document.getElementById('ev-date').value = prefillDate || formatDateISO(state.viewYear, state.viewMonth, 1);
       document.getElementById('ev-end-date').value = '';
       document.getElementById('ev-category').value = 'sit';
       document.getElementById('ev-type').value = 'reel';
-      document.getElementById('ev-title').value = 'Reel SIT Granollers';
+      document.getElementById('ev-title').value = 'Vídeo Diario SIT Granollers';
       document.getElementById('ev-full-day').checked = false;
       document.getElementById('ev-notes').value = '';
       openModal('event-form-modal');
@@ -1366,6 +1416,13 @@
       closeModal('day-detail-modal');
       document.getElementById('event-form-title').textContent = 'Editar Bloque';
       document.getElementById('ev-id').value = ev.id;
+      document.getElementById('ev-is-trip-pack').value = 'false';
+      document.getElementById('trip-pack-hint').classList.add('hidden');
+      document.getElementById('standard-event-fields').classList.remove('hidden');
+      document.getElementById('ev-date-label').textContent = 'Fecha Inicio';
+      document.getElementById('ev-end-date-label').textContent = 'Fecha Fin (Opcional)';
+      document.getElementById('ev-end-date').required = false;
+
       document.getElementById('ev-date').value = ev.date;
       document.getElementById('ev-end-date').value = '';
       document.getElementById('ev-category').value = ev.category;
@@ -1377,24 +1434,59 @@
     }
 
     function applyQuickPreset(presetKey) {
+      const isTripPackEl = document.getElementById('ev-is-trip-pack');
+      const tripHintEl = document.getElementById('trip-pack-hint');
+      const standardFieldsEl = document.getElementById('standard-event-fields');
+      const dateLabel = document.getElementById('ev-date-label');
+      const endDateLabel = document.getElementById('ev-end-date-label');
+      const endDateInput = document.getElementById('ev-end-date');
+
       const catEl = document.getElementById('ev-category');
       const typeEl = document.getElementById('ev-type');
       const titleEl = document.getElementById('ev-title');
       const fullDayEl = document.getElementById('ev-full-day');
       const notesEl = document.getElementById('ev-notes');
 
-      if (presetKey === 'travel_valladolid') {
+      if (presetKey === 'granollers_trip_pack') {
+        isTripPackEl.value = 'true';
+        tripHintEl.classList.remove('hidden');
+        standardFieldsEl.classList.add('hidden');
+        dateLabel.textContent = 'Día Viaje de Ida';
+        endDateLabel.textContent = 'Día Viaje de Vuelta (Obligatorio)';
+        endDateInput.required = true;
+        titleEl.value = 'Viaje Granollers';
+        notesEl.value = 'Viaje mensual Valladolid ↔ Granollers con jornadas de grabación de 07:00 a 19:00.';
+
+        // Si no hay fecha fin puesta aún, sugerir +3 días (Ida + 2 días estancia + Vuelta)
+        const startVal = document.getElementById('ev-date').value;
+        if (startVal && !endDateInput.value) {
+          const d = new Date(startVal + 'T00:00:00');
+          d.setDate(d.getDate() + 3);
+          endDateInput.value = formatDateISO(d.getFullYear(), d.getMonth(), d.getDate());
+        }
+        return;
+      }
+
+      // Restaurar modo evento individual si se elige otro preset
+      isTripPackEl.value = 'false';
+      tripHintEl.classList.add('hidden');
+      standardFieldsEl.classList.remove('hidden');
+      dateLabel.textContent = 'Fecha Inicio';
+      endDateLabel.textContent = 'Fecha Fin (Opcional)';
+      endDateInput.required = false;
+
+      if (presetKey === 'stay_shoot_intensive') {
+        catEl.value = 'sit';
+        typeEl.value = 'stay_shoot';
+        titleEl.value = 'Estancia / Rodaje SIT (07:00–19:00)';
+        fullDayEl.checked = true;
+        notesEl.value = 'Jornada intensiva de grabación en Granollers de 07:00 a 19:00 (Peso equivalente a 2 eventos).';
+      } else if (presetKey === 'travel_valladolid') {
         catEl.value = 'travel_shoot';
         typeEl.value = 'travel_full';
         titleEl.value = 'Viaje Valladolid ↔ Granollers (Día completo)';
         fullDayEl.checked = true;
         notesEl.value = 'Desplazamiento en transporte público. Jornada completa ocupada.';
-      } else if (presetKey === 'shoot_sit') {
-        catEl.value = 'sit';
-        typeEl.value = 'shoot';
-        titleEl.value = 'Rodaje SIT Granollers (Día completo)';
-        fullDayEl.checked = true;
-        notesEl.value = 'Grabación en lote de vídeos diarios y vídeo largo en Granollers.';
       } else if (presetKey === 'shoot_hector') {
         catEl.value = 'hector';
         typeEl.value = 'shoot';
@@ -1416,7 +1508,10 @@
       const titleInput = document.getElementById('ev-title');
       const fullDayCheck = document.getElementById('ev-full-day');
 
-      if (type === 'travel_full') {
+      if (type === 'stay_shoot') {
+        titleInput.value = 'Estancia / Rodaje SIT (07:00–19:00)';
+        fullDayCheck.checked = true;
+      } else if (type === 'travel_full') {
         titleInput.value = 'Viaje Valladolid ↔ Granollers (Día completo)';
         fullDayCheck.checked = true;
       } else if (type === 'couple_full' || cat === 'personal') {
@@ -1448,6 +1543,7 @@
       if (!state.isAdmin) return;
 
       const id = document.getElementById('ev-id').value;
+      const isTripPack = document.getElementById('ev-is-trip-pack').value === 'true';
       const startDate = document.getElementById('ev-date').value;
       const endDate = document.getElementById('ev-end-date').value;
       const category = document.getElementById('ev-category').value;
@@ -1455,16 +1551,68 @@
       const title = document.getElementById('ev-title').value.trim();
       const fullDay = document.getElementById('ev-full-day').checked;
       const notes = document.getElementById('ev-notes').value.trim();
+      const weight = type === 'stay_shoot' ? 2 : 1;
+
+      if (isTripPack) {
+        const datesToCreate = getDatesInRange(startDate, endDate || startDate);
+        if (datesToCreate.length < 2) {
+          showToast('Selecciona al menos 2 días (Ida y Vuelta) para el Pack Viaje Granollers.', 'error');
+          return;
+        }
+
+        datesToCreate.forEach((dStr, index) => {
+          if (index === 0) {
+            state.events.push({
+              id: `trip-ida-${Date.now()}-${index}`,
+              date: dStr,
+              category: 'travel_shoot',
+              type: 'travel_full',
+              title: 'Viaje de Ida (Valladolid → Granollers)',
+              fullDay: true,
+              weight: 1,
+              notes: notes || 'Desplazamiento en transporte público todo el día.'
+            });
+          } else if (index === datesToCreate.length - 1) {
+            state.events.push({
+              id: `trip-vuelta-${Date.now()}-${index}`,
+              date: dStr,
+              category: 'travel_shoot',
+              type: 'travel_full',
+              title: 'Viaje de Vuelta (Granollers → Valladolid)',
+              fullDay: true,
+              weight: 1,
+              notes: notes || 'Regreso en transporte público todo el día.'
+            });
+          } else {
+            state.events.push({
+              id: `stay-shoot-${Date.now()}-${index}`,
+              date: dStr,
+              category: 'sit',
+              type: 'stay_shoot',
+              title: `Estancia / Rodaje SIT (07:00–19:00)`,
+              fullDay: true,
+              weight: 2,
+              notes: notes || 'Jornada intensiva de grabación de 07:00 a 19:00 (Peso x2 eventos).'
+            });
+          }
+        });
+
+        markUnsavedChanges();
+        closeModal('event-form-modal');
+        renderAll();
+        showToast(`Pack Viaje Granollers creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} estancia/rodaje x2 y Vuelta).`, 'success');
+        return;
+      }
 
       if (id) {
         // Actualizar existente
         const idx = state.events.findIndex(ev => ev.id === id);
         if (idx !== -1) {
-          state.events[idx] = { ...state.events[idx], date: startDate, category, type, title, fullDay, notes };
+          state.events[idx] = { ...state.events[idx], date: startDate, category, type, title, fullDay, weight, notes };
         }
         showToast('Bloque actualizado correctamente.', 'success');
       } else {
-        // Crear uno o un rango de días (ideal para viajes de varios días)
+        // Crear uno o un rango de días
         const datesToCreate = getDatesInRange(startDate, endDate || startDate);
         datesToCreate.forEach((dStr, index) => {
           state.events.push({
@@ -1474,6 +1622,7 @@
             type,
             title: datesToCreate.length > 1 ? `${title} (Día ${index + 1}/${datesToCreate.length})` : title,
             fullDay,
+            weight,
             notes
           });
         });
