@@ -723,15 +723,16 @@
     // Normaliza eventos de schedule.json para compatibilidad total
     function normalizeEventSchema(ev) {
       const normalized = { ...ev };
-      const text = `${normalized.title || ''} ${normalized.notes || ''}`.toLowerCase();
-      const mentionsCastroOrCouple = text.includes('castro') || text.includes('pareja') || text.includes('estancia');
+      const titleLower = (normalized.title || '').toLowerCase();
+      const notesLower = (normalized.notes || '').toLowerCase();
+      const mentionsCastroOrCouple = titleLower.includes('castro') || titleLower.includes('pareja') || titleLower.includes('estancia');
       const isHectorShoot =
-        (normalized.category === 'hector' && (normalized.type === 'shoot' || text.includes('rodaje') || text.includes('grabaci') || text.includes('santoña'))) ||
-        text.includes('rodaje héctor') ||
-        text.includes('rodaje hector');
+        normalized.category === 'hector' &&
+        normalized.type !== 'reel' &&
+        (normalized.type === 'shoot' || titleLower.includes('rodaje') || titleLower.includes('grabaci'));
       const isGranollersShoot =
         normalized.type === 'stay_shoot' ||
-        (normalized.category === 'sit' && (normalized.type === 'shoot' || text.includes('rodaje sit') || text.includes('estancia / rodaje')));
+        (normalized.category === 'sit' && normalized.type !== 'reel' && normalized.type !== 'long_video' && (normalized.type === 'shoot' || titleLower.includes('rodaje') || titleLower.includes('estancia')));
 
       if (isHectorShoot) {
         normalized.category = 'hector';
@@ -897,12 +898,11 @@
         );
       });
       const hasHectorSantoñaShoot = dayEvents.some(e => {
-        const t = `${e.title || ''} ${e.notes || ''}`.toLowerCase();
+        if (e.type === 'reel') return false;
+        const titleLower = (e.title || '').toLowerCase();
         return (
-          (e.category === 'hector' && (e.type === 'shoot' || t.includes('rodaje') || t.includes('santoña'))) ||
-          t.includes('rodaje héctor') ||
-          t.includes('rodaje hector') ||
-          t.includes('santoña')
+          e.type === 'shoot' ||
+          (e.category === 'hector' && (titleLower.includes('rodaje') || titleLower.includes('grabaci')))
         );
       });
       const travelEv = dayEvents.find(e => e.type === 'travel_full');
@@ -938,21 +938,6 @@
           topText: 'text-blue-200',
           dot: 'bg-blue-400',
           pill: 'Grabando'
-        };
-      }
-
-      if (hasHectorSantoñaShoot) {
-        return {
-          label: 'En Santoña grabando (Héctor)',
-          shortLabel: 'Santoña · Rodaje',
-          mobileCode: 'Stñ',
-          sub: 'Grabación mensual barbería / escuela en Santoña',
-          isValladolid: false,
-          cellTint: 'bg-blue-950/35',
-          topHalfBg: 'bg-blue-500/20 border-blue-500/30',
-          topText: 'text-blue-200',
-          dot: 'bg-blue-400',
-          pill: 'En Santoña'
         };
       }
 
