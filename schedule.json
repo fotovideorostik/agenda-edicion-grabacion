@@ -1,25 +1,7 @@
 {
-  "updatedAt": "2026-11-26T00:45:13.999Z",
+  "updatedAt": "2026-11-26T00:55:06.597Z",
   "owner": "Freelance Filmmaker & Editor (Valladolid)",
   "events": [
-    {
-      "id": "hector-reel-2026-11-02",
-      "date": "2026-11-02",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-02",
-      "date": "2026-11-02",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
     {
       "id": "sit-reel-2026-11-03",
       "date": "2026-11-03",
@@ -30,112 +12,40 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-11-03",
-      "date": "2026-11-03",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-03",
-      "date": "2026-11-03",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-reel-2026-11-04",
+      "id": "ev-1795654125598-0",
       "date": "2026-11-04",
       "category": "sit",
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
     },
     {
-      "id": "hector-reel-2026-11-04",
-      "date": "2026-11-04",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-04",
-      "date": "2026-11-04",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-reel-2026-11-05",
+      "id": "ev-1795654139461-0",
       "date": "2026-11-05",
       "category": "sit",
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
     },
     {
-      "id": "sit-long-edit-2026-11-05",
-      "date": "2026-11-05",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-reel-2026-11-06",
+      "id": "ev-1795654256057-0",
       "date": "2026-11-06",
       "category": "sit",
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": ""
     },
     {
-      "id": "sit-long-edit-2026-11-06",
-      "date": "2026-11-06",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-long-delivery-2026-11-06",
-      "date": "2026-11-06",
+      "id": "ev-1795654260145-0",
+      "date": "2026-11-07",
       "category": "sit",
-      "type": "long_video",
-      "title": "Entrega Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves."
-    },
-    {
-      "id": "hector-reel-2026-11-09",
-      "date": "2026-11-09",
-      "category": "hector",
       "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
+      "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-09",
-      "date": "2026-11-09",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
+      "notes": ""
     },
     {
       "id": "sit-reel-2026-11-10",
@@ -147,33 +57,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-11-10",
-      "date": "2026-11-10",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-10",
-      "date": "2026-11-10",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "trip-go-2026-10",
-      "date": "2026-11-10",
-      "category": "travel_shoot",
-      "type": "travel_full",
-      "title": "Viaje Valladolid ↔ Granollers (Ida)",
-      "fullDay": true,
-      "notes": "Desplazamiento en transporte público todo el día y preparación de equipo."
-    },
-    {
       "id": "sit-reel-2026-11-11",
       "date": "2026-11-11",
       "category": "sit",
@@ -181,33 +64,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-11-11",
-      "date": "2026-11-11",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-11",
-      "date": "2026-11-11",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "shoot-sit1-2026-10",
-      "date": "2026-11-11",
-      "category": "sit",
-      "type": "shoot",
-      "title": "Rodaje SIT Granollers (Día 1)",
-      "fullDay": true,
-      "notes": "Grabación en lote de vídeos diarios y vídeos largos de instalaciones AACC."
     },
     {
       "id": "sit-reel-2026-11-12",
@@ -219,76 +75,31 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-11-12",
-      "date": "2026-11-12",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "shoot-sit2-2026-10",
-      "date": "2026-11-12",
-      "category": "sit",
-      "type": "shoot",
-      "title": "Rodaje SIT Granollers (Día 2)",
-      "fullDay": true,
-      "notes": "Grabación técnica en obra/cliente y recursos B-Roll."
-    },
-    {
-      "id": "sit-reel-2026-11-13",
+      "id": "ev-1795654250175-0",
       "date": "2026-11-13",
       "category": "sit",
       "type": "reel",
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
     },
     {
-      "id": "sit-long-edit-2026-11-13",
-      "date": "2026-11-13",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-long-delivery-2026-11-13",
+      "id": "ev-1795654475123-0",
       "date": "2026-11-13",
       "category": "sit",
       "type": "long_video",
       "title": "Entrega Vídeo Largo SIT",
       "fullDay": false,
-      "notes": "Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
     },
     {
-      "id": "trip-back-2026-10",
-      "date": "2026-11-13",
-      "category": "travel_shoot",
-      "type": "travel_full",
-      "title": "Viaje Valladolid ↔ Granollers (Vuelta)",
-      "fullDay": true,
-      "notes": "Regreso en transporte público y descarga/backup de tarjetas."
-    },
-    {
-      "id": "hector-reel-2026-11-16",
-      "date": "2026-11-16",
-      "category": "hector",
+      "id": "ev-1795654264607-0",
+      "date": "2026-11-14",
+      "category": "sit",
       "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
+      "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-16",
-      "date": "2026-11-16",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
+      "notes": ""
     },
     {
       "id": "sit-reel-2026-11-17",
@@ -300,24 +111,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-11-17",
-      "date": "2026-11-17",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-17",
-      "date": "2026-11-17",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-11-18",
       "date": "2026-11-18",
       "category": "sit",
@@ -325,24 +118,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-11-18",
-      "date": "2026-11-18",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-18",
-      "date": "2026-11-18",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
     },
     {
       "id": "sit-reel-2026-11-19",
@@ -354,24 +129,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-11-19",
-      "date": "2026-11-19",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "shoot-hector-2026-10",
-      "date": "2026-11-19",
-      "category": "hector",
-      "type": "shoot",
-      "title": "Rodaje Héctor Loza (Barbería)",
-      "fullDay": true,
-      "notes": "Grabación en lote de Reels mensuales y contenido promocional Escuela de Barbería."
-    },
-    {
       "id": "sit-reel-2026-11-20",
       "date": "2026-11-20",
       "category": "sit",
@@ -379,24 +136,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-long-edit-2026-11-20",
-      "date": "2026-11-20",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-long-delivery-2026-11-20",
-      "date": "2026-11-20",
-      "category": "sit",
-      "type": "long_video",
-      "title": "Entrega Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves."
     },
     {
       "id": "sit-reel-2026-11-21",
@@ -408,33 +147,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-11-21",
-      "date": "2026-11-21",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-11-23",
-      "date": "2026-11-23",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-23",
-      "date": "2026-11-23",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-11-24",
       "date": "2026-11-24",
       "category": "sit",
@@ -444,22 +156,13 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-11-24",
+      "id": "ev-1795654450531-0",
       "date": "2026-11-24",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
+      "category": "sit",
+      "type": "long_video",
+      "title": "Entrega Vídeo Largo SIT",
       "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-24",
-      "date": "2026-11-24",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
+      "notes": "Grabación en lote de vídeos diarios y vídeo largo en Granollers."
     },
     {
       "id": "sit-reel-2026-11-25",
@@ -471,22 +174,13 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-11-25",
+      "id": "ev-1795654498859-0",
       "date": "2026-11-25",
       "category": "hector",
       "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
+      "title": "3 Reels Héctor Loza (Barbería)",
       "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-25",
-      "date": "2026-11-25",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
+      "notes": "Grabación mensual en barbería / escuela de barbería."
     },
     {
       "id": "sit-reel-2026-11-26",
@@ -498,15 +192,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-11-26",
-      "date": "2026-11-26",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-11-27",
       "date": "2026-11-27",
       "category": "sit",
@@ -514,24 +199,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-long-edit-2026-11-27",
-      "date": "2026-11-27",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-long-delivery-2026-11-27",
-      "date": "2026-11-27",
-      "category": "sit",
-      "type": "long_video",
-      "title": "Entrega Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves."
     },
     {
       "id": "sit-reel-2026-11-28",
@@ -543,42 +210,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-11-28",
-      "date": "2026-11-28",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "couple-2-2026-10",
-      "date": "2026-11-28",
-      "category": "personal",
-      "type": "couple_full",
-      "title": "Visita Pareja (Día completo)",
-      "fullDay": true,
-      "notes": "Día personal bloqueado completo."
-    },
-    {
-      "id": "hector-reel-2026-11-30",
-      "date": "2026-11-30",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-11-30",
-      "date": "2026-11-30",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-12-01",
       "date": "2026-12-01",
       "category": "sit",
@@ -586,24 +217,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-12-01",
-      "date": "2026-12-01",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-01",
-      "date": "2026-12-01",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
     },
     {
       "id": "sit-reel-2026-12-02",
@@ -615,24 +228,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-12-02",
-      "date": "2026-12-02",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-02",
-      "date": "2026-12-02",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-12-03",
       "date": "2026-12-03",
       "category": "sit",
@@ -640,15 +235,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-long-edit-2026-12-03",
-      "date": "2026-12-03",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
     },
     {
       "id": "sit-reel-2026-12-04",
@@ -660,24 +246,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-12-04",
-      "date": "2026-12-04",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-long-delivery-2026-12-04",
-      "date": "2026-12-04",
-      "category": "sit",
-      "type": "long_video",
-      "title": "Entrega Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves."
-    },
-    {
       "id": "sit-reel-2026-12-05",
       "date": "2026-12-05",
       "category": "sit",
@@ -685,42 +253,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-long-edit-2026-12-05",
-      "date": "2026-12-05",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "couple-1-2026-11",
-      "date": "2026-12-05",
-      "category": "personal",
-      "type": "couple_full",
-      "title": "Visita Pareja (Día completo)",
-      "fullDay": true,
-      "notes": "Día personal bloqueado completo. Sin disponibilidad para rodajes ni entregas."
-    },
-    {
-      "id": "hector-reel-2026-12-07",
-      "date": "2026-12-07",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-07",
-      "date": "2026-12-07",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
     },
     {
       "id": "sit-reel-2026-12-08",
@@ -732,33 +264,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-12-08",
-      "date": "2026-12-08",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-08",
-      "date": "2026-12-08",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "trip-go-2026-11",
-      "date": "2026-12-08",
-      "category": "travel_shoot",
-      "type": "travel_full",
-      "title": "Viaje Valladolid ↔ Granollers (Ida)",
-      "fullDay": true,
-      "notes": "Desplazamiento en transporte público todo el día y preparación de equipo."
-    },
-    {
       "id": "sit-reel-2026-12-09",
       "date": "2026-12-09",
       "category": "sit",
@@ -766,33 +271,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-12-09",
-      "date": "2026-12-09",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-09",
-      "date": "2026-12-09",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "shoot-sit1-2026-11",
-      "date": "2026-12-09",
-      "category": "sit",
-      "type": "shoot",
-      "title": "Rodaje SIT Granollers (Día 1)",
-      "fullDay": true,
-      "notes": "Grabación en lote de vídeos diarios y vídeos largos de instalaciones AACC."
     },
     {
       "id": "sit-reel-2026-12-10",
@@ -804,24 +282,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-12-10",
-      "date": "2026-12-10",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "shoot-sit2-2026-11",
-      "date": "2026-12-10",
-      "category": "sit",
-      "type": "shoot",
-      "title": "Rodaje SIT Granollers (Día 2)",
-      "fullDay": true,
-      "notes": "Grabación técnica en obra/cliente y recursos B-Roll."
-    },
-    {
       "id": "sit-reel-2026-12-11",
       "date": "2026-12-11",
       "category": "sit",
@@ -829,33 +289,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-long-edit-2026-12-11",
-      "date": "2026-12-11",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-long-delivery-2026-12-11",
-      "date": "2026-12-11",
-      "category": "sit",
-      "type": "long_video",
-      "title": "Entrega Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves."
-    },
-    {
-      "id": "trip-back-2026-11",
-      "date": "2026-12-11",
-      "category": "travel_shoot",
-      "type": "travel_full",
-      "title": "Viaje Valladolid ↔ Granollers (Vuelta)",
-      "fullDay": true,
-      "notes": "Regreso en transporte público y descarga/backup de tarjetas."
     },
     {
       "id": "sit-reel-2026-12-12",
@@ -867,33 +300,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-12-12",
-      "date": "2026-12-12",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-12-14",
-      "date": "2026-12-14",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-14",
-      "date": "2026-12-14",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-12-15",
       "date": "2026-12-15",
       "category": "sit",
@@ -901,24 +307,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-12-15",
-      "date": "2026-12-15",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-15",
-      "date": "2026-12-15",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
     },
     {
       "id": "sit-reel-2026-12-16",
@@ -930,24 +318,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-12-16",
-      "date": "2026-12-16",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-16",
-      "date": "2026-12-16",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-12-17",
       "date": "2026-12-17",
       "category": "sit",
@@ -955,24 +325,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-long-edit-2026-12-17",
-      "date": "2026-12-17",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "shoot-hector-2026-11",
-      "date": "2026-12-17",
-      "category": "hector",
-      "type": "shoot",
-      "title": "Rodaje Héctor Loza (Barbería)",
-      "fullDay": true,
-      "notes": "Grabación en lote de Reels mensuales y contenido promocional Escuela de Barbería."
     },
     {
       "id": "sit-reel-2026-12-18",
@@ -984,24 +336,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-12-18",
-      "date": "2026-12-18",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-long-delivery-2026-12-18",
-      "date": "2026-12-18",
-      "category": "sit",
-      "type": "long_video",
-      "title": "Entrega Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves."
-    },
-    {
       "id": "sit-reel-2026-12-19",
       "date": "2026-12-19",
       "category": "sit",
@@ -1009,33 +343,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-long-edit-2026-12-19",
-      "date": "2026-12-19",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-12-21",
-      "date": "2026-12-21",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-21",
-      "date": "2026-12-21",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
     },
     {
       "id": "sit-reel-2026-12-22",
@@ -1047,24 +354,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-12-22",
-      "date": "2026-12-22",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-22",
-      "date": "2026-12-22",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-12-23",
       "date": "2026-12-23",
       "category": "sit",
@@ -1072,24 +361,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-12-23",
-      "date": "2026-12-23",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-23",
-      "date": "2026-12-23",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
     },
     {
       "id": "sit-reel-2026-12-24",
@@ -1101,15 +372,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-12-24",
-      "date": "2026-12-24",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-12-25",
       "date": "2026-12-25",
       "category": "sit",
@@ -1117,24 +379,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-long-edit-2026-12-25",
-      "date": "2026-12-25",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "sit-long-delivery-2026-12-25",
-      "date": "2026-12-25",
-      "category": "sit",
-      "type": "long_video",
-      "title": "Entrega Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Entrega final del vídeo largo semanal tras la edición acumulada de viernes a jueves."
     },
     {
       "id": "sit-reel-2026-12-26",
@@ -1146,42 +390,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "sit-long-edit-2026-12-26",
-      "date": "2026-12-26",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
-      "id": "couple-2-2026-11",
-      "date": "2026-12-26",
-      "category": "personal",
-      "type": "couple_full",
-      "title": "Visita Pareja (Día completo)",
-      "fullDay": true,
-      "notes": "Día personal bloqueado completo."
-    },
-    {
-      "id": "hector-reel-2026-12-28",
-      "date": "2026-12-28",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-28",
-      "date": "2026-12-28",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-12-29",
       "date": "2026-12-29",
       "category": "sit",
@@ -1189,24 +397,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "hector-reel-2026-12-29",
-      "date": "2026-12-29",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-29",
-      "date": "2026-12-29",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
     },
     {
       "id": "sit-reel-2026-12-30",
@@ -1218,24 +408,6 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
-      "id": "hector-reel-2026-12-30",
-      "date": "2026-12-30",
-      "category": "hector",
-      "type": "reel",
-      "title": "Reel Héctor Loza (Barbería)",
-      "fullDay": false,
-      "notes": "Publicación / Entrega semanal (Lunes a Miércoles) para Héctor Loza."
-    },
-    {
-      "id": "sit-long-edit-2026-12-30",
-      "date": "2026-12-30",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
-    },
-    {
       "id": "sit-reel-2026-12-31",
       "date": "2026-12-31",
       "category": "sit",
@@ -1243,15 +415,6 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
-    },
-    {
-      "id": "sit-long-edit-2026-12-31",
-      "date": "2026-12-31",
-      "category": "editing",
-      "type": "editing",
-      "title": "Edición Vídeo Largo SIT",
-      "fullDay": false,
-      "notes": "Bloque de montaje continuo (Viernes a Jueves) para el vídeo largo semanal de SIT Granollers."
     }
   ]
 }
