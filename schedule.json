@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T01:33:11.590Z",
+  "updatedAt": "2026-11-26T01:48:25.499Z",
   "owner": "Freelance Filmmaker & Editor (Valladolid)",
   "events": [
     {
@@ -486,6 +486,16 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+    },
+    {
+      "id": "ev-1795657687398-0",
+      "date": "2026-12-16",
+      "category": "travel_shoot",
+      "type": "shoot",
+      "title": "Viaje Santoña - Valladolid",
+      "fullDay": true,
+      "weight": 1,
+      "notes": "Viaje de Santoña a Valladolid"
     },
     {
       "id": "sit-reel-2026-12-17",
