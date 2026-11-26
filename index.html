@@ -423,27 +423,19 @@
 
         <!-- Presets rápidos en 1 clic -->
         <div>
-          <label class="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">Presets rápidos (Día completo / Viaje)</label>
-          <div class="grid grid-cols-2 gap-1.5">
-            <button type="button" onclick="applyQuickPreset('granollers_trip_pack')" class="col-span-2 text-left px-3 py-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-orange-500/20 hover:from-purple-500/30 hover:to-orange-500/30 border border-purple-500/40 text-xs text-purple-100 font-semibold transition flex items-center justify-between">
-              <span>🚆🎥 Pack Viaje Granollers (Ida + Estancia Rodaje + Vuelta)</span>
-              <span class="text-[10px] font-mono bg-purple-500/30 px-1.5 py-0.5 rounded text-purple-200">RANGO FECHAS</span>
+          <label class="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">Presets rápidos de viaje y rodaje</label>
+          <div class="grid grid-cols-1 gap-2">
+            <button type="button" onclick="applyQuickPreset('granollers_trip_pack')" class="text-left px-3 py-2.5 rounded-xl bg-gradient-to-r from-purple-500/20 to-emerald-500/20 hover:from-purple-500/30 hover:to-emerald-500/30 border border-emerald-500/40 text-xs text-emerald-100 font-semibold transition flex items-center justify-between gap-2">
+              <span>🚆🎥 Viaje Granollers (Ida + Estancia Rodaje 07h–19h x2 + Vuelta)</span>
+              <span class="shrink-0 text-[10px] font-mono bg-emerald-500/30 px-1.5 py-0.5 rounded text-emerald-200">RANGO</span>
             </button>
-            <button type="button" onclick="applyQuickPreset('castro_trip_pack')" class="col-span-2 text-left px-3 py-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-red-500/20 hover:from-purple-500/30 hover:to-red-500/30 border border-red-500/40 text-xs text-red-100 font-semibold transition flex items-center justify-between">
-              <span>❤️🚆 Pack Viaje Castro Urdiales (Ida + Estancia Pareja + Vuelta)</span>
-              <span class="text-[10px] font-mono bg-red-500/30 px-1.5 py-0.5 rounded text-red-200">RANGO FECHAS</span>
+            <button type="button" onclick="applyQuickPreset('castro_trip_pack')" class="text-left px-3 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/45 text-xs text-red-100 font-semibold transition flex items-center justify-between gap-2">
+              <span>❤️🚆 Viaje Castro Urdiales (Ida + Estancia en Castro + Vuelta)</span>
+              <span class="shrink-0 text-[10px] font-mono bg-red-500/30 px-1.5 py-0.5 rounded text-red-200">RANGO</span>
             </button>
-            <button type="button" onclick="applyQuickPreset('stay_shoot_intensive')" class="text-left px-2.5 py-1.5 rounded-lg bg-orange-500/15 hover:bg-orange-500/25 border border-orange-500/40 text-[11px] text-orange-200 font-medium transition truncate">
-              🎬 Estancia/Rodaje (07h–19h · x2)
-            </button>
-            <button type="button" onclick="applyQuickPreset('stay_couple_castro')" class="text-left px-2.5 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/25 border border-red-500/40 text-[11px] text-red-200 font-medium transition truncate">
-              🏡 Estancia Castro Urdiales (Peso 0)
-            </button>
-            <button type="button" onclick="applyQuickPreset('travel_valladolid')" class="text-left px-2.5 py-1.5 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-[11px] text-purple-200 font-medium transition truncate">
-              🚆 Viaje Ida / Vuelta (Día 100%)
-            </button>
-            <button type="button" onclick="applyQuickPreset('shoot_hector')" class="text-left px-2.5 py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/40 text-[11px] text-blue-200 font-medium transition truncate">
-              ✂️ Rodaje Héctor Loza
+            <button type="button" onclick="applyQuickPreset('shoot_hector')" class="text-left px-3 py-2 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/40 text-xs text-blue-200 font-medium transition flex items-center justify-between gap-2">
+              <span>✂️ Jornada Rodaje Héctor Loza (Día completo)</span>
+              <span class="shrink-0 text-[10px] font-mono bg-blue-500/30 px-1.5 py-0.5 rounded text-blue-200">1 DÍA</span>
             </button>
           </div>
         </div>
@@ -1585,25 +1577,7 @@
       endDateLabel.textContent = 'Fecha Fin (Opcional)';
       endDateInput.required = false;
 
-      if (presetKey === 'stay_shoot_intensive') {
-        catEl.value = 'sit';
-        typeEl.value = 'stay_shoot';
-        titleEl.value = 'Estancia / Rodaje SIT (07:00–19:00)';
-        fullDayEl.checked = true;
-        notesEl.value = 'Jornada intensiva de grabación en Granollers de 07:00 a 19:00 (Peso equivalente a 2 eventos).';
-      } else if (presetKey === 'stay_couple_castro') {
-        catEl.value = 'personal';
-        typeEl.value = 'stay_couple';
-        titleEl.value = 'Estancia en Castro Urdiales';
-        fullDayEl.checked = false;
-        notesEl.value = 'Estancia con mi pareja en Castro Urdiales. Marcado en rojo sin peso extra en el volumen de trabajo.';
-      } else if (presetKey === 'travel_valladolid') {
-        catEl.value = 'travel_shoot';
-        typeEl.value = 'travel_full';
-        titleEl.value = 'Viaje Valladolid ↔ Granollers (Día completo)';
-        fullDayEl.checked = true;
-        notesEl.value = 'Desplazamiento en transporte público. Jornada completa ocupada.';
-      } else if (presetKey === 'shoot_hector') {
+      if (presetKey === 'shoot_hector') {
         catEl.value = 'hector';
         typeEl.value = 'shoot';
         titleEl.value = 'Rodaje Héctor Loza (Día completo)';
@@ -1730,147 +1704,10 @@
         renderAll();
         showToast(
           isCastro
-            ? `Pack Viaje Castro Urdiales creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} estancia sin peso laboral y Vuelta).`
-            : `Pack Viaje Granollers creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} estancia/rodaje x2 y Vuelta).`,
+            ? `Viaje Castro Urdiales creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} Estancia en Castro y Vuelta).`
+            : `Viaje Granollers creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} Estancia/Rodaje x2 y Vuelta).`,
           'success'
         );
-        return;
-      }
-
-      // Restaurar modo evento individual si se elige otro preset
-      isTripPackEl.value = 'false';
-      tripHintEl.classList.add('hidden');
-      standardFieldsEl.classList.remove('hidden');
-      dateLabel.textContent = 'Fecha Inicio';
-      endDateLabel.textContent = 'Fecha Fin (Opcional)';
-      endDateInput.required = false;
-
-      if (presetKey === 'stay_shoot_intensive') {
-        catEl.value = 'sit';
-        typeEl.value = 'stay_shoot';
-        titleEl.value = 'Estancia / Rodaje SIT (07:00–19:00)';
-        fullDayEl.checked = true;
-        notesEl.value = 'Jornada intensiva de grabación en Granollers de 07:00 a 19:00 (Peso equivalente a 2 eventos).';
-      } else if (presetKey === 'travel_valladolid') {
-        catEl.value = 'travel_shoot';
-        typeEl.value = 'travel_full';
-        titleEl.value = 'Viaje Valladolid ↔ Granollers (Día completo)';
-        fullDayEl.checked = true;
-        notesEl.value = 'Desplazamiento en transporte público. Jornada completa ocupada.';
-      } else if (presetKey === 'shoot_hector') {
-        catEl.value = 'hector';
-        typeEl.value = 'shoot';
-        titleEl.value = 'Rodaje Héctor Loza (Día completo)';
-        fullDayEl.checked = true;
-        notesEl.value = 'Grabación mensual en barbería / escuela de barbería.';
-      } else if (presetKey === 'couple_visit') {
-        catEl.value = 'personal';
-        typeEl.value = 'couple_full';
-        titleEl.value = 'Visita Pareja (Día completo)';
-        fullDayEl.checked = true;
-        notesEl.value = 'Día personal bloqueado al 100%.';
-      }
-    }
-
-    function autoSuggestEventTitle() {
-      const cat = document.getElementById('ev-category').value;
-      const type = document.getElementById('ev-type').value;
-      const titleInput = document.getElementById('ev-title');
-      const fullDayCheck = document.getElementById('ev-full-day');
-
-      if (type === 'stay_shoot') {
-        titleInput.value = 'Estancia / Rodaje SIT (07:00–19:00)';
-        fullDayCheck.checked = true;
-      } else if (type === 'travel_full') {
-        titleInput.value = 'Viaje Valladolid ↔ Granollers (Día completo)';
-        fullDayCheck.checked = true;
-      } else if (type === 'couple_full' || cat === 'personal') {
-        titleInput.value = 'Visita Pareja (Día completo)';
-        fullDayCheck.checked = true;
-      } else if (cat === 'sit' && type === 'reel') {
-        titleInput.value = 'Vídeo Diario SIT Granollers';
-        fullDayCheck.checked = false;
-      } else if (cat === 'sit' && type === 'long_video') {
-        titleInput.value = 'Entrega Vídeo Largo SIT';
-        fullDayCheck.checked = false;
-      } else if (cat === 'sit' && type === 'shoot') {
-        titleInput.value = 'Rodaje SIT Granollers (Día completo)';
-        fullDayCheck.checked = true;
-      } else if (cat === 'hector' && type === 'reel') {
-        titleInput.value = 'Reel Héctor Loza (Barbería)';
-        fullDayCheck.checked = false;
-      } else if (cat === 'hector' && type === 'shoot') {
-        titleInput.value = 'Rodaje Héctor Loza (Día completo)';
-        fullDayCheck.checked = true;
-      } else if (cat === 'editing') {
-        titleInput.value = 'Edición Vídeo Largo SIT';
-        fullDayCheck.checked = false;
-      }
-    }
-
-    function handleSaveEventForm(e) {
-      e.preventDefault();
-      if (!state.isAdmin) return;
-
-      const id = document.getElementById('ev-id').value;
-      const isTripPack = document.getElementById('ev-is-trip-pack').value === 'true';
-      const startDate = document.getElementById('ev-date').value;
-      const endDate = document.getElementById('ev-end-date').value;
-      const category = document.getElementById('ev-category').value;
-      const type = document.getElementById('ev-type').value;
-      const title = document.getElementById('ev-title').value.trim();
-      const fullDay = document.getElementById('ev-full-day').checked;
-      const notes = document.getElementById('ev-notes').value.trim();
-      const weight = type === 'stay_shoot' ? 2 : 1;
-
-      if (isTripPack) {
-        const datesToCreate = getDatesInRange(startDate, endDate || startDate);
-        if (datesToCreate.length < 2) {
-          showToast('Selecciona al menos 2 días (Ida y Vuelta) para el Pack Viaje Granollers.', 'error');
-          return;
-        }
-
-        datesToCreate.forEach((dStr, index) => {
-          if (index === 0) {
-            state.events.push({
-              id: `trip-ida-${Date.now()}-${index}`,
-              date: dStr,
-              category: 'travel_shoot',
-              type: 'travel_full',
-              title: 'Viaje de Ida (Valladolid → Granollers)',
-              fullDay: true,
-              weight: 1,
-              notes: notes || 'Desplazamiento en transporte público todo el día.'
-            });
-          } else if (index === datesToCreate.length - 1) {
-            state.events.push({
-              id: `trip-vuelta-${Date.now()}-${index}`,
-              date: dStr,
-              category: 'travel_shoot',
-              type: 'travel_full',
-              title: 'Viaje de Vuelta (Granollers → Valladolid)',
-              fullDay: true,
-              weight: 1,
-              notes: notes || 'Regreso en transporte público todo el día.'
-            });
-          } else {
-            state.events.push({
-              id: `stay-shoot-${Date.now()}-${index}`,
-              date: dStr,
-              category: 'sit',
-              type: 'stay_shoot',
-              title: `Estancia / Rodaje SIT (07:00–19:00)`,
-              fullDay: true,
-              weight: 2,
-              notes: notes || 'Jornada intensiva de grabación de 07:00 a 19:00 (Peso x2 eventos).'
-            });
-          }
-        });
-
-        markUnsavedChanges();
-        closeModal('event-form-modal');
-        renderAll();
-        showToast(`Pack Viaje Granollers creado (${datesToCreate.length} días: Ida, ${Math.max(0, datesToCreate.length - 2)} estancia/rodaje x2 y Vuelta).`, 'success');
         return;
       }
 
