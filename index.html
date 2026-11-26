@@ -280,7 +280,8 @@
       <!-- Leyenda Visual -->
       <div class="pt-3 border-t border-zinc-800/80 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-zinc-400">
         <span class="font-mono uppercase text-zinc-500">Leyenda:</span>
-        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-orange-500"></span> SIT Granollers (Naranja · Reels Mar–Sáb / Largo Vie)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-orange-500"></span> SIT Granollers (Naranja · Reels Mar–Sáb)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-orange-800 border border-orange-600/60"></span> Entrega Vídeo Largo SIT (Naranja oscuro · Vie)</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Rodaje / Estancia Granollers (Verde · 07h–19h x2)</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-blue-500"></span> Héctor Loza (Azul · Reels Lun–Mié)</div>
         <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-500"></span> Viajes Trabajo (Morado · Valladolid ↔ Granollers)</div>
@@ -702,6 +703,12 @@
         dot: 'bg-orange-400',
         cardBorder: 'border-l-orange-400'
       },
+      sit_long: {
+        label: 'SIT Granollers · Largo',
+        badgeBg: 'bg-orange-950/75 text-orange-300/85 border-orange-700/50',
+        dot: 'bg-orange-600',
+        cardBorder: 'border-l-orange-700'
+      },
       hector: {
         label: 'Héctor Loza',
         badgeBg: 'bg-blue-500/15 text-blue-300 border-blue-500/35',
@@ -740,6 +747,9 @@
     function getEventStyle(ev) {
       if (ev.type === 'stay_shoot' || (ev.category === 'sit' && ev.type === 'shoot')) {
         return CATEGORY_STYLES.shoot_granollers;
+      }
+      if (ev.category === 'sit' && ev.type === 'long_video') {
+        return CATEGORY_STYLES.sit_long;
       }
       if (ev.category === 'personal' || ev.type === 'stay_couple' || ev.type === 'couple_full') {
         return CATEGORY_STYLES.personal;
