@@ -1702,10 +1702,10 @@
 
       const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`;
 
-      try {
-        // 1. Obtener SHA actual del archivo si ya existe en el repositorio
-        let currentSha = null;
-        const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(cfg.branch)}`, {
+      // Función auxiliar para obtener siempre el SHA más reciente sin caché de navegador/CDN
+      async function fetchLatestSha() {
+        const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`, {
+          cache: 'no-store',
           headers: {
             'Authorization': `Bearer ${cfg.token}`,
             'Accept': 'application/vnd.github+json'
@@ -1718,10 +1718,13 @@
 
         if (getRes.ok) {
           const fileData = await getRes.json();
-          currentSha = fileData.sha;
+          return fileData.sha;
         }
+        return null;
+      }
 
-        // 2. Preparar contenido JSON ordenado y codificado en Base64 UTF-8
+      try {
+        // 1. Preparar contenido JSON ordenado y codificado en Base64 UTF-8
         const payloadObj = {
           updatedAt: new Date().toISOString(),
           owner: 'Freelance Filmmaker & Editor (Valladolid)',
@@ -1730,25 +1733,37 @@
         const jsonString = JSON.stringify(payloadObj, null, 2);
         const base64Content = utf8ToBase64(jsonString);
 
-        // 3. Ejecutar PUT para crear o actualizar schedule.json en GitHub
-        const putBody = {
-          message: isInitialCreation
-            ? 'Inicialización de schedule.json con agenda base'
-            : `Actualización de agenda (${new Date().toLocaleDateString('es-ES')})`,
-          content: base64Content,
-          branch: cfg.branch
-        };
-        if (currentSha) putBody.sha = currentSha;
+        // 2. Obtener SHA actual fresco y ejecutar PUT (con 1 reintento automático ante conflicto 409)
+        let currentSha = await fetchLatestSha();
 
-        const putRes = await fetch(apiUrl, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${cfg.token}`,
-            'Accept': 'application/vnd.github+json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(putBody)
-        });
+        const executePut = async (shaToUse) => {
+          const putBody = {
+            message: isInitialCreation
+              ? 'Inicialización de schedule.json con agenda base'
+              : `Actualización de agenda (${new Date().toLocaleDateString('es-ES')})`,
+            content: base64Content,
+            branch: cfg.branch
+          };
+          if (shaToUse) putBody.sha = shaToUse;
+
+          return fetch(apiUrl, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${cfg.token}`,
+              'Accept': 'application/vnd.github+json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(putBody)
+          });
+        };
+
+        let putRes = await executePut(currentSha);
+
+        // Si GitHub responde 409 (SHA desactualizado por caché), volvemos a pedir el SHA fresco y reintentamos
+        if (putRes.status === 409) {
+          currentSha = await fetchLatestSha();
+          putRes = await executePut(currentSha);
+        }
 
         if (!putRes.ok) {
           const errData = await putRes.json();
