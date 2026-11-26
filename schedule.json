@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T01:14:50.359Z",
+  "updatedAt": "2026-11-26T01:31:57.592Z",
   "owner": "Freelance Filmmaker & Editor (Valladolid)",
   "events": [
     {
@@ -373,6 +373,16 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
+      "id": "trip-ida-1795656696900-0",
+      "date": "2026-12-09",
+      "category": "personal",
+      "type": "travel_full",
+      "title": "Viaje de Ida (Valladolid → Castro Urdiales)",
+      "fullDay": true,
+      "weight": 1,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+    },
+    {
       "id": "sit-reel-2026-12-10",
       "date": "2026-12-10",
       "category": "sit",
@@ -380,6 +390,16 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+    },
+    {
+      "id": "stay-castro-1795656696900-1",
+      "date": "2026-12-10",
+      "category": "personal",
+      "type": "stay_couple",
+      "title": "Estancia en Castro Urdiales",
+      "fullDay": false,
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
     },
     {
       "id": "sit-reel-2026-12-11",
@@ -391,6 +411,16 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
+      "id": "stay-castro-1795656696900-2",
+      "date": "2026-12-11",
+      "category": "personal",
+      "type": "stay_couple",
+      "title": "Estancia en Castro Urdiales",
+      "fullDay": false,
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+    },
+    {
       "id": "sit-reel-2026-12-12",
       "date": "2026-12-12",
       "category": "sit",
@@ -400,6 +430,36 @@
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
     },
     {
+      "id": "stay-castro-1795656696900-3",
+      "date": "2026-12-12",
+      "category": "personal",
+      "type": "stay_couple",
+      "title": "Estancia en Castro Urdiales",
+      "fullDay": false,
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+    },
+    {
+      "id": "stay-castro-1795656696900-4",
+      "date": "2026-12-13",
+      "category": "personal",
+      "type": "stay_couple",
+      "title": "Estancia en Castro Urdiales",
+      "fullDay": false,
+      "weight": 0,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+    },
+    {
+      "id": "trip-vuelta-1795656696900-5",
+      "date": "2026-12-14",
+      "category": "personal",
+      "type": "travel_full",
+      "title": "Viaje de Vuelta (Castro Urdiales → Valladolid)",
+      "fullDay": true,
+      "weight": 1,
+      "notes": "Viaje Valladolid ↔ Castro Urdiales para visitar a mi pareja."
+    },
+    {
       "id": "sit-reel-2026-12-15",
       "date": "2026-12-15",
       "category": "sit",
@@ -407,6 +467,16 @@
       "title": "Vídeo Diario SIT Granollers",
       "fullDay": false,
       "notes": "Publicación / Entrega vídeo diario (Martes a Sábado) para SIT Granollers."
+    },
+    {
+      "id": "ev-1795656707903-0",
+      "date": "2026-12-15",
+      "category": "hector",
+      "type": "shoot",
+      "title": "Rodaje Héctor Loza (Día completo)",
+      "fullDay": true,
+      "weight": 1,
+      "notes": "Grabación mensual en barbería / escuela de barbería."
     },
     {
       "id": "sit-reel-2026-12-16",
