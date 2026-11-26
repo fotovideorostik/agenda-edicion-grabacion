@@ -725,19 +725,30 @@
       const normalized = { ...ev };
       const text = `${normalized.title || ''} ${normalized.notes || ''}`.toLowerCase();
       const mentionsCastroOrCouple = text.includes('castro') || text.includes('pareja') || text.includes('estancia');
+      const isHectorShoot =
+        (normalized.category === 'hector' && (normalized.type === 'shoot' || text.includes('rodaje') || text.includes('grabaci') || text.includes('santoña'))) ||
+        text.includes('rodaje héctor') ||
+        text.includes('rodaje hector');
+      const isGranollersShoot =
+        normalized.type === 'stay_shoot' ||
+        (normalized.category === 'sit' && (normalized.type === 'shoot' || text.includes('rodaje sit') || text.includes('estancia / rodaje')));
 
-      if (normalized.type === 'stay_couple' || (mentionsCastroOrCouple && normalized.type !== 'travel_full' && normalized.type !== 'stay_shoot' && normalized.category !== 'sit')) {
+      if (isHectorShoot) {
+        normalized.category = 'hector';
+        normalized.type = 'shoot';
+        normalized.fullDay = true;
+        if (typeof normalized.weight !== 'number') normalized.weight = 1;
+      } else if (isGranollersShoot) {
+        normalized.category = 'sit';
+        normalized.type = 'stay_shoot';
+        normalized.fullDay = true;
+        normalized.weight = 2;
+      } else if (normalized.type === 'stay_couple' || (mentionsCastroOrCouple && normalized.type !== 'travel_full' && normalized.type !== 'stay_shoot' && normalized.category !== 'sit')) {
         normalized.type = 'stay_couple';
         normalized.category = 'personal';
         normalized.weight = 0;
         normalized.fullDay = false;
         if (!normalized.title) normalized.title = 'Estancia en Castro Urdiales';
-      } else if (normalized.type === 'stay_shoot') {
-        normalized.weight = 2;
-        normalized.fullDay = true;
-      } else if (normalized.type === 'shoot' && normalized.category === 'hector') {
-        normalized.fullDay = true;
-        if (typeof normalized.weight !== 'number') normalized.weight = 1;
       }
       return normalized;
     }
@@ -876,15 +887,24 @@
      * Móvil: Libre (Valladolid), Grnll, Stñ, Cstr, Viaje
      */
     function getDayLocationState(dayEvents, dateStr = null) {
-      const hasGranollersShoot = dayEvents.some(e =>
-        e.type === 'stay_shoot' ||
-        (e.category === 'sit' && e.type === 'shoot') ||
-        (e.title || '').toLowerCase().includes('rodaje sit')
-      );
-      const hasHectorSantoñaShoot = dayEvents.some(e =>
-        (e.category === 'hector' && e.type === 'shoot') ||
-        (e.title || '').toLowerCase().includes('santoña')
-      );
+      const hasGranollersShoot = dayEvents.some(e => {
+        const t = `${e.title || ''} ${e.notes || ''}`.toLowerCase();
+        return (
+          e.type === 'stay_shoot' ||
+          (e.category === 'sit' && (e.type === 'shoot' || t.includes('rodaje'))) ||
+          t.includes('rodaje sit') ||
+          t.includes('estancia / rodaje')
+        );
+      });
+      const hasHectorSantoñaShoot = dayEvents.some(e => {
+        const t = `${e.title || ''} ${e.notes || ''}`.toLowerCase();
+        return (
+          (e.category === 'hector' && (e.type === 'shoot' || t.includes('rodaje') || t.includes('santoña'))) ||
+          t.includes('rodaje héctor') ||
+          t.includes('rodaje hector') ||
+          t.includes('santoña')
+        );
+      });
       const travelEv = dayEvents.find(e => e.type === 'travel_full');
       const hasCastroStay = dayEvents.some(e =>
         e.type === 'stay_couple' ||
@@ -893,8 +913,8 @@
 
       if (hasGranollersShoot) {
         return {
-          label: 'En Granollers grabando',
-          shortLabel: 'Granollers · Rodaje',
+          label: 'Granollers · Grabando',
+          shortLabel: 'Granollers · Grabando',
           mobileCode: 'Grnll',
           sub: 'Jornada de grabación en Granollers (07:00–19:00)',
           isValladolid: false,
@@ -902,7 +922,22 @@
           topHalfBg: 'bg-emerald-500/20 border-emerald-500/30',
           topText: 'text-emerald-200',
           dot: 'bg-emerald-400',
-          pill: 'En Granollers'
+          pill: 'Grabando'
+        };
+      }
+
+      if (hasHectorSantoñaShoot) {
+        return {
+          label: 'Santoña · Grabando',
+          shortLabel: 'Santoña · Grabando',
+          mobileCode: 'Stñ',
+          sub: 'Grabación mensual con Héctor Loza en Santoña',
+          isValladolid: false,
+          cellTint: 'bg-blue-950/35',
+          topHalfBg: 'bg-blue-500/20 border-blue-500/30',
+          topText: 'text-blue-200',
+          dot: 'bg-blue-400',
+          pill: 'Grabando'
         };
       }
 
@@ -1493,7 +1528,9 @@
       locBadge.className = `px-2.5 py-1 rounded-full text-[11px] font-semibold border shrink-0 ${
         locState.isValladolid
           ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-          : 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30'
+          : locState.pill === 'Grabando'
+            ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+            : 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30'
       }`;
 
       const statusDot = document.getElementById('modal-status-dot');
