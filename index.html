@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agenda & Disponibilidad | Filmmaker & Editor Freelance</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            studio: {
+              950: '#09090b',
+              900: '#121216',
+              850: '#18181f',
+              800: '#202029',
+              700: '#2e2e3a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Scrollbar estilizada estilo suite de edición */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #09090b; }
+    ::-webkit-scrollbar-thumb { background: #2e2e3a; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4b4b5e; }
+    .glass-panel {
+      background: rgba(24, 24, 31, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-studio-950 text-zinc-100 font-sans antialiased min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- Barra de Notificaciones Toast (Reemplaza cualquier alert()) -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- Banner Superior Modo Edición (Solo visible cuando el Admin inicia sesión) -->
+  <div id="admin-toolbar" class="hidden sticky top-0 z-40 bg-gradient-to-r from-indigo-950 via-purple-950 to-studio-900 border-b border-indigo-500/40 px-4 py-2.5 shadow-lg">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <span class="flex h-2.5 w-2.5 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        </span>
+        <span class="text-xs sm:text-sm font-semibold tracking-wide text-indigo-200 uppercase font-mono">Modo Edición Activo</span>
+        <span id="unsaved-badge" class="hidden text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full">
+          Cambios sin subir
+        </span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="openRoutineModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-studio-800 hover:bg-studio-700 text-zinc-200 border border-zinc-700 transition">
+          <i data-lucide="wand-2" class="w-3.5 h-3.5 text-purple-400"></i>
+          <span>Generar rutina del mes</span>
+        </button>
+
+        <button onclick="openAddEventModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-white shadow transition">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+          <span>Añadir bloque</span>
+        </button>
+
+        <button id="btn-sync-github" onclick="saveToGitHub()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow transition">
+          <i data-lucide="cloud-upload" class="w-3.5 h-3.5"></i>
+          <span>Guardar en GitHub</span>
+        </button>
+
+        <button onclick="downloadScheduleJson()" title="Descargar respaldo manual de schedule.json" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-studio-800 hover:bg-studio-700 text-zinc-300 border border-zinc-700 transition">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">JSON</span>
+        </button>
+
+        <button onclick="openAdminSettingsModal()" title="Configuración GitHub API y Contraseña" class="p-1.5 rounded-lg bg-studio-800 hover:bg-studio-700 text-zinc-300 border border-zinc-700 transition">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+        </button>
+
+        <button onclick="logoutAdmin()" title="Cerrar sesión de edición" class="p-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 transition">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cabecera Principal -->
+  <header class="border-b border-zinc-800/80 bg-studio-900/70 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-start sm:items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-rose-500 p-[1px] shrink-0 shadow-lg shadow-indigo-500/10">
+            <div class="w-full h-full bg-studio-950 rounded-2xl flex items-center justify-center">
+              <i data-lucide="clapperboard" class="w-6 h-6 text-indigo-400"></i>
+            </div>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">Agenda de Producción & Rodajes</h1>
+              <span class="inline-flex items-center gap-1 text-xs font-mono px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700">
+                <i data-lucide="map-pin" class="w-3 h-3 text-rose-400"></i> Base: Valladolid
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-zinc-400 mt-0.5">
+              Filmmaker, Guionista & Editor Freelance · Consulta mi carga de trabajo y disponibilidad real.
+            </p>
+          </div>
+        </div>
+
+        <!-- Badge Dinámico de Estado Actual (Hoy / Esta Semana) -->
+        <div class="flex items-center gap-3 self-start md:self-auto">
+          <div id="live-status-badge" class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-studio-850 border border-zinc-800 shadow-inner">
+            <span id="live-status-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+            <div class="text-left">
+              <div class="text-[10px] uppercase tracking-wider text-zinc-500 font-mono">Estado actual</div>
+              <div id="live-status-text" class="text-xs sm:text-sm font-semibold text-zinc-200">Calculando agenda...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Aviso inteligente si ha saltado automáticamente al mes siguiente -->
+    <div id="auto-next-month-banner" class="hidden rounded-2xl bg-indigo-950/40 border border-indigo-500/30 px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 text-xs sm:text-sm text-indigo-200">
+        <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+        <span>
+          Quedan menos de 3 días para finalizar el mes actual, así que te muestro directamente la planificación de <strong id="auto-month-name" class="text-white underline decoration-indigo-400"></strong>.
+        </span>
+      </div>
+      <button onclick="goToActualCurrentMonth()" class="shrink-0 text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 transition">
+        Ver mes en curso
+      </button>
+    </div>
+
+    <!-- Dashboard de Carga del Mes Visible -->
+    <section aria-label="Resumen de carga mensual" class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+      <!-- KPI 1: Reels del Mes -->
+      <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-zinc-400">
+          <span class="text-xs font-medium">Reels a entregar</span>
+          <span class="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400"><i data-lucide="smartphone" class="w-4 h-4"></i></span>
+        </div>
+        <div class="mt-3 flex items-baseline gap-2">
+          <span id="kpi-reels" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
+          <span class="text-xs text-zinc-500">vídeos cortos</span>
+        </div>
+        <div id="kpi-reels-breakdown" class="mt-1 text-[11px] text-zinc-400 truncate">SIT + Héctor Loza</div>
+      </div>
+
+      <!-- KPI 2: Vídeos Largos -->
+      <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-zinc-400">
+          <span class="text-xs font-medium">Vídeos Largos</span>
+          <span class="p-1.5 rounded-lg bg-blue-500/10 text-blue-400"><i data-lucide="youtube" class="w-4 h-4"></i></span>
+        </div>
+        <div class="mt-3 flex items-baseline gap-2">
+          <span id="kpi-long" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
+          <span class="text-xs text-zinc-500">formato YouTube</span>
+        </div>
+        <div class="mt-1 text-[11px] text-zinc-400">SIT Granollers (1/sem)</div>
+      </div>
+
+      <!-- KPI 3: Rodajes y Viajes Trabajo -->
+      <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-zinc-400">
+          <span class="text-xs font-medium">Rodajes / Viajes</span>
+          <span class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400"><i data-lucide="train-front" class="w-4 h-4"></i></span>
+        </div>
+        <div class="mt-3 flex items-baseline gap-2">
+          <span id="kpi-shoots" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
+          <span class="text-xs text-zinc-500">días bloqueados</span>
+        </div>
+        <div class="mt-1 text-[11px] text-zinc-400">Granollers + Barbería</div>
+      </div>
+
+      <!-- KPI 4: Días Personales / Pareja -->
+      <div class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-zinc-400">
+          <span class="text-xs font-medium">Personal / Pareja</span>
+          <span class="p-1.5 rounded-lg bg-rose-500/10 text-rose-400"><i data-lucide="heart" class="w-4 h-4"></i></span>
+        </div>
+        <div class="mt-3 flex items-baseline gap-2">
+          <span id="kpi-personal" class="text-2xl sm:text-3xl font-extrabold text-white">0</span>
+          <span class="text-xs text-zinc-500">días completos</span>
+        </div>
+        <div class="mt-1 text-[11px] text-zinc-400">No disponible</div>
+      </div>
+
+      <!-- KPI 5: Medidor de Ocupación -->
+      <div class="col-span-2 lg:col-span-1 bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-zinc-400">
+          <span class="text-xs font-medium">Nivel de Carga</span>
+          <span id="kpi-load-badge" class="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">ALTO</span>
+        </div>
+        <div class="mt-2">
+          <div class="flex items-baseline justify-between">
+            <span id="kpi-load-percent" class="text-2xl sm:text-3xl font-extrabold text-white">0%</span>
+            <span id="kpi-busy-days" class="text-xs text-zinc-400">0/30 días</span>
+          </div>
+          <div class="w-full h-2 bg-studio-800 rounded-full mt-2 overflow-hidden">
+            <div id="kpi-load-bar" class="h-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controles de Navegación del Mes y Filtros -->
+    <section class="bg-studio-900 border border-zinc-800/90 rounded-2xl p-4 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <!-- Navegador de Mes -->
+        <div class="flex items-center justify-between sm:justify-start gap-2">
+          <button onclick="changeMonth(-1)" aria-label="Mes anterior" class="p-2.5 rounded-xl bg-studio-800 hover:bg-studio-700 text-zinc-200 border border-zinc-700/80 transition active:scale-95">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+          </button>
+
+          <div class="min-w-[190px] text-center px-3">
+            <h2 id="current-month-label" class="text-lg sm:text-xl font-bold capitalize text-white tracking-tight">
+              Noviembre 2026
+            </h2>
+            <p id="current-month-sub" class="text-[11px] font-mono text-zinc-400">Vista mensual</p>
+          </div>
+
+          <button onclick="changeMonth(1)" aria-label="Mes siguiente" class="p-2.5 rounded-xl bg-studio-800 hover:bg-studio-700 text-zinc-200 border border-zinc-700/80 transition active:scale-95">
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+          </button>
+
+          <button onclick="resetToDefaultLandingMonth()" class="ml-1 px-3 py-2 rounded-xl text-xs font-medium bg-studio-850 hover:bg-studio-800 text-zinc-300 border border-zinc-700/70 transition">
+            Hoy / Inicio
+          </button>
+        </div>
+
+        <!-- Filtros rápidos por Cliente / Categoría -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar" id="filter-buttons">
+          <button data-filter="all" onclick="setFilter('all')" class="filter-btn active px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-studio-950 transition shrink-0">
+            Todos
+          </button>
+          <button data-filter="sit" onclick="setFilter('sit')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span> SIT Granollers
+          </button>
+          <button data-filter="hector" onclick="setFilter('hector')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-purple-400"></span> Héctor Loza
+          </button>
+          <button data-filter="travel_shoot" onclick="setFilter('travel_shoot')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span> Viajes y Rodajes
+          </button>
+          <button data-filter="personal" onclick="setFilter('personal')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-rose-400"></span> Personal / Pareja
+          </button>
+          <button data-filter="editing" onclick="setFilter('editing')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Edición / Guion
+          </button>
+        </div>
+      </div>
+
+      <!-- Leyenda Visual -->
+      <div class="pt-3 border-t border-zinc-800/80 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-zinc-400">
+        <span class="font-mono uppercase text-zinc-500">Leyenda:</span>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-cyan-500"></span> SIT Granollers (Reels / Vídeo Largo)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-500"></span> Héctor Loza (Barbería / Escuela)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-amber-500"></span> Rodaje / Viaje Tren-Bus (Día completo)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-rose-500"></span> Visita Pareja / Personal (Día completo)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Bloque Edición & Guion</div>
+      </div>
+    </section>
+
+    <!-- Calendario Mensual -->
+    <section aria-label="Calendario de actividades" class="bg-studio-900 border border-zinc-800/90 rounded-2xl overflow-hidden shadow-xl">
+      <!-- Cabecera Días de la Semana (Lunes a Domingo - estándar España) -->
+      <div class="grid grid-cols-7 bg-studio-850 border-b border-zinc-800 text-center py-2.5">
+        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Lun</div>
+        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Mar</div>
+        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Mié</div>
+        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Jue</div>
+        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Vie</div>
+        <div class="text-xs font-semibold text-amber-400/90 uppercase tracking-wider">Sáb</div>
+        <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Dom</div>
+      </div>
+
+      <!-- Cuadrícula de Días -->
+      <div id="calendar-grid" class="grid grid-cols-7 divide-x divide-y divide-zinc-800/70 bg-studio-900">
+        <!-- Se rellena dinámicamente vía JS -->
+      </div>
+    </section>
+
+    <!-- Nota informativa sobre el flujo de trabajo para clientes potenciales -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-studio-900/70 border border-zinc-800/80 rounded-2xl p-4 flex items-start gap-3">
+        <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 shrink-0 mt-0.5">
+          <i data-lucide="wind" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-white">SIT Granollers (Climatización)</h3>
+          <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
+            Producción semanal continua: <strong class="text-zinc-200">5 Reels (Mar–Sáb)</strong> + <strong class="text-zinc-200">1 Vídeo Largo semanal</strong>. Grabación intensiva en lote 1 vez al mes desplazándome desde Valladolid a Barcelona.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-studio-900/70 border border-zinc-800/80 rounded-2xl p-4 flex items-start gap-3">
+        <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400 shrink-0 mt-0.5">
+          <i data-lucide="scissors" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-white">Héctor Loza (Barbería & Escuela)</h3>
+          <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
+            Estrategia de marca personal y lanzamiento de academia: <strong class="text-zinc-200">3 Reels semanales</strong> con máximo 1 jornada de rodaje mensual.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-studio-900/70 border border-zinc-800/80 rounded-2xl p-4 flex items-start gap-3">
+        <div class="p-2 rounded-xl bg-rose-500/10 text-rose-400 shrink-0 mt-0.5">
+          <i data-lucide="calendar-off" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-white">Días Completos Bloqueados</h3>
+          <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
+            Los desplazamientos en transporte público (Valladolid ↔ Granollers) y los viajes personales/pareja ocupan la <strong class="text-zinc-200">jornada completa</strong> sin disponibilidad para rodajes ni entregas urgentes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pie de página con acceso discreto para el propietario -->
+  <footer class="border-t border-zinc-800/80 bg-studio-900/50 py-5 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
+      <div class="flex items-center gap-2">
+        <span>Agenda pública actualizada en tiempo real · Valladolid, España</span>
+        <span id="data-source-indicator" class="hidden sm:inline-block font-mono text-[10px] px-2 py-0.5 rounded bg-studio-850 text-zinc-400 border border-zinc-800">
+          Fuente: schedule.json
+        </span>
+      </div>
+
+      <button onclick="handleAdminAccessClick()" class="inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-300 transition py-1 px-2.5 rounded-lg hover:bg-studio-800">
+        <i id="footer-lock-icon" data-lucide="lock" class="w-3.5 h-3.5"></i>
+        <span id="footer-lock-text">Acceso Admin</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: DETALLE DEL DÍA (Público + Controles si es Admin)            -->
+  <!-- ===================================================================== -->
+  <div id="day-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-5 py-4 bg-studio-850 border-b border-zinc-800 flex items-center justify-between">
+        <div>
+          <span id="modal-day-weekday" class="text-xs font-mono uppercase text-indigo-400">Jueves</span>
+          <h3 id="modal-day-title" class="text-lg font-bold text-white capitalize">26 de Noviembre de 2026</h3>
+        </div>
+        <button onclick="closeModal('day-detail-modal')" class="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-studio-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+        <!-- Banner de disponibilidad del día -->
+        <div id="modal-day-status-banner" class="p-3 rounded-xl border flex items-center gap-3">
+          <!-- Dinámico -->
+        </div>
+
+        <!-- Lista de bloques / tareas del día -->
+        <div id="modal-day-events-list" class="space-y-2.5">
+          <!-- Dinámico -->
+        </div>
+      </div>
+
+      <div class="px-5 py-3.5 bg-studio-850 border-t border-zinc-800 flex items-center justify-between gap-2">
+        <button id="modal-btn-add-day-event" onclick="openAddEventForSelectedDate()" class="hidden inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>Añadir bloque a este día</span>
+        </button>
+        <button onclick="closeModal('day-detail-modal')" class="ml-auto px-4 py-2 rounded-xl text-xs font-medium bg-studio-800 hover:bg-studio-700 text-zinc-200 transition">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: AÑADIR / EDITAR EVENTO (Solo Admin)                          -->
+  <!-- ===================================================================== -->
+  <div id="event-form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
+      <div class="px-5 py-4 bg-studio-850 border-b border-zinc-800 flex items-center justify-between">
+        <h3 id="event-form-title" class="text-base font-bold text-white">Nuevo Bloque en Agenda</h3>
+        <button onclick="closeModal('event-form-modal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-studio-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="event-form" onsubmit="handleSaveEventForm(event)" class="p-5 space-y-4">
+        <input type="hidden" id="ev-id" />
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-zinc-400 mb-1">Fecha Inicio</label>
+            <input type="date" id="ev-date" required class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-zinc-400 mb-1">Fecha Fin (Opcional)</label>
+            <input type="date" id="ev-end-date" title="Útil para viajes de varios días seguidos" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1">Cliente / Categoría</label>
+          <select id="ev-category" required onchange="autoSuggestEventTitle()" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500">
+            <option value="sit">SIT Granollers (AACC / Climatización)</option>
+            <option value="hector">Héctor Loza (Barbería & Escuela)</option>
+            <option value="travel_shoot">Viaje / Rodaje Fuera (Valladolid ↔ Granollers)</option>
+            <option value="personal">Personal / Visita Pareja</option>
+            <option value="editing">Edición / Guionización Interna</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1">Tipo de Entregable / Bloque</label>
+          <select id="ev-type" required onchange="autoSuggestEventTitle()" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500">
+            <option value="reel">Entrega / Publicación Reel</option>
+            <option value="long_video">Entrega Vídeo Largo (YouTube)</option>
+            <option value="shoot">Jornada de Rodaje / Grabación</option>
+            <option value="travel_full">Viaje Transporte Público (Día Completo)</option>
+            <option value="couple_full">Visita Pareja / Personal (Día Completo)</option>
+            <option value="editing">Bloque Edición / Guion</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1">Título visible en calendario</label>
+          <input type="text" id="ev-title" required placeholder="Ej: Reel #3 SIT Granollers" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+        </div>
+
+        <div class="flex items-center gap-2.5 p-3 rounded-xl bg-studio-850 border border-zinc-800">
+          <input type="checkbox" id="ev-full-day" class="w-4 h-4 rounded accent-rose-500" />
+          <label for="ev-full-day" class="text-xs text-zinc-300 select-none cursor-pointer">
+            Marcar como <strong class="text-rose-300">DÍA COMPLETO OCUPADO</strong> (bloquea disponibilidad todo el día)
+          </label>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1">Notas / Detalles (opcional)</label>
+          <textarea id="ev-notes" rows="2" placeholder="Ej: Tren salida 07:15 desde Valladolid Campo Grande..." class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('event-form-modal')" class="px-4 py-2 rounded-xl text-xs font-medium bg-studio-800 hover:bg-studio-700 text-zinc-300">
+            Cancelar
+          </button>
+          <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow">
+            Guardar bloque
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 3: GENERADOR AUTOMÁTICO DE RUTINA MENSUAL                       -->
+  <!-- ===================================================================== -->
+  <div id="routine-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
+      <div class="px-5 py-4 bg-studio-850 border-b border-zinc-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="wand-2" class="w-4 h-4 text-purple-400"></i>
+          <h3 class="text-base font-bold text-white">Generar Rutina Base del Mes</h3>
+        </div>
+        <button onclick="closeModal('routine-modal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4">
+        <p class="text-xs text-zinc-300 leading-relaxed">
+          Rellenará automáticamente <strong id="routine-target-month" class="text-indigo-400 capitalize"></strong> con tu estructura habitual de entregas semanales:
+        </p>
+
+        <ul class="space-y-2 text-xs text-zinc-300 bg-studio-850 p-3.5 rounded-xl border border-zinc-800">
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-400"></span> <strong>SIT Granollers:</strong> 5 Reels (Martes a Sábado)</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-400"></span> <strong>SIT Granollers:</strong> 1 Vídeo Largo semanal (Lunes)</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-purple-400"></span> <strong>Héctor Loza:</strong> 3 Reels (Lunes, Miércoles, Viernes)</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> <strong>Edición & Guion:</strong> Bloques internos Lun–Jue</li>
+        </ul>
+
+        <div class="flex items-center gap-2 text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-xl">
+          <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
+          <span>Después podrás añadir manualmente tus fechas exactas de viaje a Granollers, rodaje en barbería y visitas a tu pareja.</span>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button onclick="closeModal('routine-modal')" class="px-4 py-2 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300">
+            Cancelar
+          </button>
+          <button onclick="generateMonthlyRoutine()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-purple-600 hover:bg-purple-500 text-white shadow">
+            Aplicar rutina a este mes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 4: LOGIN ADMIN & CONFIGURACIÓN GITHUB API SYNC                  -->
+  <!-- ===================================================================== -->
+  <div id="admin-auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="bg-studio-900 border border-zinc-700/80 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="px-5 py-4 bg-studio-850 border-b border-zinc-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-5 h-5 text-indigo-400"></i>
+          <h3 class="text-base font-bold text-white">Panel de Administración & GitHub Sync</h3>
+        </div>
+        <button onclick="closeModal('admin-auth-modal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
+        <!-- Acordeón / Guía rápida de 3 pasos para el Token de GitHub -->
+        <div class="rounded-xl bg-indigo-950/30 border border-indigo-500/30 p-3.5">
+          <button type="button" onclick="toggleGitHubGuide()" class="w-full flex items-center justify-between text-left text-xs font-semibold text-indigo-300">
+            <span class="flex items-center gap-2">
+              <i data-lucide="help-circle" class="w-4 h-4"></i>
+              ¿Cómo configurar el autoguardado en GitHub Pages? (Guía 3 pasos)
+            </span>
+            <i id="guide-chevron" data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+          </button>
+
+          <div id="github-guide-content" class="hidden mt-3 pt-3 border-t border-indigo-500/20 space-y-2 text-xs text-zinc-300 leading-relaxed">
+            <p><strong class="text-white">Paso 1:</strong> Ve a GitHub → <em>Settings</em> → <em>Developer settings</em> → <em>Personal access tokens</em> → <strong>Fine-grained tokens</strong> → <em>Generate new token</em>.</p>
+            <p><strong class="text-white">Paso 2:</strong> En <em>Repository access</em>, selecciona solo el repositorio de tu agenda. En <em>Permissions → Repository permissions</em>, activa <strong>Contents: Read and Write</strong>.</p>
+            <p><strong class="text-white">Paso 3:</strong> Copia el token generado (`github_pat_...`), pégalo abajo junto a tu usuario y repositorio. El token se guarda únicamente en este navegador (`localStorage`), nunca se sube al código público.</p>
+          </div>
+        </div>
+
+        <form onsubmit="handleAdminLoginAndSaveConfig(event)" class="space-y-3.5">
+          <!-- Contraseña Local (SHA-256) -->
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-xs font-medium text-zinc-300">Contraseña de Acceso Local</label>
+              <span id="password-hint-badge" class="text-[10px] font-mono text-zinc-400">Por defecto: admin1234</span>
+            </div>
+            <input type="password" id="cfg-password" required placeholder="Introduce tu contraseña de editor" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+
+          <div id="new-password-wrapper" class="hidden">
+            <label class="block text-xs font-medium text-zinc-400 mb-1">Cambiar contraseña (dejar vacío para mantener la actual)</label>
+            <input type="password" id="cfg-new-password" placeholder="Nueva contraseña personal" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+
+          <div class="pt-2 border-t border-zinc-800">
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2.5 flex items-center gap-1.5">
+              <i data-lucide="github" class="w-3.5 h-3.5"></i> Conexión Directa a GitHub Pages (Opcional para auto-commit)
+            </h4>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-zinc-400 mb-1">Usuario de GitHub</label>
+                <input type="text" id="cfg-gh-owner" placeholder="ej: tu-usuario" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-zinc-400 mb-1">Nombre del Repositorio</label>
+                <input type="text" id="cfg-gh-repo" placeholder="ej: mi-agenda" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+              <div>
+                <label class="block text-xs font-medium text-zinc-400 mb-1">Rama (Branch)</label>
+                <input type="text" id="cfg-gh-branch" value="main" placeholder="main" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-zinc-400 mb-1">Archivo de datos</label>
+                <input type="text" id="cfg-gh-path" value="schedule.json" placeholder="schedule.json" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm text-white focus:outline-none focus:border-indigo-500" />
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <label class="block text-xs font-medium text-zinc-400 mb-1">GitHub Personal Access Token (PAT)</label>
+              <input type="password" id="cfg-gh-token" placeholder="github_pat_xxxxxxxxxxxx" class="w-full px-3 py-2 rounded-xl bg-studio-850 border border-zinc-700 text-sm font-mono text-white focus:outline-none focus:border-indigo-500" />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-2 pt-3">
+            <button type="button" onclick="closeModal('admin-auth-modal')" class="px-4 py-2 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300">
+              Cancelar
+            </button>
+            <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow">
+              Desbloquear Modo Edición
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ============================================================================
+     * CONFIGURACIÓN Y ESTADO GLOBAL DE LA APLICACIÓN
+     * ============================================================================
+     */
+    const MONTHS_ES = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+    const WEEKDAYS_ES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+    // Hash SHA-256 por defecto para "admin1234"
+    const DEFAULT_PASSWORD_HASH = 'ac9689e2272427085e35b9d3e3e8be88cb3d8954033ca04c8905f9521fd27f97';
+
+    // Paletas visuales por categoría
+    const CATEGORY_STYLES = {
+      sit: {
+        label: 'SIT Granollers',
+        badgeBg: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+        dot: 'bg-cyan-400',
+        cardBorder: 'border-l-cyan-400'
+      },
+      hector: {
+        label: 'Héctor Loza',
+        badgeBg: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+        dot: 'bg-purple-400',
+        cardBorder: 'border-l-purple-400'
+      },
+      travel_shoot: {
+        label: 'Viaje / Rodaje',
+        badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+        dot: 'bg-amber-400',
+        cardBorder: 'border-l-amber-400'
+      },
+      personal: {
+        label: 'Personal / Pareja',
+        badgeBg: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+        dot: 'bg-rose-400',
+        cardBorder: 'border-l-rose-400'
+      },
+      editing: {
+        label: 'Edición / Guion',
+        badgeBg: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        dot: 'bg-emerald-400',
+        cardBorder: 'border-l-emerald-400'
+      }
+    };
+
+    const TYPE_LABELS = {
+      reel: 'Reel',
+      long_video: 'Vídeo Largo',
+      shoot: 'Rodaje',
+      travel_full: 'Viaje Día Completo',
+      couple_full: 'Pareja Día Completo',
+      editing: 'Edición & Guion'
+    };
+
+    let state = {
+      events: [],
+      viewYear: new Date().getFullYear(),
+      viewMonth: new Date().getMonth(), // 0-11
+      autoJumpedToNextMonth: false,
+      activeFilter: 'all',
+      isAdmin: false,
+      hasUnsavedChanges: false,
+      selectedDateStr: null,
+      ghFileSha: null // SHA necesario para actualizar archivos vía GitHub Contents API
+    };
+
+    /**
+     * ============================================================================
+     * INICIALIZACIÓN Y LÓGICA INTELIGENTE DE FECHA (LANDING PAGE)
+     * ============================================================================
+     */
+    document.addEventListener('DOMContentLoaded', async () => {
+      calculateSmartInitialMonth();
+      await loadScheduleData();
+      renderAll();
+      lucide.createIcons();
+    });
+
+    /**
+     * Calcula si quedan menos de 3 días para terminar el mes actual.
+     * Ejemplo: Noviembre tiene 30 días. Si hoy es 28 (30-28 = 2 < 3), 29 o 30, salta a Diciembre.
+     */
+    function calculateSmartInitialMonth() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      const dayOfMonth = today.getDate();
+
+      // Último día del mes actual (día 0 del mes siguiente)
+      const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
+      const remainingDays = daysInCurrentMonth - dayOfMonth;
+
+      if (remainingDays < 3) {
+        const nextMonthDate = new Date(year, month + 1, 1);
+        state.viewYear = nextMonthDate.getFullYear();
+        state.viewMonth = nextMonthDate.getMonth();
+        state.autoJumpedToNextMonth = true;
+
+        const banner = document.getElementById('auto-next-month-banner');
+        const monthNameSpan = document.getElementById('auto-month-name');
+        monthNameSpan.textContent = `${MONTHS_ES[state.viewMonth]} ${state.viewYear}`;
+        banner.classList.remove('hidden');
+      } else {
+        state.viewYear = year;
+        state.viewMonth = month;
+        state.autoJumpedToNextMonth = false;
+      }
+    }
+
+    function goToActualCurrentMonth() {
+      const today = new Date();
+      state.viewYear = today.getFullYear();
+      state.viewMonth = today.getMonth();
+      document.getElementById('auto-next-month-banner').classList.add('hidden');
+      renderAll();
+    }
+
+    function resetToDefaultLandingMonth() {
+      calculateSmartInitialMonth();
+      renderAll();
+    }
+
+    /**
+     * ============================================================================
+     * CARGA DE DATOS (schedule.json en GitHub Pages o Datos Iniciales Realistas)
+     * ============================================================================
+     */
+    async function loadScheduleData() {
+      const sourceIndicator = document.getElementById('data-source-indicator');
+      try {
+        // Intentar leer schedule.json desde el mismo hosting estático evitando caché
+        const response = await fetch(`./schedule.json?t=${Date.now()}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data.events)) {
+            state.events = data.events;
+            sourceIndicator.textContent = 'Fuente: schedule.json (En vivo)';
+            return;
+          }
+        }
+        throw new Error('schedule.json no encontrado aún');
+      } catch (err) {
+        // Si es la primera vez y aún no existe schedule.json en el repo,
+        // cargamos automáticamente la agenda base realista para el mes visible y adyacentes
+        console.info('Cargando agenda base preconfigurada:', err.message);
+        state.events = buildDefaultRealisticSchedule();
+        sourceIndicator.textContent = 'Fuente: Plantilla Base Preconfigurada';
+      }
+    }
+
+    /**
+     * Genera un horario base realista para el mes actual y el mes siguiente
+     * con los flujos reales de SIT Granollers, Héctor Loza, viajes desde Valladolid y pareja.
+     */
+    function buildDefaultRealisticSchedule() {
+      const today = new Date();
+      const baseMonths = [
+        { year: today.getFullYear(), month: today.getMonth() },
+        { year: new Date(today.getFullYear(), today.getMonth() + 1, 1).getFullYear(), month: new Date(today.getFullYear(), today.getMonth() + 1, 1).getMonth() }
+      ];
+
+      let generated = [];
+
+      baseMonths.forEach(({ year, month }) => {
+        // 1. Rutina semanal recurrente (Reels SIT Mar-Sáb, Vídeo Largo SIT Lun, Reels Héctor L-X-V, Edición)
+        generated = generated.concat(createRoutineEventsForMonth(year, month));
+
+        // 2. Viaje mensual Valladolid <-> Granollers (4 días seguidos: Ida + 2 días rodaje intensivo + Vuelta)
+        // Buscamos el segundo martes del mes para simular el bloque mensual
+        const tripStartDay = findNthWeekdayOfMonth(year, month, 2, 2); // 2º Martes
+        if (tripStartDay) {
+          const d1 = formatDateISO(year, month, tripStartDay);
+          const d2 = formatDateISO(year, month, tripStartDay + 1);
+          const d3 = formatDateISO(year, month, tripStartDay + 2);
+          const d4 = formatDateISO(year, month, tripStartDay + 3);
+
+          generated.push(
+            {
+              id: `trip-go-${year}-${month}`,
+              date: d1,
+              category: 'travel_shoot',
+              type: 'travel_full',
+              title: 'Viaje Tren/Bus Valladolid → Granollers',
+              fullDay: true,
+              notes: 'Desplazamiento en transporte público todo el día y preparación de equipo.'
+            },
+            {
+              id: `shoot-sit1-${year}-${month}`,
+              date: d2,
+              category: 'sit',
+              type: 'shoot',
+              title: 'Rodaje Intensivo SIT Granollers (Día 1)',
+              fullDay: true,
+              notes: 'Grabación en lote de Reels mensuales y vídeos largos de instalaciones AACC.'
+            },
+            {
+              id: `shoot-sit2-${year}-${month}`,
+              date: d3,
+              category: 'sit',
+              type: 'shoot',
+              title: 'Rodaje Intensivo SIT Granollers (Día 2)',
+              fullDay: true,
+              notes: 'Grabación técnica en obra/cliente y recursos B-Roll.'
+            },
+            {
+              id: `trip-back-${year}-${month}`,
+              date: d4,
+              category: 'travel_shoot',
+              type: 'travel_full',
+              title: 'Viaje Vuelta Granollers → Valladolid',
+              fullDay: true,
+              notes: 'Regreso en transporte público y descarga/backup de tarjetas.'
+            }
+          );
+        }
+
+        // 3. Sesión mensual de grabación Héctor Loza (Máximo 1 día al mes, 3er jueves)
+        const hectorShootDay = findNthWeekdayOfMonth(year, month, 4, 3); // 3er Jueves
+        if (hectorShootDay) {
+          generated.push({
+            id: `shoot-hector-${year}-${month}`,
+            date: formatDateISO(year, month, hectorShootDay),
+            category: 'hector',
+            type: 'shoot',
+            title: 'Rodaje Mensual Héctor Loza (Barbería)',
+            fullDay: true,
+            notes: 'Grabación en lote de 12 Reels mensuales y contenido promocional Escuela de Barbería.'
+          });
+        }
+
+        // 4. Visitas a su pareja (Fin de semana / días completos bloqueados)
+        const coupleDay1 = findNthWeekdayOfMonth(year, month, 6, 1); // 1er Sábado
+        const coupleDay2 = findNthWeekdayOfMonth(year, month, 6, 4); // 4º Sábado
+        if (coupleDay1) {
+          generated.push({
+            id: `couple-1-${year}-${month}`,
+            date: formatDateISO(year, month, coupleDay1),
+            category: 'personal',
+            type: 'couple_full',
+            title: 'Viaje / Visita Pareja (Día completo)',
+            fullDay: true,
+            notes: 'Día personal bloqueado completo. Sin disponibilidad para rodajes ni entregas.'
+          });
+        }
+        if (coupleDay2) {
+          generated.push({
+            id: `couple-2-${year}-${month}`,
+            date: formatDateISO(year, month, coupleDay2),
+            category: 'personal',
+            type: 'couple_full',
+            title: 'Viaje / Visita Pareja (Día completo)',
+            fullDay: true,
+            notes: 'Día personal bloqueado completo.'
+          });
+        }
+      });
+
+      return generated;
+    }
+
+    /**
+     * Crea los entregables recurrentes de un mes:
+     * - SIT Granollers: 5 Reels (Mar a Sáb) + 1 Vídeo Largo (Lunes)
+     * - Héctor Loza: 3 Reels (Lunes, Miércoles, Viernes)
+     * - Bloques internos de Edición y Guionización
+     */
+    function createRoutineEventsForMonth(year, month) {
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const events = [];
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateObj = new Date(year, month, d);
+        const dow = dateObj.getDay(); // 0=Dom, 1=Lun, 2=Mar, 3=Mié, 4=Jue, 5=Vie, 6=Sáb
+        const dateStr = formatDateISO(year, month, d);
+
+        // SIT Granollers: 5 Reels a la semana (Martes=2 a Sábado=6)
+        if (dow >= 2 && dow <= 6) {
+          events.push({
+            id: `sit-reel-${dateStr}`,
+            date: dateStr,
+            category: 'sit',
+            type: 'reel',
+            title: 'Reel SIT Granollers',
+            fullDay: false,
+            notes: 'Publicación / Entrega reel diario climatización y AACC.'
+          });
+        }
+
+        // SIT Granollers: 1 Vídeo Largo semanal (Lunes=1)
+        if (dow === 1) {
+          events.push({
+            id: `sit-long-${dateStr}`,
+            date: dateStr,
+            category: 'sit',
+            type: 'long_video',
+            title: 'Vídeo Largo SIT Granollers',
+            fullDay: false,
+            notes: 'Entrega vídeo formato largo semanal (YouTube / Web).'
+          });
+        }
+
+        // Héctor Loza: 3 Reels semanales (Lunes=1, Miércoles=3, Viernes=5)
+        if (dow === 1 || dow === 3 || dow === 5) {
+          events.push({
+            id: `hector-reel-${dateStr}`,
+            date: dateStr,
+            category: 'hector',
+            type: 'reel',
+            title: 'Reel Héctor Loza (Barbería)',
+            fullDay: false,
+            notes: 'Contenido marca personal y futura Escuela de Barbería.'
+          });
+        }
+
+        // Bloques de Edición y Guionización (Martes=2 y Jueves=4)
+        if (dow === 2 || dow === 4) {
+          events.push({
+            id: `edit-block-${dateStr}`,
+            date: dateStr,
+            category: 'editing',
+            type: 'editing',
+            title: 'Bloque Edición & Guion (Lote)',
+            fullDay: false,
+            notes: 'Montaje de reels semanales, etalonaje y escaletas de guion en estudio (Valladolid).'
+          });
+        }
+      }
+
+      return events;
+    }
+
+    /**
+     * ============================================================================
+     * RENDERIZADO DE UI, KPIs Y CALENDARIO
+     * ============================================================================
+     */
+    function renderAll() {
+      renderMonthHeader();
+      renderKPIs();
+      renderLiveStatusBadge();
+      renderCalendarGrid();
+      lucide.createIcons();
+    }
+
+    function renderMonthHeader() {
+      const label = document.getElementById('current-month-label');
+      const sub = document.getElementById('current-month-sub');
+      label.textContent = `${MONTHS_ES[state.viewMonth]} ${state.viewYear}`;
+
+      const today = new Date();
+      if (state.viewYear === today.getFullYear() && state.viewMonth === today.getMonth()) {
+        sub.textContent = 'Mes en curso';
+      } else {
+        sub.textContent = 'Planificación mensual';
+      }
+    }
+
+    function renderKPIs() {
+      const monthPrefix = `${state.viewYear}-${String(state.viewMonth + 1).padStart(2, '0')}`;
+      const monthEvents = state.events.filter(ev => ev.date.startsWith(monthPrefix));
+
+      const sitReels = monthEvents.filter(e => e.category === 'sit' && e.type === 'reel').length;
+      const hectorReels = monthEvents.filter(e => e.category === 'hector' && e.type === 'reel').length;
+      const totalReels = sitReels + hectorReels;
+
+      const longVideos = monthEvents.filter(e => e.type === 'long_video').length;
+
+      // Días únicos con rodaje o viaje de trabajo
+      const shootTravelDates = new Set(
+        monthEvents
+          .filter(e => e.type === 'shoot' || e.type === 'travel_full' || e.category === 'travel_shoot')
+          .map(e => e.date)
+      );
+
+      // Días únicos personales / pareja
+      const personalDates = new Set(
+        monthEvents
+          .filter(e => e.category === 'personal' || e.type === 'couple_full')
+          .map(e => e.date)
+      );
+
+      // Cálculo de ocupación del mes
+      const daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
+      const activeDates = new Set(monthEvents.map(e => e.date));
+      const fullDayBlockedDates = new Set(monthEvents.filter(e => e.fullDay).map(e => e.date));
+
+      // Ponderación realista: días completos valen 100% del día, días con entregas/edición valen 75%
+      let weightedLoad = 0;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dStr = formatDateISO(state.viewYear, state.viewMonth, d);
+        if (fullDayBlockedDates.has(dStr)) weightedLoad += 1;
+        else if (activeDates.has(dStr)) weightedLoad += 0.72;
+      }
+      const loadPercent = Math.min(100, Math.round((weightedLoad / daysInMonth) * 100));
+
+      document.getElementById('kpi-reels').textContent = totalReels;
+      document.getElementById('kpi-reels-breakdown').textContent = `${sitReels} SIT · ${hectorReels} Héctor Loza`;
+      document.getElementById('kpi-long').textContent = longVideos;
+      document.getElementById('kpi-shoots').textContent = shootTravelDates.size;
+      document.getElementById('kpi-personal').textContent = personalDates.size;
+
+      document.getElementById('kpi-load-percent').textContent = `${loadPercent}%`;
+      document.getElementById('kpi-busy-days').textContent = `${activeDates.size}/${daysInMonth} días con actividad`;
+      document.getElementById('kpi-load-bar').style.width = `${loadPercent}%`;
+
+      const loadBadge = document.getElementById('kpi-load-badge');
+      if (loadPercent >= 80) {
+        loadBadge.textContent = 'MUY LIADO';
+        loadBadge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30';
+      } else if (loadPercent >= 55) {
+        loadBadge.textContent = 'CARGA ALTA';
+        loadBadge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30';
+      } else {
+        loadBadge.textContent = 'DISPONIBLE';
+        loadBadge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+      }
+    }
+
+    function renderLiveStatusBadge() {
+      const today = new Date();
+      const todayStr = formatDateISO(today.getFullYear(), today.getMonth(), today.getDate());
+      const todayEvents = state.events.filter(e => e.date === todayStr);
+
+      const dot = document.getElementById('live-status-dot');
+      const text = document.getElementById('live-status-text');
+
+      if (todayEvents.some(e => e.type === 'travel_full')) {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse';
+        text.textContent = 'En viaje (Transporte público)';
+      } else if (todayEvents.some(e => e.type === 'shoot')) {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse';
+        text.textContent = 'En rodaje (Grabación activa)';
+      } else if (todayEvents.some(e => e.category === 'personal' || e.type === 'couple_full')) {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-400';
+        text.textContent = 'Día personal / No disponible';
+      } else if (todayEvents.length > 0) {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400';
+        text.textContent = 'Full Edición & Entregas (Valladolid)';
+      } else {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-indigo-400';
+        text.textContent = 'Huecos limitados disponibles';
+      }
+    }
+
+    function renderCalendarGrid() {
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML = '';
+
+      const firstDayOfMonth = new Date(state.viewYear, state.viewMonth, 1);
+      const daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
+
+      // Convertir domingo=0 a lunes=0 ... domingo=6
+      let startWeekday = firstDayOfMonth.getDay() - 1;
+      if (startWeekday < 0) startWeekday = 6;
+
+      const today = new Date();
+      const todayStr = formatDateISO(today.getFullYear(), today.getMonth(), today.getDate());
+
+      // Celdas vacías iniciales antes del día 1
+      for (let i = 0; i < startWeekday; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'min-h-[105px] sm:min-h-[135px] bg-studio-950/50 p-2';
+        grid.appendChild(emptyCell);
+      }
+
+      // Días del mes
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = formatDateISO(state.viewYear, state.viewMonth, day);
+        const isToday = dateStr === todayStr;
+
+        // Filtrar eventos del día según el filtro activo
+        let dayEvents = state.events.filter(ev => ev.date === dateStr);
+        if (state.activeFilter !== 'all') {
+          dayEvents = dayEvents.filter(ev => ev.category === state.activeFilter);
+        }
+
+        const isFullDayBlocked = dayEvents.some(ev => ev.fullDay);
+        const isPersonalDay = dayEvents.some(ev => ev.category === 'personal');
+        const isTravelShootDay = dayEvents.some(ev => ev.category === 'travel_shoot' || ev.type === 'shoot');
+
+        const cell = document.createElement('div');
+        let bgClass = 'bg-studio-900 hover:bg-studio-850/90';
+        if (isPersonalDay) bgClass = 'bg-rose-950/20 hover:bg-rose-950/30';
+        else if (isTravelShootDay) bgClass = 'bg-amber-950/20 hover:bg-amber-950/30';
+
+        cell.className = `min-h-[105px] sm:min-h-[135px] p-1.5 sm:p-2.5 flex flex-col justify-between cursor-pointer transition relative group ${bgClass} ${isToday ? 'ring-2 ring-inset ring-indigo-500' : ''}`;
+        cell.onclick = () => openDayDetailModal(dateStr);
+
+        // Cabecera de la celda (Número de día + indicador "HOY" o estado)
+        const topRow = document.createElement('div');
+        topRow.className = 'flex items-center justify-between gap-1 mb-1.5';
+
+        const dayNum = document.createElement('span');
+        dayNum.className = isToday
+          ? 'w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center shadow'
+          : 'text-xs sm:text-sm font-semibold text-zinc-300 group-hover:text-white';
+        dayNum.textContent = day;
+        topRow.appendChild(dayNum);
+
+        if (isFullDayBlocked) {
+          const lockBadge = document.createElement('span');
+          lockBadge.className = 'text-[9px] sm:text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 truncate';
+          lockBadge.textContent = 'DÍA COMPLETO';
+          topRow.appendChild(lockBadge);
+        } else if (dayEvents.length === 0 && state.activeFilter === 'all') {
+          const freeDot = document.createElement('span');
+          freeDot.className = 'text-[10px] text-zinc-600 group-hover:text-emerald-400 font-mono transition';
+          freeDot.textContent = 'Libre';
+          topRow.appendChild(freeDot);
+        }
+
+        cell.appendChild(topRow);
+
+        // Contenedor de etiquetas de eventos
+        const eventsContainer = document.createElement('div');
+        eventsContainer.className = 'space-y-1 flex-1 overflow-hidden';
+
+        // Mostrar hasta 3 eventos en vista escritorio y puntos/resumen compacto en móvil
+        const maxVisible = 3;
+        dayEvents.slice(0, maxVisible).forEach(ev => {
+          const style = CATEGORY_STYLES[ev.category] || CATEGORY_STYLES.editing;
+          const pill = document.createElement('div');
+          pill.className = `px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium border truncate flex items-center gap-1 ${style.badgeBg}`;
+          pill.innerHTML = `<span class="w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}"></span><span class="truncate">${escapeHtml(ev.title)}</span>`;
+          eventsContainer.appendChild(pill);
+        });
+
+        if (dayEvents.length > maxVisible) {
+          const more = document.createElement('div');
+          more.className = 'text-[10px] font-mono text-zinc-400 pl-1';
+          more.textContent = `+${dayEvents.length - maxVisible} más...`;
+          eventsContainer.appendChild(more);
+        }
+
+        cell.appendChild(eventsContainer);
+        grid.appendChild(cell);
+      }
+
+      // Rellenar celdas sobrantes al final para mantener cuadrícula limpia
+      const totalCells = startWeekday + daysInMonth;
+      const remainder = totalCells % 7;
+      if (remainder !== 0) {
+        for (let i = 0; i < 7 - remainder; i++) {
+          const emptyCell = document.createElement('div');
+          emptyCell.className = 'min-h-[105px] sm:min-h-[135px] bg-studio-950/50 p-2';
+          grid.appendChild(emptyCell);
+        }
+      }
+    }
+
+    function changeMonth(delta) {
+      const next = new Date(state.viewYear, state.viewMonth + delta, 1);
+      state.viewYear = next.getFullYear();
+      state.viewMonth = next.getMonth();
+      renderAll();
+    }
+
+    function setFilter(filterKey) {
+      state.activeFilter = filterKey;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.dataset.filter === filterKey) {
+          btn.className = 'filter-btn active px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-studio-950 transition shrink-0 flex items-center gap-1.5';
+        } else {
+          btn.className = 'filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-studio-800 text-zinc-300 hover:bg-studio-700 border border-zinc-700/70 transition shrink-0 flex items-center gap-1.5';
+        }
+      });
+      renderCalendarGrid();
+    }
+
+    /**
+     * ============================================================================
+     * MODAL DE DETALLE DIARIO
+     * ============================================================================
+     */
+    function openDayDetailModal(dateStr) {
+      state.selectedDateStr = dateStr;
+      const [y, m, d] = dateStr.split('-').map(Number);
+      const dateObj = new Date(y, m - 1, d);
+
+      document.getElementById('modal-day-weekday').textContent = WEEKDAYS_ES[dateObj.getDay()];
+      document.getElementById('modal-day-title').textContent = `${d} de ${MONTHS_ES[m - 1]} de ${y}`;
+
+      const dayEvents = state.events.filter(ev => ev.date === dateStr);
+      const isFullBlocked = dayEvents.some(ev => ev.fullDay);
+
+      const banner = document.getElementById('modal-day-status-banner');
+      if (isFullBlocked) {
+        banner.className = 'p-3 rounded-xl border bg-rose-950/40 border-rose-500/40 text-rose-200 flex items-center gap-3';
+        banner.innerHTML = `
+          <i data-lucide="ban" class="w-5 h-5 text-rose-400 shrink-0"></i>
+          <div class="text-xs">
+            <strong class="block text-sm text-white">Día Completo Ocupado</strong>
+            No disponible para nuevos rodajes, llamadas largas ni entregas urgentes.
+          </div>
+        `;
+      } else if (dayEvents.length > 0) {
+        banner.className = 'p-3 rounded-xl border bg-amber-950/30 border-amber-500/30 text-amber-200 flex items-center gap-3';
+        banner.innerHTML = `
+          <i data-lucide="clock" class="w-5 h-5 text-amber-400 shrink-0"></i>
+          <div class="text-xs">
+            <strong class="block text-sm text-white">Jornada con Entregas / Edición Programada</strong>
+            Disponibilidad reducida según carga de postproducción.
+          </div>
+        `;
+      } else {
+        banner.className = 'p-3 rounded-xl border bg-emerald-950/30 border-emerald-500/30 text-emerald-200 flex items-center gap-3';
+        banner.innerHTML = `
+          <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+          <div class="text-xs">
+            <strong class="block text-sm text-white">Día Despejado / Disponible</strong>
+            Sin bloqueos fijos registrados para esta fecha.
+          </div>
+        `;
+      }
+
+      const list = document.getElementById('modal-day-events-list');
+      list.innerHTML = '';
+
+      if (dayEvents.length === 0) {
+        list.innerHTML = `<p class="text-xs text-zinc-500 text-center py-4">No hay tareas o bloqueos registrados este día.</p>`;
+      } else {
+        dayEvents.forEach(ev => {
+          const style = CATEGORY_STYLES[ev.category] || CATEGORY_STYLES.editing;
+          const item = document.createElement('div');
+          item.className = `p-3.5 rounded-xl bg-studio-850 border border-zinc-800 border-l-4 ${style.cardBorder} flex items-start justify-between gap-3`;
+
+          item.innerHTML = `
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${style.badgeBg}">${style.label}</span>
+                <span class="text-[10px] font-mono text-zinc-400">${TYPE_LABELS[ev.type] || ev.type}</span>
+                ${ev.fullDay ? '<span class="text-[10px] font-mono bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded">DÍA COMPLETO</span>' : ''}
+              </div>
+              <h4 class="text-sm font-semibold text-white">${escapeHtml(ev.title)}</h4>
+              ${ev.notes ? `<p class="text-xs text-zinc-400 leading-relaxed">${escapeHtml(ev.notes)}</p>` : ''}
+            </div>
+            ${state.isAdmin ? `
+              <div class="flex items-center gap-1 shrink-0">
+                <button onclick="openEditEventModal('${ev.id}')" title="Editar" class="p-1.5 rounded-lg bg-studio-800 hover:bg-studio-700 text-zinc-300">
+                  <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="deleteEvent('${ev.id}')" title="Eliminar" class="p-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900 text-rose-300">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            ` : ''}
+          `;
+          list.appendChild(item);
+        });
+      }
+
+      const addBtn = document.getElementById('modal-btn-add-day-event');
+      if (state.isAdmin) addBtn.classList.remove('hidden');
+      else addBtn.classList.add('hidden');
+
+      openModal('day-detail-modal');
+      lucide.createIcons();
+    }
+
+    /**
+     * ============================================================================
+     * FUNCIONES CRUD DEL ADMINISTRADOR
+     * ============================================================================
+     */
+    function openAddEventModal(prefillDate = null) {
+      if (!state.isAdmin) return;
+      document.getElementById('event-form-title').textContent = 'Nuevo Bloque en Agenda';
+      document.getElementById('ev-id').value = '';
+      document.getElementById('ev-date').value = prefillDate || formatDateISO(state.viewYear, state.viewMonth, 1);
+      document.getElementById('ev-end-date').value = '';
+      document.getElementById('ev-category').value = 'sit';
+      document.getElementById('ev-type').value = 'reel';
+      document.getElementById('ev-title').value = 'Reel SIT Granollers';
+      document.getElementById('ev-full-day').checked = false;
+      document.getElementById('ev-notes').value = '';
+      openModal('event-form-modal');
+    }
+
+    function openAddEventForSelectedDate() {
+      closeModal('day-detail-modal');
+      openAddEventModal(state.selectedDateStr);
+    }
+
+    function openEditEventModal(eventId) {
+      if (!state.isAdmin) return;
+      const ev = state.events.find(e => e.id === eventId);
+      if (!ev) return;
+
+      closeModal('day-detail-modal');
+      document.getElementById('event-form-title').textContent = 'Editar Bloque';
+      document.getElementById('ev-id').value = ev.id;
+      document.getElementById('ev-date').value = ev.date;
+      document.getElementById('ev-end-date').value = '';
+      document.getElementById('ev-category').value = ev.category;
+      document.getElementById('ev-type').value = ev.type;
+      document.getElementById('ev-title').value = ev.title;
+      document.getElementById('ev-full-day').checked = !!ev.fullDay;
+      document.getElementById('ev-notes').value = ev.notes || '';
+      openModal('event-form-modal');
+    }
+
+    function autoSuggestEventTitle() {
+      const cat = document.getElementById('ev-category').value;
+      const type = document.getElementById('ev-type').value;
+      const titleInput = document.getElementById('ev-title');
+      const fullDayCheck = document.getElementById('ev-full-day');
+
+      if (type === 'travel_full') {
+        titleInput.value = 'Viaje Tren/Bus Valladolid ↔ Granollers';
+        fullDayCheck.checked = true;
+      } else if (type === 'couple_full' || cat === 'personal') {
+        titleInput.value = 'Viaje / Visita Pareja (Día completo)';
+        fullDayCheck.checked = true;
+      } else if (cat === 'sit' && type === 'reel') {
+        titleInput.value = 'Reel SIT Granollers';
+        fullDayCheck.checked = false;
+      } else if (cat === 'sit' && type === 'long_video') {
+        titleInput.value = 'Vídeo Largo SIT Granollers';
+        fullDayCheck.checked = false;
+      } else if (cat === 'sit' && type === 'shoot') {
+        titleInput.value = 'Rodaje Intensivo SIT Granollers';
+        fullDayCheck.checked = true;
+      } else if (cat === 'hector' && type === 'reel') {
+        titleInput.value = 'Reel Héctor Loza (Barbería)';
+        fullDayCheck.checked = false;
+      } else if (cat === 'hector' && type === 'shoot') {
+        titleInput.value = 'Rodaje Mensual Héctor Loza (Barbería)';
+        fullDayCheck.checked = true;
+      } else if (cat === 'editing') {
+        titleInput.value = 'Bloque Edición & Guionización';
+        fullDayCheck.checked = false;
+      }
+    }
+
+    function handleSaveEventForm(e) {
+      e.preventDefault();
+      if (!state.isAdmin) return;
+
+      const id = document.getElementById('ev-id').value;
+      const startDate = document.getElementById('ev-date').value;
+      const endDate = document.getElementById('ev-end-date').value;
+      const category = document.getElementById('ev-category').value;
+      const type = document.getElementById('ev-type').value;
+      const title = document.getElementById('ev-title').value.trim();
+      const fullDay = document.getElementById('ev-full-day').checked;
+      const notes = document.getElementById('ev-notes').value.trim();
+
+      if (id) {
+        // Actualizar existente
+        const idx = state.events.findIndex(ev => ev.id === id);
+        if (idx !== -1) {
+          state.events[idx] = { ...state.events[idx], date: startDate, category, type, title, fullDay, notes };
+        }
+        showToast('Bloque actualizado correctamente.', 'success');
+      } else {
+        // Crear uno o un rango de días (ideal para viajes de varios días)
+        const datesToCreate = getDatesInRange(startDate, endDate || startDate);
+        datesToCreate.forEach((dStr, index) => {
+          state.events.push({
+            id: `ev-${Date.now()}-${index}`,
+            date: dStr,
+            category,
+            type,
+            title: datesToCreate.length > 1 ? `${title} (Día ${index + 1}/${datesToCreate.length})` : title,
+            fullDay,
+            notes
+          });
+        });
+        showToast(`Añadido${datesToCreate.length > 1 ? `s ${datesToCreate.length} días` : ''} a la agenda.`, 'success');
+      }
+
+      markUnsavedChanges();
+      closeModal('event-form-modal');
+      renderAll();
+    }
+
+    function deleteEvent(eventId) {
+      if (!state.isAdmin) return;
+      state.events = state.events.filter(ev => ev.id !== eventId);
+      markUnsavedChanges();
+      renderAll();
+      if (state.selectedDateStr) {
+        openDayDetailModal(state.selectedDateStr);
+      }
+      showToast('Bloque eliminado.', 'info');
+    }
+
+    function openRoutineModal() {
+      if (!state.isAdmin) return;
+      document.getElementById('routine-target-month').textContent = `${MONTHS_ES[state.viewMonth]} ${state.viewYear}`;
+      openModal('routine-modal');
+    }
+
+    function generateMonthlyRoutine() {
+      if (!state.isAdmin) return;
+      const monthPrefix = `${state.viewYear}-${String(state.viewMonth + 1).padStart(2, '0')}`;
+      // Evitar duplicar IDs de rutina si ya existen en este mes
+      const existingIds = new Set(state.events.map(e => e.id));
+      const newRoutine = createRoutineEventsForMonth(state.viewYear, state.viewMonth)
+        .filter(ev => !existingIds.has(ev.id));
+
+      state.events = state.events.concat(newRoutine);
+      markUnsavedChanges();
+      closeModal('routine-modal');
+      renderAll();
+      showToast(`Rutina generada para ${MONTHS_ES[state.viewMonth]} (${newRoutine.length} bloques).`, 'success');
+    }
+
+    function markUnsavedChanges() {
+      state.hasUnsavedChanges = true;
+      document.getElementById('unsaved-badge').classList.remove('hidden');
+    }
+
+    /**
+     * ============================================================================
+     * AUTENTICACIÓN ADMIN (SHA-256) Y SINCRONIZACIÓN DIRECTA CON GITHUB API
+     * ============================================================================
+     */
+    function handleAdminAccessClick() {
+      if (state.isAdmin) {
+        openAdminSettingsModal();
+      } else {
+        loadSavedAdminConfigIntoForm();
+        document.getElementById('new-password-wrapper').classList.add('hidden');
+        openModal('admin-auth-modal');
+      }
+    }
+
+    function openAdminSettingsModal() {
+      loadSavedAdminConfigIntoForm();
+      document.getElementById('new-password-wrapper').classList.remove('hidden');
+      openModal('admin-auth-modal');
+    }
+
+    function loadSavedAdminConfigIntoForm() {
+      const cfg = JSON.parse(localStorage.getItem('agenda_gh_config') || '{}');
+      document.getElementById('cfg-gh-owner').value = cfg.owner || '';
+      document.getElementById('cfg-gh-repo').value = cfg.repo || '';
+      document.getElementById('cfg-gh-branch').value = cfg.branch || 'main';
+      document.getElementById('cfg-gh-path').value = cfg.path || 'schedule.json';
+      document.getElementById('cfg-gh-token').value = cfg.token || '';
+
+      const customHash = localStorage.getItem('agenda_admin_hash');
+      document.getElementById('password-hint-badge').textContent = customHash
+        ? 'Contraseña personalizada activa'
+        : 'Por defecto: admin1234';
+    }
+
+    async function handleAdminLoginAndSaveConfig(e) {
+      e.preventDefault();
+      const inputPass = document.getElementById('cfg-password').value;
+      const newPass = document.getElementById('cfg-new-password').value.trim();
+
+      const storedHash = localStorage.getItem('agenda_admin_hash') || DEFAULT_PASSWORD_HASH;
+      const inputHash = await sha256(inputPass);
+
+      if (inputHash !== storedHash) {
+        showToast('Contraseña incorrecta. Acceso denegado.', 'error');
+        return;
+      }
+
+      // Si el usuario quiso cambiar su contraseña
+      if (newPass.length >= 4) {
+        const newHash = await sha256(newPass);
+        localStorage.setItem('agenda_admin_hash', newHash);
+        showToast('Contraseña actualizada correctamente.', 'success');
+      }
+
+      // Guardar configuración de GitHub API localmente en el navegador del propietario
+      const ghConfig = {
+        owner: document.getElementById('cfg-gh-owner').value.trim(),
+        repo: document.getElementById('cfg-gh-repo').value.trim(),
+        branch: document.getElementById('cfg-gh-branch').value.trim() || 'main',
+        path: document.getElementById('cfg-gh-path').value.trim() || 'schedule.json',
+        token: document.getElementById('cfg-gh-token').value.trim()
+      };
+      localStorage.setItem('agenda_gh_config', JSON.stringify(ghConfig));
+
+      state.isAdmin = true;
+      document.getElementById('admin-toolbar').classList.remove('hidden');
+      document.getElementById('footer-lock-text').textContent = 'Admin Conectado';
+      document.getElementById('footer-lock-icon').setAttribute('data-lucide', 'unlock');
+
+      closeModal('admin-auth-modal');
+      renderAll();
+      showToast('Modo Edición desbloqueado.', 'success');
+    }
+
+    function logoutAdmin() {
+      state.isAdmin = false;
+      document.getElementById('admin-toolbar').classList.add('hidden');
+      document.getElementById('footer-lock-text').textContent = 'Acceso Admin';
+      document.getElementById('footer-lock-icon').setAttribute('data-lucide', 'lock');
+      renderAll();
+      showToast('Sesión de edición cerrada.', 'info');
+    }
+
+    function toggleGitHubGuide() {
+      const content = document.getElementById('github-guide-content');
+      const chevron = document.getElementById('guide-chevron');
+      content.classList.toggle('hidden');
+      chevron.classList.toggle('rotate-180');
+    }
+
+    /**
+     * Guarda directamente `schedule.json` en el repositorio de GitHub mediante la API REST
+     * haciendo un commit real que actualiza GitHub Pages automáticamente.
+     */
+    async function saveToGitHub() {
+      if (!state.isAdmin) return;
+
+      const cfg = JSON.parse(localStorage.getItem('agenda_gh_config') || '{}');
+      if (!cfg.owner || !cfg.repo || !cfg.token) {
+        showToast('Configura primero tu Usuario, Repo y Token en el icono de engranaje.', 'error');
+        openAdminSettingsModal();
+        return;
+      }
+
+      const btn = document.getElementById('btn-sync-github');
+      const originalHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>Subiendo...</span>`;
+      lucide.createIcons();
+
+      const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`;
+
+      try {
+        // 1. Obtener SHA actual del archivo si ya existe en el repositorio
+        let currentSha = null;
+        const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(cfg.branch)}`, {
+          headers: {
+            'Authorization': `Bearer ${cfg.token}`,
+            'Accept': 'application/vnd.github+json'
+          }
+        });
+
+        if (getRes.ok) {
+          const fileData = await getRes.json();
+          currentSha = fileData.sha;
+        }
+
+        // 2. Preparar contenido JSON ordenado y codificado en Base64 UTF-8
+        const payloadObj = {
+          updatedAt: new Date().toISOString(),
+          owner: 'Freelance Filmmaker & Editor (Valladolid)',
+          events: state.events.sort((a, b) => a.date.localeCompare(b.date))
+        };
+        const jsonString = JSON.stringify(payloadObj, null, 2);
+        const base64Content = utf8ToBase64(jsonString);
+
+        // 3. Ejecutar PUT para crear o actualizar schedule.json en GitHub
+        const putBody = {
+          message: `Actualización de agenda (${new Date().toLocaleDateString('es-ES')})`,
+          content: base64Content,
+          branch: cfg.branch
+        };
+        if (currentSha) putBody.sha = currentSha;
+
+        const putRes = await fetch(apiUrl, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${cfg.token}`,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(putBody)
+        });
+
+        if (!putRes.ok) {
+          const errData = await putRes.json();
+          throw new Error(errData.message || `Error HTTP ${putRes.status}`);
+        }
+
+        state.hasUnsavedChanges = false;
+        document.getElementById('unsaved-badge').classList.add('hidden');
+        document.getElementById('data-source-indicator').textContent = 'Fuente: schedule.json (Sincronizado)';
+        showToast('¡Agenda guardada en GitHub! Se actualizará en tu web pública en segundos.', 'success');
+      } catch (err) {
+        console.error('Error sincronizando con GitHub:', err);
+        showToast(`Error al guardar en GitHub: ${err.message}`, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+        lucide.createIcons();
+      }
+    }
+
+    function downloadScheduleJson() {
+      const payloadObj = {
+        updatedAt: new Date().toISOString(),
+        events: state.events.sort((a, b) => a.date.localeCompare(b.date))
+      };
+      const blob = new Blob([JSON.stringify(payloadObj, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'schedule.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Archivo schedule.json descargado como respaldo.', 'info');
+    }
+
+    /**
+     * ============================================================================
+     * UTILIDADES GENERALES (FECHAS, CRYPTO SHA-256, BASE64, MODALES Y TOASTS)
+     * ============================================================================
+     */
+    function formatDateISO(year, monthZeroIndexed, day) {
+      return `${year}-${String(monthZeroIndexed + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    }
+
+    function findNthWeekdayOfMonth(year, month, targetWeekday, nth) {
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      let count = 0;
+      for (let d = 1; d <= daysInMonth; d++) {
+        if (new Date(year, month, d).getDay() === targetWeekday) {
+          count++;
+          if (count === nth) return d;
+        }
+      }
+      return null;
+    }
+
+    function getDatesInRange(startStr, endStr) {
+      const start = new Date(startStr + 'T00:00:00');
+      const end = new Date(endStr + 'T00:00:00');
+      if (end < start) return [startStr];
+
+      const list = [];
+      const cur = new Date(start);
+      while (cur <= end && list.length < 31) {
+        list.push(formatDateISO(cur.getFullYear(), cur.getMonth(), cur.getDate()));
+        cur.setDate(cur.getDate() + 1);
+      }
+      return list;
+    }
+
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binString = '';
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binString += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binString);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+
+      const styles = {
+        success: 'bg-emerald-950/95 border-emerald-500/50 text-emerald-100',
+        error: 'bg-rose-950/95 border-rose-500/50 text-rose-100',
+        info: 'bg-studio-850/95 border-indigo-500/50 text-zinc-100'
+      };
+      const icons = {
+        success: 'check-circle-2',
+        error: 'alert-circle',
+        info: 'info'
+      };
+
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl border shadow-xl text-xs font-medium transition-all duration-300 ${styles[type] || styles.info}`;
+      toast.innerHTML = `<i data-lucide="${icons[type]}" class="w-4 h-4 shrink-0"></i><span>${escapeHtml(message)}</span>`;
+
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-8px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
